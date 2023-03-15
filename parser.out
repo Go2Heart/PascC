@@ -1,0 +1,654 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    ASSIGN
+    BCONST
+    BEGIN
+    BOOLEAN
+    CCONST
+    DO
+    DOWNTO
+    ELSE
+    END
+    EOF
+    FOR
+    FORWARD
+    FUNCTION
+    IF
+    INOP
+    LCURL
+    MULDIVANDOP
+    NOTOP
+    OROP
+    PROCEDURE
+    RCONST
+    RCURL
+    READ
+    RECORD
+    RELOP
+    SET
+    THEN
+    TO
+    TYPE
+    WHILE
+    WITH
+    WRITE
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> program_head SEMI program_body DOT
+Rule 2     program_head -> PROGRAM ID
+Rule 3     program_head -> PROGRAM ID LPAREN idlist RPAREN
+Rule 4     idlist -> idlist COMMA ID
+Rule 5     idlist -> ID
+Rule 6     program_body -> const_declarations var_declarations
+Rule 7     const_declarations -> CONST const_declaration SEMI
+Rule 8     const_declarations -> empty
+Rule 9     const_declaration -> ID EQU const_value
+Rule 10    const_declaration -> const_declaration SEMI ID EQU const_value
+Rule 11    const_value -> ADDOP ICONST
+Rule 12    const_value -> ICONST
+Rule 13    const_value -> ID
+Rule 14    var_declarations -> VAR var_declaration SEMI
+Rule 15    var_declarations -> empty
+Rule 16    var_declaration -> idlist COLON type
+Rule 17    var_declaration -> var_declaration SEMI idlist COLON type
+Rule 18    type -> basic_type
+Rule 19    type -> ARRAY LBRACK period RBRACK OF basic_type
+Rule 20    basic_type -> INTEGER
+Rule 21    basic_type -> REAL
+Rule 22    basic_type -> CHAR
+Rule 23    basic_type -> STRING
+Rule 24    period -> ICONST DOTDOT ICONST
+Rule 25    period -> period COMMA ICONST DOTDOT ICONST
+Rule 26    empty -> <empty>
+
+Terminals, with rules where they appear
+
+ADDOP                : 11
+ARRAY                : 19
+ASSIGN               : 
+BCONST               : 
+BEGIN                : 
+BOOLEAN              : 
+CCONST               : 
+CHAR                 : 22
+COLON                : 16 17
+COMMA                : 4 25
+CONST                : 7
+DO                   : 
+DOT                  : 1
+DOTDOT               : 24 25
+DOWNTO               : 
+ELSE                 : 
+END                  : 
+EOF                  : 
+EQU                  : 9 10
+FOR                  : 
+FORWARD              : 
+FUNCTION             : 
+ICONST               : 11 12 24 24 25 25
+ID                   : 2 3 4 5 9 10 13
+IF                   : 
+INOP                 : 
+INTEGER              : 20
+LBRACK               : 19
+LCURL                : 
+LPAREN               : 3
+MULDIVANDOP          : 
+NOTOP                : 
+OF                   : 19
+OROP                 : 
+PROCEDURE            : 
+PROGRAM              : 2 3
+RBRACK               : 19
+RCONST               : 
+RCURL                : 
+READ                 : 
+REAL                 : 21
+RECORD               : 
+RELOP                : 
+RPAREN               : 3
+SEMI                 : 1 7 10 14 17
+SET                  : 
+STRING               : 23
+THEN                 : 
+TO                   : 
+TYPE                 : 
+VAR                  : 14
+WHILE                : 
+WITH                 : 
+WRITE                : 
+error                : 
+
+Nonterminals, with rules where they appear
+
+basic_type           : 18 19
+const_declaration    : 7 10
+const_declarations   : 6
+const_value          : 9 10
+empty                : 8 15
+idlist               : 3 4 16 17
+period               : 19 25
+program              : 0
+program_body         : 1
+program_head         : 1
+type                 : 16 17
+var_declaration      : 14 17
+var_declarations     : 6
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . program_head SEMI program_body DOT
+    (2) program_head -> . PROGRAM ID
+    (3) program_head -> . PROGRAM ID LPAREN idlist RPAREN
+
+    PROGRAM         shift and go to state 3
+
+    program                        shift and go to state 1
+    program_head                   shift and go to state 2
+
+state 1
+
+    (0) S' -> program .
+
+
+
+state 2
+
+    (1) program -> program_head . SEMI program_body DOT
+
+    SEMI            shift and go to state 4
+
+
+state 3
+
+    (2) program_head -> PROGRAM . ID
+    (3) program_head -> PROGRAM . ID LPAREN idlist RPAREN
+
+    ID              shift and go to state 5
+
+
+state 4
+
+    (1) program -> program_head SEMI . program_body DOT
+    (6) program_body -> . const_declarations var_declarations
+    (7) const_declarations -> . CONST const_declaration SEMI
+    (8) const_declarations -> . empty
+    (26) empty -> .
+
+    CONST           shift and go to state 8
+    VAR             reduce using rule 26 (empty -> .)
+    DOT             reduce using rule 26 (empty -> .)
+
+    program_body                   shift and go to state 6
+    const_declarations             shift and go to state 7
+    empty                          shift and go to state 9
+
+state 5
+
+    (2) program_head -> PROGRAM ID .
+    (3) program_head -> PROGRAM ID . LPAREN idlist RPAREN
+
+    SEMI            reduce using rule 2 (program_head -> PROGRAM ID .)
+    LPAREN          shift and go to state 10
+
+
+state 6
+
+    (1) program -> program_head SEMI program_body . DOT
+
+    DOT             shift and go to state 11
+
+
+state 7
+
+    (6) program_body -> const_declarations . var_declarations
+    (14) var_declarations -> . VAR var_declaration SEMI
+    (15) var_declarations -> . empty
+    (26) empty -> .
+
+    VAR             shift and go to state 13
+    DOT             reduce using rule 26 (empty -> .)
+
+    var_declarations               shift and go to state 12
+    empty                          shift and go to state 14
+
+state 8
+
+    (7) const_declarations -> CONST . const_declaration SEMI
+    (9) const_declaration -> . ID EQU const_value
+    (10) const_declaration -> . const_declaration SEMI ID EQU const_value
+
+    ID              shift and go to state 16
+
+    const_declaration              shift and go to state 15
+
+state 9
+
+    (8) const_declarations -> empty .
+
+    VAR             reduce using rule 8 (const_declarations -> empty .)
+    DOT             reduce using rule 8 (const_declarations -> empty .)
+
+
+state 10
+
+    (3) program_head -> PROGRAM ID LPAREN . idlist RPAREN
+    (4) idlist -> . idlist COMMA ID
+    (5) idlist -> . ID
+
+    ID              shift and go to state 17
+
+    idlist                         shift and go to state 18
+
+state 11
+
+    (1) program -> program_head SEMI program_body DOT .
+
+    $end            reduce using rule 1 (program -> program_head SEMI program_body DOT .)
+
+
+state 12
+
+    (6) program_body -> const_declarations var_declarations .
+
+    DOT             reduce using rule 6 (program_body -> const_declarations var_declarations .)
+
+
+state 13
+
+    (14) var_declarations -> VAR . var_declaration SEMI
+    (16) var_declaration -> . idlist COLON type
+    (17) var_declaration -> . var_declaration SEMI idlist COLON type
+    (4) idlist -> . idlist COMMA ID
+    (5) idlist -> . ID
+
+    ID              shift and go to state 17
+
+    var_declaration                shift and go to state 19
+    idlist                         shift and go to state 20
+
+state 14
+
+    (15) var_declarations -> empty .
+
+    DOT             reduce using rule 15 (var_declarations -> empty .)
+
+
+state 15
+
+    (7) const_declarations -> CONST const_declaration . SEMI
+    (10) const_declaration -> const_declaration . SEMI ID EQU const_value
+
+    SEMI            shift and go to state 21
+
+
+state 16
+
+    (9) const_declaration -> ID . EQU const_value
+
+    EQU             shift and go to state 22
+
+
+state 17
+
+    (5) idlist -> ID .
+
+    RPAREN          reduce using rule 5 (idlist -> ID .)
+    COMMA           reduce using rule 5 (idlist -> ID .)
+    COLON           reduce using rule 5 (idlist -> ID .)
+
+
+state 18
+
+    (3) program_head -> PROGRAM ID LPAREN idlist . RPAREN
+    (4) idlist -> idlist . COMMA ID
+
+    RPAREN          shift and go to state 23
+    COMMA           shift and go to state 24
+
+
+state 19
+
+    (14) var_declarations -> VAR var_declaration . SEMI
+    (17) var_declaration -> var_declaration . SEMI idlist COLON type
+
+    SEMI            shift and go to state 25
+
+
+state 20
+
+    (16) var_declaration -> idlist . COLON type
+    (4) idlist -> idlist . COMMA ID
+
+    COLON           shift and go to state 26
+    COMMA           shift and go to state 24
+
+
+state 21
+
+    (7) const_declarations -> CONST const_declaration SEMI .
+    (10) const_declaration -> const_declaration SEMI . ID EQU const_value
+
+    VAR             reduce using rule 7 (const_declarations -> CONST const_declaration SEMI .)
+    DOT             reduce using rule 7 (const_declarations -> CONST const_declaration SEMI .)
+    ID              shift and go to state 27
+
+
+state 22
+
+    (9) const_declaration -> ID EQU . const_value
+    (11) const_value -> . ADDOP ICONST
+    (12) const_value -> . ICONST
+    (13) const_value -> . ID
+
+    ADDOP           shift and go to state 30
+    ICONST          shift and go to state 31
+    ID              shift and go to state 28
+
+    const_value                    shift and go to state 29
+
+state 23
+
+    (3) program_head -> PROGRAM ID LPAREN idlist RPAREN .
+
+    SEMI            reduce using rule 3 (program_head -> PROGRAM ID LPAREN idlist RPAREN .)
+
+
+state 24
+
+    (4) idlist -> idlist COMMA . ID
+
+    ID              shift and go to state 32
+
+
+state 25
+
+    (14) var_declarations -> VAR var_declaration SEMI .
+    (17) var_declaration -> var_declaration SEMI . idlist COLON type
+    (4) idlist -> . idlist COMMA ID
+    (5) idlist -> . ID
+
+    DOT             reduce using rule 14 (var_declarations -> VAR var_declaration SEMI .)
+    ID              shift and go to state 17
+
+    idlist                         shift and go to state 33
+
+state 26
+
+    (16) var_declaration -> idlist COLON . type
+    (18) type -> . basic_type
+    (19) type -> . ARRAY LBRACK period RBRACK OF basic_type
+    (20) basic_type -> . INTEGER
+    (21) basic_type -> . REAL
+    (22) basic_type -> . CHAR
+    (23) basic_type -> . STRING
+
+    ARRAY           shift and go to state 36
+    INTEGER         shift and go to state 37
+    REAL            shift and go to state 38
+    CHAR            shift and go to state 39
+    STRING          shift and go to state 40
+
+    type                           shift and go to state 34
+    basic_type                     shift and go to state 35
+
+state 27
+
+    (10) const_declaration -> const_declaration SEMI ID . EQU const_value
+
+    EQU             shift and go to state 41
+
+
+state 28
+
+    (13) const_value -> ID .
+
+    SEMI            reduce using rule 13 (const_value -> ID .)
+
+
+state 29
+
+    (9) const_declaration -> ID EQU const_value .
+
+    SEMI            reduce using rule 9 (const_declaration -> ID EQU const_value .)
+
+
+state 30
+
+    (11) const_value -> ADDOP . ICONST
+
+    ICONST          shift and go to state 42
+
+
+state 31
+
+    (12) const_value -> ICONST .
+
+    SEMI            reduce using rule 12 (const_value -> ICONST .)
+
+
+state 32
+
+    (4) idlist -> idlist COMMA ID .
+
+    RPAREN          reduce using rule 4 (idlist -> idlist COMMA ID .)
+    COMMA           reduce using rule 4 (idlist -> idlist COMMA ID .)
+    COLON           reduce using rule 4 (idlist -> idlist COMMA ID .)
+
+
+state 33
+
+    (17) var_declaration -> var_declaration SEMI idlist . COLON type
+    (4) idlist -> idlist . COMMA ID
+
+    COLON           shift and go to state 43
+    COMMA           shift and go to state 24
+
+
+state 34
+
+    (16) var_declaration -> idlist COLON type .
+
+    SEMI            reduce using rule 16 (var_declaration -> idlist COLON type .)
+
+
+state 35
+
+    (18) type -> basic_type .
+
+    SEMI            reduce using rule 18 (type -> basic_type .)
+
+
+state 36
+
+    (19) type -> ARRAY . LBRACK period RBRACK OF basic_type
+
+    LBRACK          shift and go to state 44
+
+
+state 37
+
+    (20) basic_type -> INTEGER .
+
+    SEMI            reduce using rule 20 (basic_type -> INTEGER .)
+
+
+state 38
+
+    (21) basic_type -> REAL .
+
+    SEMI            reduce using rule 21 (basic_type -> REAL .)
+
+
+state 39
+
+    (22) basic_type -> CHAR .
+
+    SEMI            reduce using rule 22 (basic_type -> CHAR .)
+
+
+state 40
+
+    (23) basic_type -> STRING .
+
+    SEMI            reduce using rule 23 (basic_type -> STRING .)
+
+
+state 41
+
+    (10) const_declaration -> const_declaration SEMI ID EQU . const_value
+    (11) const_value -> . ADDOP ICONST
+    (12) const_value -> . ICONST
+    (13) const_value -> . ID
+
+    ADDOP           shift and go to state 30
+    ICONST          shift and go to state 31
+    ID              shift and go to state 28
+
+    const_value                    shift and go to state 45
+
+state 42
+
+    (11) const_value -> ADDOP ICONST .
+
+    SEMI            reduce using rule 11 (const_value -> ADDOP ICONST .)
+
+
+state 43
+
+    (17) var_declaration -> var_declaration SEMI idlist COLON . type
+    (18) type -> . basic_type
+    (19) type -> . ARRAY LBRACK period RBRACK OF basic_type
+    (20) basic_type -> . INTEGER
+    (21) basic_type -> . REAL
+    (22) basic_type -> . CHAR
+    (23) basic_type -> . STRING
+
+    ARRAY           shift and go to state 36
+    INTEGER         shift and go to state 37
+    REAL            shift and go to state 38
+    CHAR            shift and go to state 39
+    STRING          shift and go to state 40
+
+    type                           shift and go to state 46
+    basic_type                     shift and go to state 35
+
+state 44
+
+    (19) type -> ARRAY LBRACK . period RBRACK OF basic_type
+    (24) period -> . ICONST DOTDOT ICONST
+    (25) period -> . period COMMA ICONST DOTDOT ICONST
+
+    ICONST          shift and go to state 48
+
+    period                         shift and go to state 47
+
+state 45
+
+    (10) const_declaration -> const_declaration SEMI ID EQU const_value .
+
+    SEMI            reduce using rule 10 (const_declaration -> const_declaration SEMI ID EQU const_value .)
+
+
+state 46
+
+    (17) var_declaration -> var_declaration SEMI idlist COLON type .
+
+    SEMI            reduce using rule 17 (var_declaration -> var_declaration SEMI idlist COLON type .)
+
+
+state 47
+
+    (19) type -> ARRAY LBRACK period . RBRACK OF basic_type
+    (25) period -> period . COMMA ICONST DOTDOT ICONST
+
+    RBRACK          shift and go to state 49
+    COMMA           shift and go to state 50
+
+
+state 48
+
+    (24) period -> ICONST . DOTDOT ICONST
+
+    DOTDOT          shift and go to state 51
+
+
+state 49
+
+    (19) type -> ARRAY LBRACK period RBRACK . OF basic_type
+
+    OF              shift and go to state 52
+
+
+state 50
+
+    (25) period -> period COMMA . ICONST DOTDOT ICONST
+
+    ICONST          shift and go to state 53
+
+
+state 51
+
+    (24) period -> ICONST DOTDOT . ICONST
+
+    ICONST          shift and go to state 54
+
+
+state 52
+
+    (19) type -> ARRAY LBRACK period RBRACK OF . basic_type
+    (20) basic_type -> . INTEGER
+    (21) basic_type -> . REAL
+    (22) basic_type -> . CHAR
+    (23) basic_type -> . STRING
+
+    INTEGER         shift and go to state 37
+    REAL            shift and go to state 38
+    CHAR            shift and go to state 39
+    STRING          shift and go to state 40
+
+    basic_type                     shift and go to state 55
+
+state 53
+
+    (25) period -> period COMMA ICONST . DOTDOT ICONST
+
+    DOTDOT          shift and go to state 56
+
+
+state 54
+
+    (24) period -> ICONST DOTDOT ICONST .
+
+    RBRACK          reduce using rule 24 (period -> ICONST DOTDOT ICONST .)
+    COMMA           reduce using rule 24 (period -> ICONST DOTDOT ICONST .)
+
+
+state 55
+
+    (19) type -> ARRAY LBRACK period RBRACK OF basic_type .
+
+    SEMI            reduce using rule 19 (type -> ARRAY LBRACK period RBRACK OF basic_type .)
+
+
+state 56
+
+    (25) period -> period COMMA ICONST DOTDOT . ICONST
+
+    ICONST          shift and go to state 57
+
+
+state 57
+
+    (25) period -> period COMMA ICONST DOTDOT ICONST .
+
+    RBRACK          reduce using rule 25 (period -> period COMMA ICONST DOTDOT ICONST .)
+    COMMA           reduce using rule 25 (period -> period COMMA ICONST DOTDOT ICONST .)
+
