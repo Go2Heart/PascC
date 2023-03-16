@@ -56,8 +56,8 @@ class Parser:
             p[0] = ASTNode(("idlist"), *p[1].childs, ASTNode(("id", p[3])))
             
     def p_program_body(self, p):
-        """program_body : const_declarations var_declarations subprogram_declarations """
-        p[0] = ASTNode(("program_body"), p[1], p[2], p[3])
+        """program_body : const_declarations var_declarations subprogram_declarations compound_statement"""
+        p[0] = ASTNode(("program_body"), p[1], p[2], p[3], p[4])
         
     def p_const_declarations(self, p):
         """const_declarations : CONST const_declaration SEMI
@@ -117,6 +117,176 @@ class Parser:
             p[0] = ASTNode(("period"), *p[1].childs, ASTNode(("const_value", p[3])), ASTNode(("const_value", p[5])))
         # TODO what if the period is not a const value?
         
+    def p_subprogram_declarations(self, p):
+        """subprogram_declarations : subprogram_declarations subprogram SEMI
+                                   | empty"""
+        if len(p) == 4:
+            p[0] = ASTNode(("subprogram_declarations"), *p[1].childs, p[2])
+        elif len(p) == 2:
+            p[0] = ASTNode(("subprogram_declarations"))
+            
+    def p_subprogram(self, p):
+        """subprogram : subprogram_head SEMI subprogram_body"""
+        p[0] = ASTNode(("subprogram"), p[1], p[3])
+        
+    def p_subprogram_head(self, p):
+        """subprogram_head : PROCEDURE ID formal_parameter
+                           | FUNCTION ID formal_parameter COLON basic_type"""
+        if len(p) == 4:
+            p[0] = ASTNode(("procedure_head", p[2]), p[3])
+        elif len(p) == 6:
+            p[0] = ASTNode(("function_head", p[2]), p[3], p[5])
+            
+    def p_formal_parameter(self, p):
+        """formal_parameter : LPAREN parameter_list RPAREN
+                            | empty"""
+        if len(p) == 4:
+            p[0] = ASTNode(("formal_parameter"), p[2])
+    
+    def p_parameter_list(self, p):
+        """parameter_list : parameter_list SEMI parameter
+                          | parameter"""
+        if len(p) == 4:
+            p[0] = ASTNode(("parameter_list"), *p[1].childs, p[3])
+        elif len(p) == 2:
+            p[0] = ASTNode(("parameter_list"), p[1])
+    
+    def p_parameter(self, p):
+        """parameter : var_parameter
+                     | value_parameter"""
+        p[0] = p[1]
+    
+    def p_var_parameter(self, p):
+        """var_parameter : VAR value_parameter"""
+        p[0] = ASTNode(("var_parameter"), p[2])
+    
+    def p_value_parameter(self, p):
+        """value_parameter : idlist COLON basic_type"""
+        p[0] = ASTNode(("value_parameter"), *p[1].childs, p[3])
+    
+    def p_subprogram_body(self, p):
+        """subprogram_body : const_declarations var_declarations compound_statement"""
+        p[0] = ASTNode(("subprogram_body"), p[1], p[2], p[3])
+    
+    def p_compound_statement(self, p):
+        """compound_statement : BEGIN statement_list END"""
+        p[0] = ASTNode(("compound_statement"), p[2])
+    
+    def p_statement_list(self, p):
+        """statement_list : statement_list SEMI statement
+                          | statement"""
+        if len(p) == 4:
+            p[0] = ASTNode(("statement_list"), *p[1].childs, p[3])
+        elif len(p) == 2:
+            p[0] = ASTNode(("statement_list"), p[1])
+    
+    def p_statement(self, p):
+        """statement : variable ASSIGN expression
+                     | ID ASSIGN expression
+                     | procedure_call
+                     | compound_statement
+                     | IF expression THEN statement else_part
+                     | FOR ID ASSIGN expression TO expression DO statement
+                     | READ LPAREN variable_list RPAREN
+                     | WRITE LPAREN expression_list RPAREN"""
+        if len(p) == 4:
+            p[0] = ASTNode(("assignment_statement"), ASTNode(("id", p[1])), p[3])
+        elif len(p) == 2:
+            p[0] = p[1]
+        elif len(p) == 6:
+            p[0] = ASTNode(("if_statement"), p[2], p[4], p[5])
+        elif len(p) == 9:
+            p[0] = ASTNode(("for_statement"), ASTNode(("id", p[2])), p[4], p[6], p[8])
+        elif p[1].lower() == "read":
+            p[0] = ASTNode(("read_statement"), p[3])
+        elif p[1].lower() == "write":
+            p[0] = ASTNode(("write_statement"), p[3])
+    
+    def p_variable_list(self, p):
+        """variable_list : variable_list COMMA variable
+                         | variable"""
+        if len(p) == 4:
+            p[0] = ASTNode(("variable_list"), *p[1].childs, p[3])
+        elif len(p) == 2:
+            p[0] = ASTNode(("variable_list"), p[1])
+    
+    def p_variable(self, p):
+        """variable : ID id_varpart"""
+        if p[2] is not None:
+            p[0] = ASTNode(("variable"), ASTNode(("id", p[1])), p[2])
+        else:
+            p[0] = ASTNode(("variable"), ASTNode(("id", p[1])))
+    
+    def p_id_varpart(self, p):
+        """id_varpart : LBRACK expression RBRACK
+                      | empty"""
+        if len(p) == 4:
+            p[0] = ASTNode(("id_varpart"), p[2])
+        
+    def p_procedure_call(self, p):
+        """procedure_call : ID
+                          | ID LPAREN expression_list RPAREN"""
+        if len(p) == 2:
+            p[0] = ASTNode(("procedure_call"), ASTNode(("id", p[1])))
+        elif len(p) == 5:
+            p[0] = ASTNode(("procedure_call"), ASTNode(("id", p[1])), p[3])
+    
+    def p_else_part(self, p):
+        """else_part : ELSE statement
+                     | empty"""
+        if len(p) == 3:
+            p[0] = p[2]
+    
+    def p_expression_list(self, p):
+        """expression_list : expression_list COMMA expression
+                           | expression"""
+        if len(p) == 4:
+            p[0] = ASTNode(("expression_list"), *p[1].childs, p[3])
+        elif len(p) == 2:
+            p[0] = ASTNode(("expression_list"), p[1])
+    
+    def p_expression(self, p):
+        """expression : simple_expression RELOP simple_expression
+                      | simple_expression EQU simple_expression
+                      | simple_expression"""
+        if len(p) == 4:
+            p[0] = ASTNode(("expression"), p[1], p[2], p[3])
+        elif len(p) == 2:
+            p[0] = ASTNode(("expression"), p[1])
+    
+    def p_simple_expression(self, p):
+        """simple_expression : simple_expression ADDOP term
+                             | term"""
+        if len(p) == 4:
+            p[0] = ASTNode(("simple_expression"), p[1], p[2], p[3])
+        elif len(p) == 2:
+            p[0] = ASTNode(("simple_expression"), p[1])
+            
+    def p_term(self, p):
+        """term : term MULDIVANDOP factor
+                | factor"""
+        if len(p) == 4:
+            p[0] = ASTNode(("term"), p[1], p[2], p[3])
+        elif len(p) == 2:
+            p[0] = ASTNode(("term"), p[1])
+            
+    def p_factor(self, p):
+        """factor : number
+                  | variable
+                  | ID LPAREN expression_list RPAREN
+                  | NOTOP factor
+                  | ADDOP factor"""
+        if len(p) == 2:
+            p[0] = ASTNode(("factor"), p[1])
+        elif len(p) == 5:
+            p[0] = ASTNode(("factor"), ASTNode(("id", p[1])), p[3])
+        elif len(p) == 3:
+            p[0] = ASTNode(("factor"), p[1], p[2])
+            
+    def p_number(self, p):
+        """number : ICONST
+                  | RCONST"""
+        p[0] = ASTNode(("number", p[1]))
     
     def p_empty(self, p):
         """empty :"""
@@ -124,7 +294,8 @@ class Parser:
     
     def p_error(self, p):
         """error handler"""
-        print("Syntax error at '%s'" % p.value)
+        print("Line {1}: Syntax error '{0}'".format(p.value, p.lineno))
+        #print("Syntax error at '%s'" % p.value, p.lineno, p.lexpos)
         
     
             
@@ -132,9 +303,9 @@ class Parser:
 
 if __name__ == "__main__":
     parser = Parser()
-    with open("test/test_parser.pas", "r") as f:
+    with open("test/gcd.pas", "r") as f:
         node = parser.parse(f.read())
         f.close()
-    node.print()
+    node.print(output_file=open("test/gcd.ast", "w"))
     
     

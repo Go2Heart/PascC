@@ -32,7 +32,7 @@ class ASTNode(object):
         else:
             return str(self.type)
     
-    def print(self, indent=1):
+    def print(self, indent=1, output_file=None):
         """print the AST
         
         Args:
@@ -40,9 +40,11 @@ class ASTNode(object):
         """
         out = " " * (indent - 1) * 4 + "└──" + " " + str(self)
         print(out)
-        
+        if output_file:
+            output_file.write(out)
+            output_file.write("\r")
         for child in self.childs:
             try:
-                child.print(indent + 1)
+                child.print(indent + 1, output_file)
             except AttributeError:
                 print(" " * indent * 4 + "└──" + " " + str(child))

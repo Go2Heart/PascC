@@ -179,7 +179,7 @@ class Lexer:
         return t
 
     def t_STRING(self,t):
-        r'"([^"]|\\\\|\\"|\\n|\\t)*"'
+        r"'([^']|\\\\|\\'|\\n|\\t)*'"
         t.value = str(t.value[1:-1])
         t.type = 'STRING'
         t.lexer.lineno += t.value.count('\n')
@@ -194,7 +194,7 @@ class Lexer:
 
     def t_error(self,t):
         global errorFlag
-        print("{1}: Illegal character '{0}'".format(t.value[0], t.lineno))
+        print("Line {1}: Illegal character '{0}'".format(t.value[0], t.lineno))
         t.lexer.skip(1)
         errorFlag = True
     
@@ -218,6 +218,6 @@ class Lexer:
         
 if __name__ == '__main__':
     lexer = Lexer()
-    lexer.load_file('test/qsort.pas')
-    lexer.scan(output_file=open('test/qsort.out', 'w'))
+    lexer.load_file('test/gcd.pas')
+    lexer.scan(output_file=open('test/gcd.out', 'w'))
     
