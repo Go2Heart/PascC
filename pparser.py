@@ -140,6 +140,8 @@ class Parser:
     def p_formal_parameter(self, p):
         """formal_parameter : LPAREN parameter_list RPAREN
                             | empty"""
+        # test
+        
         if len(p) == 4:
             p[0] = ASTNode(("formal_parameter"), p[2])
     
