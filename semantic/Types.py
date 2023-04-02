@@ -26,6 +26,12 @@ class RecordType(object):  # 每个实例代表一个记录类型
         self.fields = fields  # （子成员变量名，类型）：二元组列表
 
 
+# TODO 指针类型
+class PointerType(object):  # 每个实例代表一个指针类型
+    def __init__(self, type):
+        self.type = type # 指针指向的类型
+
+
 class FunctionType(object):  # 每个实例代表一个函数类型
     def __init__(self, type, params):
         self.type = type  # 返回值类型

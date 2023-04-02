@@ -29,7 +29,49 @@
         },
         {
             "childs": [
-                null,
+                {
+                    "childs": [
+                        {
+                            "childs": [
+                                {
+                                    "childs": [],
+                                    "type": [
+                                        "id",
+                                        "z"
+                                    ]
+                                },
+                                {
+                                    "childs": [],
+                                    "type": [
+                                        "const_value",
+                                        500
+                                    ]
+                                }
+                            ],
+                            "type": "const_declaration"
+                        },
+                        {
+                            "childs": [
+                                {
+                                    "childs": [],
+                                    "type": [
+                                        "id",
+                                        "p"
+                                    ]
+                                },
+                                {
+                                    "childs": [],
+                                    "type": [
+                                        "const_value",
+                                        250
+                                    ]
+                                }
+                            ],
+                            "type": "const_declaration"
+                        }
+                    ],
+                    "type": "const_declarations"
+                },
                 {
                     "childs": [
                         {
@@ -51,8 +93,65 @@
                                 {
                                     "childs": [],
                                     "type": [
-                                        "basic_type",
                                         "integer"
+                                    ]
+                                }
+                            ],
+                            "type": "var_declaration"
+                        },
+                        {
+                            "childs": [
+                                {
+                                    "childs": [],
+                                    "type": [
+                                        "id",
+                                        "c"
+                                    ]
+                                },
+                                {
+                                    "childs": [
+                                        {
+                                            "childs": [
+                                                {
+                                                    "childs": [],
+                                                    "type": [
+                                                        "const_value",
+                                                        1
+                                                    ]
+                                                },
+                                                {
+                                                    "childs": [],
+                                                    "type": [
+                                                        "const_value",
+                                                        2
+                                                    ]
+                                                },
+                                                {
+                                                    "childs": [],
+                                                    "type": [
+                                                        "const_value",
+                                                        5
+                                                    ]
+                                                },
+                                                {
+                                                    "childs": [],
+                                                    "type": [
+                                                        "const_value",
+                                                        6
+                                                    ]
+                                                }
+                                            ],
+                                            "type": "period"
+                                        },
+                                        {
+                                            "childs": [],
+                                            "type": [
+                                                "char"
+                                            ]
+                                        }
+                                    ],
+                                    "type": [
+                                        "array_type"
                                     ]
                                 }
                             ],
@@ -90,7 +189,178 @@
                                                                 {
                                                                     "childs": [],
                                                                     "type": [
-                                                                        "basic_type",
+                                                                        "integer"
+                                                                    ]
+                                                                }
+                                                            ],
+                                                            "type": "value_parameter"
+                                                        },
+                                                        {
+                                                            "childs": [
+                                                                {
+                                                                    "childs": [
+                                                                        {
+                                                                            "childs": [],
+                                                                            "type": [
+                                                                                "id",
+                                                                                "c"
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "childs": [],
+                                                                            "type": [
+                                                                                "id",
+                                                                                "d"
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "childs": [],
+                                                                            "type": [
+                                                                                "integer"
+                                                                            ]
+                                                                        }
+                                                                    ],
+                                                                    "type": "value_parameter"
+                                                                }
+                                                            ],
+                                                            "type": "var_parameter"
+                                                        }
+                                                    ],
+                                                    "type": "parameter_list"
+                                                }
+                                            ],
+                                            "type": "formal_parameter"
+                                        },
+                                        {
+                                            "childs": [],
+                                            "type": [
+                                                "integer"
+                                            ]
+                                        }
+                                    ],
+                                    "type": [
+                                        "function_head",
+                                        "gcd"
+                                    ]
+                                },
+                                {
+                                    "childs": [
+                                        null,
+                                        null,
+                                        {
+                                            "childs": [
+                                                {
+                                                    "childs": [
+                                                        {
+                                                            "childs": [
+                                                                {
+                                                                    "childs": [
+                                                                        {
+                                                                            "childs": [
+                                                                                {
+                                                                                    "childs": null,
+                                                                                    "type": null
+                                                                                }
+                                                                            ],
+                                                                            "type": "simple_expression"
+                                                                        },
+                                                                        "=",
+                                                                        {
+                                                                            "childs": [
+                                                                                {
+                                                                                    "childs": null,
+                                                                                    "type": null
+                                                                                }
+                                                                            ],
+                                                                            "type": "simple_expression"
+                                                                        }
+                                                                    ],
+                                                                    "type": "expression"
+                                                                },
+                                                                {
+                                                                    "childs": [
+                                                                        {
+                                                                            "childs": [],
+                                                                            "type": [
+                                                                                "id",
+                                                                                "gcd"
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "childs": [
+                                                                                {
+                                                                                    "childs": null,
+                                                                                    "type": null
+                                                                                }
+                                                                            ],
+                                                                            "type": "expression"
+                                                                        }
+                                                                    ],
+                                                                    "type": "assignment_statement"
+                                                                },
+                                                                {
+                                                                    "childs": [
+                                                                        {
+                                                                            "childs": [],
+                                                                            "type": [
+                                                                                "id",
+                                                                                "gcd"
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "childs": [
+                                                                                {
+                                                                                    "childs": null,
+                                                                                    "type": null
+                                                                                }
+                                                                            ],
+                                                                            "type": "expression"
+                                                                        }
+                                                                    ],
+                                                                    "type": "assignment_statement"
+                                                                }
+                                                            ],
+                                                            "type": "if_statement"
+                                                        }
+                                                    ],
+                                                    "type": "statement_list"
+                                                }
+                                            ],
+                                            "type": "compound_statement"
+                                        }
+                                    ],
+                                    "type": "subprogram_body"
+                                }
+                            ],
+                            "type": "subprogram"
+                        },
+                        {
+                            "childs": [
+                                {
+                                    "childs": [
+                                        {
+                                            "childs": [
+                                                {
+                                                    "childs": [
+                                                        {
+                                                            "childs": [
+                                                                {
+                                                                    "childs": [],
+                                                                    "type": [
+                                                                        "id",
+                                                                        "a"
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    "childs": [],
+                                                                    "type": [
+                                                                        "id",
+                                                                        "b"
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    "childs": [],
+                                                                    "type": [
                                                                         "integer"
                                                                     ]
                                                                 }
@@ -102,18 +372,11 @@
                                                 }
                                             ],
                                             "type": "formal_parameter"
-                                        },
-                                        {
-                                            "childs": [],
-                                            "type": [
-                                                "basic_type",
-                                                "integer"
-                                            ]
                                         }
                                     ],
                                     "type": [
-                                        "function_head",
-                                        "gcd"
+                                        "procedure_head",
+                                        "gcd1"
                                     ]
                                 },
                                 {

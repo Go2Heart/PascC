@@ -1,5 +1,7 @@
 
 program example(input,output);
+    const z=500;p=250;
+
     var x,y:integer;
         c:array[1..2,5..6] of char;
     function gcd(a,b:integer;var c,d:integer):integer;
