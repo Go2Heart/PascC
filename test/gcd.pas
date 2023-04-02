@@ -1,7 +1,9 @@
 
 program example(input,output);
-    const z=500;p=250;
-
+    const
+        test_char = 'c';
+        test_integer = 1;
+        test_minus_integer = -1;
     var x,y:integer;
         c:array[1..2,5..6] of char;
     function gcd(a,b:integer;var c,d:integer):integer;

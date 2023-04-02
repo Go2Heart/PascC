@@ -19,12 +19,18 @@ class Parser:
         tokens: the tokens
         _yacc: the yacc parser
     """
-
+    
     def __init__(self):
         """init the parser"""
         self._lexer = Lexer()
         self.tokens = self._lexer.tokens
         self._yacc = yacc(module=self)
+        
+    precedence = (
+        ('left', 'ELSE'),
+        ('left', 'LPAREN', 'LBRACK'),
+        ('right', 'ASSIGN')
+    )
 
     def parse(self, script):
         """parse the script
@@ -80,8 +86,14 @@ class Parser:
     def p_const_value(self, p):
         """const_value : ADDOP ICONST
                        | ICONST"""
-        #                | ID""" TODO：不应该是ID，应该是'letter'。改词法分析
-        p[0] = ASTNode(("const_value", p[1]))
+        #                | CCONST""" TODO：不应该是ID，应该是'letter'。改词法分析
+        if len(p) == 3:
+            p[0] = ASTNode(("int_const", p[1] + str(p[2])))
+        else:
+            if isinstance(p[1], int):
+                p[0] = ASTNode(("int_const", p[1]))
+            else:
+                p[0] = ASTNode(("char_const", p[1]))
 
     def p_var_declarations(self, p):
         """var_declarations : VAR var_declaration SEMI
@@ -199,7 +211,7 @@ class Parser:
                      | READ LPAREN variable_list RPAREN
                      | WRITE LPAREN expression_list RPAREN"""
         if len(p) == 4:
-            p[0] = ASTNode(("assignment_statement"), p[1],
+            p[0] = ASTNode(("assignment_statement"), ASTNode(("id", p[1])),
                            p[3])
         elif len(p) == 2:
             p[0] = p[1]
@@ -311,10 +323,10 @@ class Parser:
 
 if __name__ == "__main__":
     parser = Parser()
-    with open("test/gcd.pas", "r") as f:
+    with open("./test/gcd.pas", "r") as f:
         node = parser.parse(f.read())
         f.close()
     node.print(output_file=open("test/gcd.ast", "w"))
     # node.print(output_file=open("test/gcd.ast", "w", encoding='utf-8')
-    node.json_print(output_file=open("test/gcd_ast.json", "w", encoding='utf-8'))
+    # node.json_print(output_file=open("test/gcd_ast.json", "w", encoding='utf-8'))
     pass
