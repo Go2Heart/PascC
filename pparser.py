@@ -104,8 +104,9 @@ class Parser:
         """basic_type : INTEGER
                       | REAL
                       | CHAR
-                      | STRING"""
-        p[0] = ASTNode(("basic_type", p[1]))
+                      | STRING
+                      | BOOLEAN"""
+        p[0] = ASTNode((p[1]))
     
     def p_period(self, p):
         """period : ICONST DOTDOT ICONST
@@ -139,6 +140,8 @@ class Parser:
     def p_formal_parameter(self, p):
         """formal_parameter : LPAREN parameter_list RPAREN
                             | empty"""
+        # test
+        
         if len(p) == 4:
             p[0] = ASTNode(("formal_parameter"), p[2])
     
@@ -295,10 +298,7 @@ class Parser:
         """error handler"""
         print("Line {1}: Syntax error '{0}'".format(p.value, p.lineno))
         #print("Syntax error at '%s'" % p.value, p.lineno, p.lexpos)
-        
-    
-            
-            
+                 
 
 if __name__ == "__main__":
     parser = Parser()
