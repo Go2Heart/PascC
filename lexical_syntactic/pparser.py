@@ -85,8 +85,8 @@ class Parser:
 
     def p_const_value(self, p):
         """const_value : ADDOP ICONST
-                       | ICONST"""
-        #                | CCONST""" TODO：不应该是ID，应该是'letter'。改词法分析
+                       | ICONST
+                       | CCONST""" 
         if len(p) == 3:
             p[0] = ASTNode(("int_const", p[1] + str(p[2])))
         else:
@@ -204,6 +204,7 @@ class Parser:
 
     def p_statement(self, p):
         """statement : variable ASSIGN expression
+                     | ID ASSIGN expression
                      | procedure_call
                      | compound_statement
                      | IF expression THEN statement else_part
@@ -211,7 +212,11 @@ class Parser:
                      | READ LPAREN variable_list RPAREN
                      | WRITE LPAREN expression_list RPAREN"""
         if len(p) == 4:
-            p[0] = ASTNode(("assignment_statement"), ASTNode(("id", p[1])),
+            if isinstance(p[1], ASTNode):
+                p[0] = ASTNode(("assignment_statement"), p[1],
+                               p[3])
+            else:
+                p[0] = ASTNode(("assignment_statement"), ASTNode(("fun_id"), p[1]),
                            p[3])
         elif len(p) == 2:
             p[0] = p[1]
