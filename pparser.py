@@ -10,7 +10,6 @@ from ply.yacc import yacc
 from plexer import Lexer
 from ast_node import ASTNode
 
-
 class Parser:
     """Parse the script and return the AST
     
@@ -306,6 +305,7 @@ if __name__ == "__main__":
     with open("test/gcd.pas", "r") as f:
         node = parser.parse(f.read())
         f.close()
-    node.print(output_file=open("test/gcd.ast", "w"))
-    
+    # node.print(output_file=open("test/gcd.ast", "w", encoding='utf-8')
+    node.json_print(output_file=open("test/gcd_ast.json", "w", encoding='utf-8'))
+    pass
     

@@ -218,6 +218,6 @@ class Lexer:
         
 if __name__ == '__main__':
     lexer = Lexer()
-    lexer.load_file('test/gcd.pas')
-    lexer.scan(output_file=open('test/gcd.out', 'w'))
+    lexer.load_file('test/qsort.pas')
+    lexer.scan(output_file=open('test/qsort.out', 'w',encoding='utf-8'))
     
