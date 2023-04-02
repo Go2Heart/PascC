@@ -24,14 +24,15 @@ class ASTNode(object):
         """return the string representation of the AST"""
         if self != None:
             return str(self.type)
-    
+
     def __repr__(self):
         """return the string representation of the AST"""
         if self.childs:
-            return str(self.type) + "(" + ", ".join([repr(child) for child in self.childs]) + ")"
+            return str(self.type) + "(" + ", ".join(
+                [repr(child) for child in self.childs]) + ")"
         else:
             return str(self.type)
-    
+
     def print(self, indent=1, output_file=None):
         """print the AST
         
