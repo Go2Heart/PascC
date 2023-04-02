@@ -1,0 +1,279 @@
+{
+    "childs": [
+        {
+            "childs": [
+                {
+                    "childs": [
+                        {
+                            "childs": [],
+                            "type": [
+                                "id",
+                                "input"
+                            ]
+                        },
+                        {
+                            "childs": [],
+                            "type": [
+                                "id",
+                                "output"
+                            ]
+                        }
+                    ],
+                    "type": "idlist"
+                }
+            ],
+            "type": [
+                "program_head",
+                "example"
+            ]
+        },
+        {
+            "childs": [
+                {
+                    "childs": [
+                        {
+                            "childs": [
+                                {
+                                    "childs": [],
+                                    "type": [
+                                        "id",
+                                        "x"
+                                    ]
+                                },
+                                {
+                                    "childs": [],
+                                    "type": [
+                                        "id",
+                                        "y"
+                                    ]
+                                },
+                                {
+                                    "childs": [],
+                                    "type": [
+                                        "basic_type",
+                                        "integer"
+                                    ]
+                                }
+                            ],
+                            "type": "var_declaration"
+                        }
+                    ],
+                    "type": "var_declarations"
+                },
+                {
+                    "childs": [
+                        {
+                            "childs": [
+                                {
+                                    "childs": [
+                                        {
+                                            "childs": [
+                                                {
+                                                    "childs": [
+                                                        {
+                                                            "childs": [
+                                                                {
+                                                                    "childs": [],
+                                                                    "type": [
+                                                                        "id",
+                                                                        "a"
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    "childs": [],
+                                                                    "type": [
+                                                                        "id",
+                                                                        "b"
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    "childs": [],
+                                                                    "type": [
+                                                                        "basic_type",
+                                                                        "integer"
+                                                                    ]
+                                                                }
+                                                            ],
+                                                            "type": "value_parameter"
+                                                        }
+                                                    ],
+                                                    "type": "parameter_list"
+                                                }
+                                            ],
+                                            "type": "formal_parameter"
+                                        },
+                                        {
+                                            "childs": [],
+                                            "type": [
+                                                "basic_type",
+                                                "integer"
+                                            ]
+                                        }
+                                    ],
+                                    "type": [
+                                        "function_head",
+                                        "gcd"
+                                    ]
+                                },
+                                {
+                                    "childs": [
+                                        {
+                                            "childs": [
+                                                {
+                                                    "childs": [
+                                                        {
+                                                            "childs": [
+                                                                {
+                                                                    "childs": [
+                                                                        {
+                                                                            "childs": [
+                                                                                {}
+                                                                            ],
+                                                                            "type": "simple_expression"
+                                                                        },
+                                                                        "=",
+                                                                        {
+                                                                            "childs": [
+                                                                                {}
+                                                                            ],
+                                                                            "type": "simple_expression"
+                                                                        }
+                                                                    ],
+                                                                    "type": "expression"
+                                                                },
+                                                                {
+                                                                    "childs": [
+                                                                        {
+                                                                            "childs": [],
+                                                                            "type": [
+                                                                                "id",
+                                                                                "gcd"
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "childs": [
+                                                                                {}
+                                                                            ],
+                                                                            "type": "expression"
+                                                                        }
+                                                                    ],
+                                                                    "type": "assignment_statement"
+                                                                },
+                                                                {
+                                                                    "childs": [
+                                                                        {
+                                                                            "childs": [],
+                                                                            "type": [
+                                                                                "id",
+                                                                                "gcd"
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "childs": [
+                                                                                {}
+                                                                            ],
+                                                                            "type": "expression"
+                                                                        }
+                                                                    ],
+                                                                    "type": "assignment_statement"
+                                                                }
+                                                            ],
+                                                            "type": "if_statement"
+                                                        }
+                                                    ],
+                                                    "type": "statement_list"
+                                                }
+                                            ],
+                                            "type": "compound_statement"
+                                        }
+                                    ],
+                                    "type": "subprogram_body"
+                                }
+                            ],
+                            "type": "subprogram"
+                        }
+                    ],
+                    "type": "subprogram_declarations"
+                },
+                {
+                    "childs": [
+                        {
+                            "childs": [
+                                {
+                                    "childs": [
+                                        {
+                                            "childs": [
+                                                {
+                                                    "childs": [
+                                                        {
+                                                            "childs": [],
+                                                            "type": [
+                                                                "id",
+                                                                "x"
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "type": "variable"
+                                                },
+                                                {
+                                                    "childs": [
+                                                        {
+                                                            "childs": [],
+                                                            "type": [
+                                                                "id",
+                                                                "y"
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "type": "variable"
+                                                }
+                                            ],
+                                            "type": "variable_list"
+                                        }
+                                    ],
+                                    "type": "read_statement"
+                                },
+                                {
+                                    "childs": [
+                                        {
+                                            "childs": [
+                                                {
+                                                    "childs": [
+                                                        {
+                                                            "childs": [
+                                                                {
+                                                                    "childs": [
+                                                                        {
+                                                                            "childs": [
+                                                                                {},
+                                                                                {}
+                                                                            ],
+                                                                            "type": "factor"
+                                                                        }
+                                                                    ],
+                                                                    "type": "term"
+                                                                }
+                                                            ],
+                                                            "type": "simple_expression"
+                                                        }
+                                                    ],
+                                                    "type": "expression"
+                                                }
+                                            ],
+                                            "type": "expression_list"
+                                        }
+                                    ],
+                                    "type": "write_statement"
+                                }
+                            ],
+                            "type": "statement_list"
+                        }
+                    ],
+                    "type": "compound_statement"
+                }
+            ],
+            "type": "program_body"
+        }
+    ],
+    "type": "program"
+}

@@ -1,6 +1,7 @@
 """
 """
-
+import json
+import objtyping
 
 class ASTNode(object):
     """Abstract syntax tree node
@@ -9,7 +10,6 @@ class ASTNode(object):
         type: the type of the node
         childs: the child nodes
     """
-
     def __init__(self, type, *child):
         """init the AST node
         
@@ -49,3 +49,7 @@ class ASTNode(object):
                 child.print(indent + 1, output_file)
             except AttributeError:
                 print(" " * indent * 4 + "└──" + " " + str(child))
+
+    def json_print(self, output_file=None):
+        """print the AST to json"""
+        json.dump(objtyping.to_primitive(self),output_file, indent=4, sort_keys=True)
