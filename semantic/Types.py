@@ -52,7 +52,10 @@ class FunctionType(object):  # 每个实例代表一个函数类型
         ans += ')'
         return ans
 
-
+class ConstType(object):  # 每个实例代表一个常量类型
+    def __init__(self, type, value):
+        self.type = type
+        self.value = value
 class Types(object):
     types = {  # 类型名和类型实例的对应关系
         'integer': BasicTypes.interger,
@@ -68,16 +71,16 @@ class Types(object):
         if node.type[0] in cls.types.keys(
         ):  # 基本类型/自定义类型。basic_type -> INTEGER | REAL | CHAR | STRING | BOOLEAN
             return cls.types[node.type[0]]
-        elif node.type[
-                0] == 'array_type':  # 数组类型。type -> ARRAY LBRACK period RBRACK OF basic_type
+        elif node.type[0] == 'array_type':
+            # 数组类型。type -> ARRAY LBRACK period RBRACK OF basic_type
             now = node.childs[0]  # now = period
             lst = []
-            for i in range(0, len(now.children), 2):
+            for i in range(0, len(now.childs), 2):
                 lst.append(
-                    (now.children[i].type[1], now.children[i + 1].type[1]))
+                    (now.childs[i].type[1], now.childs[i + 1].type[1]))
 
             now = node.childs[1]  # now = basic_type
-            return ArrayType(lst, cls.get_type(now.type))
+            return ArrayType(lst, cls.get_type(now))
         elif node.type[0] == 'function_head' or node.type[
                 0] == 'procedure_head':
             # 子程序类型。subprogram_head subprogram_head -> PROCEDURE ID formal_parameter
@@ -102,6 +105,10 @@ class Types(object):
                 for i in range(len(x.childs) - 1):
                     lst.append((var_flag, tmp_type))
             return FunctionType(return_type, lst)
+        elif node.type[0] == 'const_declaration':
+            type = cls.types[node.childs[1].type[0]]  # type = 'integer'
+            val = node.childs[1].type[1]  # val = 123
+            return ConstType(type, val)
         elif node.type[0] == 'record_type':
             pass  # TODO
 

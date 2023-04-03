@@ -76,11 +76,11 @@ class Parser:
                              | const_declaration SEMI ID EQU const_value"""
         if len(p) == 4:
             p[0] = [
-                ASTNode(("const_declaration"), ASTNode(("id", p[1])), p[3])
+                ASTNode(("const_declaration",), ASTNode(("id", p[1])), p[3])
             ]
         elif len(p) == 6:
             p[0] = p[1] + [
-                ASTNode(("const_declaration"), ASTNode(("id", p[3])), p[5])
+                ASTNode(("const_declaration",), ASTNode(("id", p[3])), p[5])
             ]
 
     def p_const_value(self, p):
@@ -88,12 +88,12 @@ class Parser:
                        | ICONST
                        | CCONST""" 
         if len(p) == 3:
-            p[0] = ASTNode(("int_const", p[1] + str(p[2])))
+            p[0] = ASTNode(("integer", p[1] + str(p[2])))
         else:
             if isinstance(p[1], int):
-                p[0] = ASTNode(("int_const", p[1]))
+                p[0] = ASTNode(("integer", p[1]))
             else:
-                p[0] = ASTNode(("char_const", p[1]))
+                p[0] = ASTNode(("char", p[1]))
 
     def p_var_declarations(self, p):
         """var_declarations : VAR var_declaration SEMI
