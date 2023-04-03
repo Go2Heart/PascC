@@ -1,4 +1,5 @@
 class CodeGenerater(object):
+    # 基于 符号表symboltable，类型表typestable，根节点program进行代码生成
     def __init__(self, symboltable, typestable):
         self.symboltable = symboltable
         self.typestable = typestable
