@@ -1,12 +1,13 @@
 
-program example(input,output);
+program example;
     const
         test_char = 'c';
         test_integer = 1;
         test_minus_integer = -1;
     var x,y:integer;
         c:array[1..2,5..6] of char;
-    function gcd(a,b:integer;var c,d:integer):integer;
+    function gcd:integer;
+        var dd,ab,ce,c,c:array[100..100] of char;
         begin 
             begin 
                 c := 0 ;
@@ -14,7 +15,7 @@ program example(input,output);
             if b=0 then gcd:=a
             else gcd:=gcd(b, a mod b)
         end;
-    procedure gcd1(a,b:integer);
+    procedure gcd1(a,b:integer;var c,d:integer);
         begin 
             if b=0 then gcd:=a
             else gcd:=gcd(b, a mod b)

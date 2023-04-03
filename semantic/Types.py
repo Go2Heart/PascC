@@ -69,12 +69,15 @@ class ArrayType(object):  # 每个实例代表一个数组类型
                  type):  # 根据ast_node.py,node.childs=(period, type)
         self.name = 'array'
         self.period = period  # 数组各维度下标范围（起始，终止）：二元组列表
+        # 起始和终止又分别是二元组。形如('integer', 1)。既包括类型又包括值。
         self.type = type  # 数组元素类型
 
     def __str__(self):
         ans = str(self.type)
         for pair in self.period:
-            ans += '[' + str(pair[0]) + ',' + str(pair[1]) + ']'
+            ans += '[' + str(pair[0][1]) + ',' + str(pair[1][1]) + ']'
+            # 输出是不输出数组下标的类型
+            # pair[0][0]为下标类型，pair[0][1]为下标值
         return ans
 
     def __repr__(self):
@@ -97,20 +100,18 @@ class FunctionType(object):  # 每个实例代表一个函数类型
     def __init__(self, type, params):
         self.name = 'function'
         self.type = type  # 返回值类型
-        self.params = params  # 参数列表（是否传引用，类型）：二元组列表
+        self.params = params  # 参数列表。二元组（是否传引用，类型）：二元组列表
 
     def __str__(self):
         ans = str(self.type)
         ans += '('
         first = True
-        for pair in self.params:
+        for p in self.params:
             if first:
                 first = False
             else:
                 ans += ','
-            if pair[0]:
-                ans += 'var '
-            ans += str(pair[1])
+            ans += str(p)
         ans += ')'
         return ans
 
@@ -130,6 +131,18 @@ class ConstType(object):  # 每个实例代表一个常量类型
     def __repr__(self):
         return str(self)
 
+
+class ReferenceType(object):  # 每个实例代表一个引用传参类型
+    def __init__(self, type):
+        self.name = 'var'
+        self.type = type
+
+    def __str__(self):
+        return 'var ' + str(self.type)
+
+    def __repr__(self):
+        return str(self)
+        
 
 class Types(object):
     types = {  # 类型名和类型实例的对应关系
@@ -152,33 +165,37 @@ class Types(object):
             now = node.childs[0]  # now = period
             lst = []
             for i in range(0, len(now.childs), 2):
-                lst.append((now.childs[i].type[1], now.childs[i + 1].type[1]))
+                lst.append((now.childs[i].type, now.childs[i + 1].type))
 
             now = node.childs[1]  # now = basic_type
             return ArrayType(lst, cls.get_type(now))
         elif node.type[0] == 'function_head' or node.type[
                 0] == 'procedure_head':
             # 子程序类型。subprogram_head subprogram_head -> PROCEDURE ID formal_parameter
-            #                                              | FUNCTION ID formal_parameter COLON basic_type
+            #                   
             if node.type[0] == 'function_head':
                 now = node.childs[1]  # now = basic_type
                 return_type = cls.get_type(now)
             elif node.type[0] == 'procedure_head':
                 return_type = VoidType()
+            lst = []
             now = node.childs[0]
             # now = formal_parameter.formal_parameter -> LPAREN parameter_list RPAREN
-            now = now.childs[0]
-            # now = parameter_list.parameter_list -> parameter_list SEMI parameter | parameter
-            lst = []
-            for x in now.childs:  # x = value_parameter/variable_parameter
-                var_flag = False
-                if x.type == 'variable_parameter':
-                    var_flag = True
-                    x = x.childs[0]
-                # value_parameter -> idlist COLON basic_type
-                tmp_type = cls.get_type(x.childs[-1])
-                for i in range(len(x.childs) - 1):
-                    lst.append((var_flag, tmp_type))
+            if now is not None:
+                now = now.childs[0]
+                # now = parameter_list.parameter_list -> parameter_list SEMI parameter | parameter
+                for x in now.childs:  # x = value_parameter/var_parameter
+                    var_flag = False
+                    _x = x
+                    if _x.type == 'var_parameter':
+                        var_flag = True
+                        _x = _x.childs[0]
+                    # value_parameter -> idlist COLON basic_type
+                    tmp_type = cls.get_type(_x.childs[-1])
+                    if var_flag:
+                        tmp_type = ReferenceType(tmp_type)
+                    for i in range(len(_x.childs) - 1):
+                        lst.append(tmp_type)
             return FunctionType(return_type, lst)
         elif node.type[0] == 'const_declaration':
             type = cls.types[node.childs[1].type[0]]  # type = 'integer'

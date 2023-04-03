@@ -49,7 +49,7 @@ class Parser:
                         | PROGRAM ID LPAREN idlist RPAREN"""
 
         if len(p) == 3:
-            p[0] = ASTNode(("program_head", p[2]))
+            p[0] = ASTNode(("program_head", p[2]), None)
         elif len(p) == 6:
             p[0] = ASTNode(("program_head", p[2]), p[4])
 
@@ -70,6 +70,8 @@ class Parser:
                               | empty"""
         if len(p) == 4:
             p[0] = ASTNode(("const_declarations"), *p[2])
+        else:
+            p[0] = None
 
     def p_const_declaration(self, p):
         """const_declaration : ID EQU const_value 
@@ -100,6 +102,8 @@ class Parser:
                             | empty"""
         if len(p) == 4:
             p[0] = ASTNode(("var_declarations"), *p[2])
+        else:
+            p[0] = None
 
     def p_var_declaration(self, p):
         """var_declaration : idlist COLON type
@@ -125,16 +129,27 @@ class Parser:
                       | BOOLEAN"""
         p[0] = ASTNode((p[1], ))
 
+    def p_my_period_part(self, p):
+        """my_period_part : ADDOP ICONST
+                          | ICONST
+                          | CCONST"""
+        if len(p) == 3:
+            p[0] = ASTNode(("integer", p[1] + str(p[2])))
+        else:
+            if isinstance(p[1], int):
+                p[0] = ASTNode(("integer", p[1]))
+            else:
+                p[0] = ASTNode(("char", p[1]))
+
+
     def p_period(self, p):
-        """period : ICONST DOTDOT ICONST
-                  | period COMMA ICONST DOTDOT ICONST"""
+        """period : my_period_part DOTDOT my_period_part
+                  | period COMMA my_period_part DOTDOT my_period_part"""
+        # 做了改动，让数组下标元素可以是负数、可以是字符
         if len(p) == 4:
-            p[0] = ASTNode(("period"), ASTNode(("const_value", p[1])),
-                           ASTNode(("const_value", p[3])))
+            p[0] = ASTNode(("period"), p[1], p[3])
         elif len(p) == 6:
-            p[0] = ASTNode(("period"), *p[1].childs,
-                           ASTNode(("const_value", p[3])),
-                           ASTNode(("const_value", p[5])))
+            p[0] = ASTNode(("period"), *p[1].childs, p[3], p[5])
         # TODO what if the period is not a const value?
 
     def p_subprogram_declarations(self, p):
@@ -164,6 +179,8 @@ class Parser:
 
         if len(p) == 4:
             p[0] = ASTNode(("formal_parameter"), p[2])
+        else:
+            p[0] = None
 
     def p_parameter_list(self, p):
         """parameter_list : parameter_list SEMI parameter
