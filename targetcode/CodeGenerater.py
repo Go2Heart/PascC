@@ -12,7 +12,7 @@ class CodeGenerater(object):
         # 进入块
         self.symboltable.pushblock()  # 进入到一个块中了，更新索引表
 
-        print("include<stdio.h>")
+        print("#include<stdio.h>")
         self.symboltable.recover_const_var()
 
         for id in program.const_idlist:

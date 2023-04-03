@@ -150,7 +150,6 @@ class SymbolTable():
 
     @classmethod
     def popblock(cls):  # 块结束时，重定位。索引栈出栈+更新符号表+更新哈希表
-        # print(HashTable.hash)
         block = IndexStack.popblock()
         while len(cls.now_indexs) > 0:
             item = cls.table[cls.now_indexs[-1]]
@@ -159,18 +158,7 @@ class SymbolTable():
                 cls.now_indexs.pop()
             else:
                 break
-        # print(HashTable.hash)
 
     @classmethod
     def pushblock(cls):  # 块开始时，定位。索引栈入栈+更新符号表
         IndexStack.pushblock()
-        # block = IndexStack.topblock()
-        # print(IndexStack.block_range[block])
-        # if IndexStack.Generate_flag:
-        #     print(IndexStack.block_range[block][0],
-        #           IndexStack.block_range[block][1])
-        #     for i in range(IndexStack.block_range[block][0],
-        #                    IndexStack.block_range[block][1]):
-        #         HashTable.insert(cls.table[i]['name'], i)
-        #     print(HashTable.hash)
-        #     print(IndexStack.block_range)
