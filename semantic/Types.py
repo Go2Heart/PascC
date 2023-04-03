@@ -1,15 +1,73 @@
-class BasicTypes(object):  # 每个静态成员代表一个基本类型
-    interger = 'integer'
-    real = 'real'
-    boolean = 'boolean'
-    char = 'char'
-    void = 'void'
-    string = 'string'
+class IntegerType(object):
+    def __init__(self):
+        self.name = 'integer'
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return str(self)
+
+
+class RealType(object):
+    def __init__(self):
+        self.name = 'real'
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return str(self)
+
+
+class BooleanType(object):
+    def __init__(self):
+        self.name = 'boolean'
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return str(self)
+
+
+class CharType(object):
+    def __init__(self):
+        self.name = 'char'
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return str(self)
+
+
+class VoidType(object):
+    def __init__(self):
+        self.name = 'void'
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return str(self)
+
+
+class StringType(object):
+    def __init__(self):
+        self.name = 'string'
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return str(self)
 
 
 class ArrayType(object):  # 每个实例代表一个数组类型
     def __init__(self, period,
                  type):  # 根据ast_node.py,node.childs=(period, type)
+        self.name = 'array'
         self.period = period  # 数组各维度下标范围（起始，终止）：二元组列表
         self.type = type  # 数组元素类型
 
@@ -18,6 +76,9 @@ class ArrayType(object):  # 每个实例代表一个数组类型
         for pair in self.period:
             ans += '[' + str(pair[0]) + ',' + str(pair[1]) + ']'
         return ans
+
+    def __repr__(self):
+        return str(self)
 
 
 # TODO 记录类型
@@ -29,11 +90,12 @@ class RecordType(object):  # 每个实例代表一个记录类型
 # TODO 指针类型
 class PointerType(object):  # 每个实例代表一个指针类型
     def __init__(self, type):
-        self.type = type # 指针指向的类型
+        self.type = type  # 指针指向的类型
 
 
 class FunctionType(object):  # 每个实例代表一个函数类型
     def __init__(self, type, params):
+        self.name = 'function'
         self.type = type  # 返回值类型
         self.params = params  # 参数列表（是否传引用，类型）：二元组列表
 
@@ -52,21 +114,35 @@ class FunctionType(object):  # 每个实例代表一个函数类型
         ans += ')'
         return ans
 
+    def __repr__(self):
+        return str(self)
+
+
 class ConstType(object):  # 每个实例代表一个常量类型
     def __init__(self, type, value):
+        self.name = 'const'
         self.type = type
         self.value = value
+
+    def __str__(self):
+        return 'const ' + str(self.type)
+
+    def __repr__(self):
+        return str(self)
+
+
 class Types(object):
     types = {  # 类型名和类型实例的对应关系
-        'integer': BasicTypes.interger,
-        'real': BasicTypes.real,
-        'boolean': BasicTypes.boolean,
-        'char': BasicTypes.char,
-        'void': BasicTypes.void,
-        'string': BasicTypes.string
-    }  # 遇到type用户自定义类型时，需要在这里添加
+        'integer': IntegerType(),
+        'real': RealType(),
+        'boolean': BooleanType(),
+        'char': CharType(),
+        'void': VoidType(),
+        'string': StringType()
+    }  # 遇到type用户自定义类型时，需要在这里添加F
 
-    # 获取一个node的类型
+    # 基于node提取类型
+    @classmethod
     def get_type(cls, node):
         if node.type[0] in cls.types.keys(
         ):  # 基本类型/自定义类型。basic_type -> INTEGER | REAL | CHAR | STRING | BOOLEAN
@@ -76,8 +152,7 @@ class Types(object):
             now = node.childs[0]  # now = period
             lst = []
             for i in range(0, len(now.childs), 2):
-                lst.append(
-                    (now.childs[i].type[1], now.childs[i + 1].type[1]))
+                lst.append((now.childs[i].type[1], now.childs[i + 1].type[1]))
 
             now = node.childs[1]  # now = basic_type
             return ArrayType(lst, cls.get_type(now))
@@ -89,7 +164,7 @@ class Types(object):
                 now = node.childs[1]  # now = basic_type
                 return_type = cls.get_type(now)
             elif node.type[0] == 'procedure_head':
-                return_type = BasicTypes.void
+                return_type = VoidType()
             now = node.childs[0]
             # now = formal_parameter.formal_parameter -> LPAREN parameter_list RPAREN
             now = now.childs[0]
@@ -113,5 +188,6 @@ class Types(object):
             pass  # TODO
 
     # TODO 用户自定义类型，需要添加到types里
+    @classmethod
     def build_type(cls, node):
         pass

@@ -8,6 +8,9 @@ program example(input,output);
         c:array[1..2,5..6] of char;
     function gcd(a,b:integer;var c,d:integer):integer;
         begin 
+            begin 
+                c := 0 ;
+            end;
             if b=0 then gcd:=a
             else gcd:=gcd(b, a mod b)
         end;

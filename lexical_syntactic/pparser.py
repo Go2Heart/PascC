@@ -6,10 +6,14 @@ parser.parse(script)
 """
 import sys, os
 
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+print(os.path.abspath(__file__))
+print(sys.path)
 from ply.yacc import yacc
 from plexer import Lexer
 from ast_node import ASTNode
+
 
 class Parser:
     """Parse the script and return the AST
@@ -19,18 +23,14 @@ class Parser:
         tokens: the tokens
         _yacc: the yacc parser
     """
-    
     def __init__(self):
         """init the parser"""
         self._lexer = Lexer()
         self.tokens = self._lexer.tokens
         self._yacc = yacc(module=self)
-        
-    precedence = (
-        ('left', 'ELSE'),
-        ('left', 'LPAREN', 'LBRACK'),
-        ('right', 'ASSIGN')
-    )
+
+    precedence = (('left', 'ELSE'), ('left', 'LPAREN', 'LBRACK'), ('right',
+                                                                   'ASSIGN'))
 
     def parse(self, script):
         """parse the script
@@ -76,17 +76,17 @@ class Parser:
                              | const_declaration SEMI ID EQU const_value"""
         if len(p) == 4:
             p[0] = [
-                ASTNode(("const_declaration",), ASTNode(("id", p[1])), p[3])
+                ASTNode(("const_declaration", ), ASTNode(("id", p[1])), p[3])
             ]
         elif len(p) == 6:
             p[0] = p[1] + [
-                ASTNode(("const_declaration",), ASTNode(("id", p[3])), p[5])
+                ASTNode(("const_declaration", ), ASTNode(("id", p[3])), p[5])
             ]
 
     def p_const_value(self, p):
         """const_value : ADDOP ICONST
                        | ICONST
-                       | CCONST""" 
+                       | CCONST"""
         if len(p) == 3:
             p[0] = ASTNode(("integer", p[1] + str(p[2])))
         else:
@@ -115,7 +115,7 @@ class Parser:
         if len(p) == 2:
             p[0] = p[1]
         elif len(p) == 7:
-            p[0] = ASTNode(("array_type",), p[3], p[6])
+            p[0] = ASTNode(("array_type", ), p[3], p[6])
 
     def p_basic_type(self, p):
         """basic_type : INTEGER
@@ -123,7 +123,7 @@ class Parser:
                       | CHAR
                       | STRING
                       | BOOLEAN"""
-        p[0] = ASTNode((p[1],))
+        p[0] = ASTNode((p[1], ))
 
     def p_period(self, p):
         """period : ICONST DOTDOT ICONST
@@ -203,23 +203,22 @@ class Parser:
             p[0] = ASTNode(("statement_list"), p[1])
 
     def p_statement(self, p):
-        """statement : variable ASSIGN expression
-                     | ID ASSIGN expression
+        """statement : empty
+                     | variable ASSIGN expression
                      | procedure_call
                      | compound_statement
                      | IF expression THEN statement else_part
                      | FOR ID ASSIGN expression TO expression DO statement
                      | READ LPAREN variable_list RPAREN
                      | WRITE LPAREN expression_list RPAREN"""
+        # 删去了不可能归约的产生式 | ID ASSIGN expression，以免产生混淆
         if len(p) == 4:
-            if isinstance(p[1], ASTNode):
-                p[0] = ASTNode(("assignment_statement"), p[1],
-                               p[3])
-            else:
-                p[0] = ASTNode(("assignment_statement"), ASTNode(("fun_id"), p[1]),
-                           p[3])
+            p[0] = ASTNode(("assignment_statement"), p[1], p[3])
         elif len(p) == 2:
-            p[0] = p[1]
+            if isinstance(p[1], ASTNode):  # compound
+                p[0] = p[1]
+            else: # p[1] is None
+                p[0] = ASTNode(("empty_statement"))
         elif len(p) == 6:
             p[0] = ASTNode(("if_statement"), p[2], p[4], p[5])
         elif len(p) == 9:
