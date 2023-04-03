@@ -1,4 +1,8 @@
 import logging
+
+
+# 注意Pascal大小写不敏感，所以在哈希表中，所有的标识符都转换为小写
+# 注意不同作用域的名称可以相同
 class HashTable(object):
     hash = {}  # 用字典代替哈希表
 
@@ -7,6 +11,7 @@ class HashTable(object):
     @classmethod
     def insert(cls, name, index):  # 向哈希表中添加下标
         # 用列表模拟链式哈希表的链表
+        name = name.lower()
         if cls.hash.get(name) is None:
             cls.hash[name] = [index]
         else:
@@ -16,6 +21,7 @@ class HashTable(object):
     @classmethod
     def find(cls, name):
         # 查询哈希表，获取变量名中对应的符号表下标的列表
+        name = name.lower()
         if cls.hash.get(name) is None:
             return []
         ans = []
@@ -29,6 +35,7 @@ class HashTable(object):
     def delete(cls, name, block):
         # 删除哈希表中的某一块的某个标识符
         # 用列表模拟链式哈希表的链表
+        name = name.lower()
         if cls.hash.get(name) is None:
             return False
         flag = False
@@ -42,32 +49,48 @@ class HashTable(object):
         return flag  # 删除成功返回True，否则返回False
 
 
-class IndexStack(object):
+class IndexStack():
+    # Generate_flag = False
     cnt = 0
     stack = []
+    # block_range = []  # [st,ed)是块号为i的块的符号表范围
 
     @classmethod
     def pushblock(cls):  # 索引栈入栈
-        cls.cnt += 1
         cls.stack.append(cls.cnt)
+        # if not cls.Generate_flag:  # 当前是语义分析在调用
+        #     cls.block_range.append([len(SymbolTable.table)])
+        cls.cnt += 1
 
     @classmethod
     def popblock(cls):  # 索引栈出栈并返回栈顶
-        return cls.stack.pop()
+        ans = cls.stack.pop()
+        # if not cls.Generate_flag:  # 当前是语义分析在调用
+        #     cls.block_range[ans].append(len(SymbolTable.table))
+        return ans
 
     @classmethod
     def topblock(cls):  # 返回索引栈栈顶，即当前块标识符
         return cls.stack[-1]
 
 
-class SymbolTable(object):
+class SymbolTable():
     table = []  # 每一项为多元列表(块号，标识符名，类型，声明行，引用行列表)
+    now_indexs = []  # 当前作用域内的符号表下标列表
+    scan_index = 0  # 当前扫描到的符号表下标
+
+    @classmethod
+    def setIndexStack(cls):
+        IndexStack.cnt = 0
+        # IndexStack.Generate_flag = True
 
     # 通过块号+标识符名唯一定位一个多元列表
     @classmethod
     def print(cls):
+        i = 0
         for item in cls.table:
-            logging.debug(item)
+            logging.debug('index = ' + str(i) + ' : ' + str(item))
+            i += 1
 
     @classmethod
     def getItem(cls, name):
@@ -97,21 +120,57 @@ class SymbolTable(object):
         HashTable.insert(name, len(cls.table))
         cls.table.append({
             'block': block,
-            'name': name,
+            'name': name.lower(),
+            'actual_name': name,
             'type': type,
             'declaration': declaration,
             'reference': reference
         })
+        cls.now_indexs.append(len(cls.table) - 1)
         return True
 
     @classmethod
+    def recover_const_var(cls):
+        block = IndexStack.topblock()
+        while cls.scan_index < len(cls.table) and \
+              cls.table[cls.scan_index]['block'] == block and \
+              cls.table[cls.scan_index]['type'].name != 'function':
+            HashTable.insert(cls.table[cls.scan_index]['name'], cls.scan_index)
+            cls.now_indexs.append(cls.scan_index)
+            cls.scan_index += 1
+
+    @classmethod
+    def recover_function(cls):
+        if cls.scan_index < len(cls.table):
+            HashTable.insert(cls.table[cls.scan_index]['name'], cls.scan_index)
+            cls.now_indexs.append(cls.scan_index)
+            cls.scan_index += 1
+            return True
+        return False
+
+    @classmethod
     def popblock(cls):  # 块结束时，重定位。索引栈出栈+更新符号表+更新哈希表
+        # print(HashTable.hash)
         block = IndexStack.popblock()
-        while (len(cls.table) > 0 and cls.table[-1]['block'] == block):
-            HashTable.delete(cls.table[-1]['name'],
-                             cls.table[-1]['block'])
-            cls.table.pop()
+        while len(cls.now_indexs) > 0:
+            item = cls.table[cls.now_indexs[-1]]
+            if item['block'] == block:
+                HashTable.delete(item['name'], item['block'])
+                cls.now_indexs.pop()
+            else:
+                break
+        # print(HashTable.hash)
 
     @classmethod
     def pushblock(cls):  # 块开始时，定位。索引栈入栈+更新符号表
         IndexStack.pushblock()
+        # block = IndexStack.topblock()
+        # print(IndexStack.block_range[block])
+        # if IndexStack.Generate_flag:
+        #     print(IndexStack.block_range[block][0],
+        #           IndexStack.block_range[block][1])
+        #     for i in range(IndexStack.block_range[block][0],
+        #                    IndexStack.block_range[block][1]):
+        #         HashTable.insert(cls.table[i]['name'], i)
+        #     print(HashTable.hash)
+        #     print(IndexStack.block_range)

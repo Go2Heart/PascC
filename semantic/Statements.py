@@ -1,5 +1,5 @@
 class CompoundStatement(object):
-    def __init__(self, node):
+    def __init__(self, node, symboltable, typestable):
         self.name = 'compound_statement'
         self.statements = []
         now = node.childs[0]  # now = statement_list

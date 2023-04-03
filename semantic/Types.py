@@ -1,67 +1,92 @@
 class IntegerType(object):
     def __init__(self):
         self.name = 'integer'
-
+        self.cname = 'int'
     def __str__(self):
         return self.name
 
     def __repr__(self):
         return str(self)
+
+    def generate(self, id):
+        return 'int ' + id
+
 
 
 class RealType(object):
     def __init__(self):
         self.name = 'real'
+        self.cname = 'double'
 
     def __str__(self):
         return self.name
 
     def __repr__(self):
         return str(self)
+
+    def generate(self, id):
+        return 'double ' + id
+
 
 
 class BooleanType(object):
     def __init__(self):
         self.name = 'boolean'
+        self.cname = 'bool'
 
     def __str__(self):
         return self.name
 
     def __repr__(self):
         return str(self)
+
+    def generate(self, id):
+        return 'bool ' + id
 
 
 class CharType(object):
     def __init__(self):
         self.name = 'char'
+        self.cname = 'char'
 
     def __str__(self):
         return self.name
 
     def __repr__(self):
         return str(self)
+
+    def generate(self, id):
+        return 'char ' + id
 
 
 class VoidType(object):
     def __init__(self):
         self.name = 'void'
+        self.cname = 'void'
 
     def __str__(self):
         return self.name
 
     def __repr__(self):
         return str(self)
+
+    def generate(self, id):
+        return 'void ' + id
 
 
 class StringType(object):
     def __init__(self):
         self.name = 'string'
+        self.cname = 'string'
 
     def __str__(self):
         return self.name
 
     def __repr__(self):
         return str(self)
+
+    def generate(self, id):
+        return 'string ' + id  # TODO：C语言string怎么表示？
 
 
 class ArrayType(object):  # 每个实例代表一个数组类型
@@ -82,6 +107,14 @@ class ArrayType(object):  # 每个实例代表一个数组类型
 
     def __repr__(self):
         return str(self)
+
+    def generate(self, id):
+        ans = self.type.generate(id)
+        for pair in self.period:
+            ans += '[' + str(int(pair[1][1]) - int(pair[0][1]) + 1) + ']'
+            # 输出是不输出数组下标的类型
+            # pair[0][0]为下标类型，pair[0][1]为下标值
+        return ans
 
 
 # TODO 记录类型
@@ -117,6 +150,19 @@ class FunctionType(object):  # 每个实例代表一个函数类型
 
     def __repr__(self):
         return str(self)
+    
+    def generate(self, id, param_list):
+        ans = self.type.generate(id)
+        ans += '('
+        first = True
+        for i in range(len(param_list)):
+            if first:
+                first = False
+            else:
+                ans += ','
+            ans += self.params[i].generate(param_list[i])
+        ans += ')'
+        return ans
 
 
 class ConstType(object):  # 每个实例代表一个常量类型
@@ -131,6 +177,9 @@ class ConstType(object):  # 每个实例代表一个常量类型
     def __repr__(self):
         return str(self)
 
+    def generate(self, id):
+        return 'const ' + self.type.generate(id) + ' = ' + str(self.value)
+
 
 class ReferenceType(object):  # 每个实例代表一个引用传参类型
     def __init__(self, type):
@@ -142,9 +191,12 @@ class ReferenceType(object):  # 每个实例代表一个引用传参类型
 
     def __repr__(self):
         return str(self)
-        
 
-class Types(object):
+    def generate(self, id):
+        return self.type.generate('(*' + id + ')')
+
+
+class TypesTable(object):
     types = {  # 类型名和类型实例的对应关系
         'integer': IntegerType(),
         'real': RealType(),
@@ -152,7 +204,7 @@ class Types(object):
         'char': CharType(),
         'void': VoidType(),
         'string': StringType()
-    }  # 遇到type用户自定义类型时，需要在这里添加F
+    }  # 遇到type用户自定义类型时，需要在这里添加
 
     # 基于node提取类型
     @classmethod
@@ -172,7 +224,7 @@ class Types(object):
         elif node.type[0] == 'function_head' or node.type[
                 0] == 'procedure_head':
             # 子程序类型。subprogram_head subprogram_head -> PROCEDURE ID formal_parameter
-            #                   
+            #
             if node.type[0] == 'function_head':
                 now = node.childs[1]  # now = basic_type
                 return_type = cls.get_type(now)
