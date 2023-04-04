@@ -39,8 +39,14 @@ program example(input,output);
             if b=0 then gcd:=a
             else gcd:=gcd(b, a mod b)
         end;
+    procedure Init;
+    var x,y:integer;
+    begin
+        x := y;
+    end;
     begin
         read(x, y);
         write('test');
-        write(gcd(x, y))
+        write(gcd(x, y));
+        INIT;
     end.

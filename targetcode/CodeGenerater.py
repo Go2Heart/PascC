@@ -87,10 +87,24 @@ class CodeGenerater(object):
             self.ReadGenerate(statement.information)
         elif statement.information.name == 'write_statement':
             self.WriteGenerate(statement.information)
+        elif statement.information.name == 'procedure_statement':
+            self.ProcedureGenerate(statement.information)
 
     def CompoundGenerate(self, compoundstatement):
         for statement in compoundstatement.statements:
             self.StatementGenerate(statement)
+
+    def ProcedureGenerate(self, procedurestatement):
+        ans = ' ' * 4 * self.depth + str(procedurestatement.id) + '(' 
+        first = True
+        for expression in procedurestatement.expression_list:
+            if first:
+                first = False
+            else:
+                ans += ', '
+            ans += str(expression)
+        ans += ');'
+        print(ans)
 
     def AssignmentGenerate(self, assignmentstatement):
         if assignmentstatement.is_function:
@@ -101,7 +115,8 @@ class CodeGenerater(object):
                   ' = ' + str(assignmentstatement.expression) + ';')
 
     def EmptyGenerate(self, statement):
-        print(' ' * 4 * self.depth + ';')
+        # print(' ' * 4 * self.depth + ';')
+        # 空语句直接不输出比较好看
         pass
 
     def IfGenerate(self, statement):

@@ -160,6 +160,7 @@ class Variable(object):
         self.name = 'variable'
         node.print()
         self.id = symboltable.getItem(node.childs[0].type[1])['actual_name']  # 大小写以声明时为准
+        self.id_isvar = symboltable.getItem(self.id)['type'].name == 'var'
         self.id_period = None
         print('---'+self.id)
         if len(node.childs) > 1:
@@ -175,6 +176,8 @@ class Variable(object):
 
     def __str__(self):
         ans = self.id
+        if self.id_isvar:
+            ans = '(*'+ans+')'
         if self.part_expression_list is not None:
             for i in range(len(self.part_expression_list)):
                 ans += '[('+str(self.part_expression_list[i]) + ') - (' + str(self.id_period[i][0][1]) + ')]'
@@ -183,12 +186,27 @@ class Variable(object):
 class Function(object):
     def __init__(self, node, symboltable, typestable):
         self.name = 'function'
-        self.id = symboltable.getItem(node.childs[0].type[1])['actual_name']  # 大小写以声明时为准
+        item = symboltable.getItem(node.childs[0].type[1])
+        self.id = item['actual_name']  # 大小写以声明时为准
+        # 函数名不需要考虑引用
         self.expression_list = [
             Expression(p, symboltable, typestable)
             for p in node.childs[1].childs
         ]
+        self.isvar_list = [
+            p.name == 'var' for p in item['type'].params
+        ] # 布尔数组，表示每个参数是否是var
         self.type = symboltable.getItem(self.id)['type'].type  # 返回值类型
 
     def __str__(self):
-        return self.id+'('+', '.join([str(p) for p in self.expression_list])+')'
+        ans = self.id+'('
+        for i in range(len(self.expression_list)):
+            if self.isvar_list[i]:
+                ans += '&('
+            ans += str(self.expression_list[i])
+            if self.isvar_list[i]:
+                ans += ')'
+            if i != len(self.expression_list)-1:
+                ans += ', '
+        ans += ')'
+        return ans

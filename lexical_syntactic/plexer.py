@@ -24,6 +24,7 @@ class Lexer:
         'function' : 'FUNCTION',
         'procedure' : 'PROCEDURE',
         'integer' : 'INTEGER',
+        'longint' : 'INTEGER',
         'real' : 'REAL',
         'boolean' : 'BOOLEAN',
         'char' : 'CHAR',

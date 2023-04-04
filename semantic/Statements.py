@@ -9,6 +9,9 @@ class Statement(object):
                                                    typestable)
         elif node.type == 'compound_statement':
             self.information = CompoundStatement(node, symboltable, typestable)
+        elif node.type == 'procedure_call':
+            self.information = ProcedureStatement(node, symboltable,
+                                                  typestable)
         elif node.type == 'empty_statement':
             self.information = EmptyStatement(node, symboltable, typestable)
         elif node.type == 'if_statement':
@@ -19,6 +22,19 @@ class Statement(object):
             self.information = ReadStatement(node, symboltable, typestable)
         elif node.type == 'write_statement':
             self.information = WriteStatement(node, symboltable, typestable)
+
+
+class ProcedureStatement(object):
+    def __init__(self, node, symboltable, typestable):
+        self.name = 'procedure_statement'
+        self.id = symboltable.getItem(node.childs[0].type[1])['actual_name']
+        print('---------')
+        print(self.id)
+        self.expression_list = []
+        if len(node.childs) == 2:
+            for parameter in node.childs[1].childs:
+                self.expression_list.append(
+                    Expressions.Expression(parameter, symboltable, typestable))
 
 
 class CompoundStatement(object):
@@ -72,7 +88,8 @@ class ForStatement(object):
     def __init__(self, node, symboltable, typestable):
         # child[0]=id,child[1]=expression,child[2]=expression,child[3]=statement
         self.name = 'for_statement'
-        self.id = symboltable.getItem(node.childs[0].type[1])['actual_name'] # pascal大小写不敏感，故输出时以定义时为准
+        self.id = symboltable.getItem(
+            node.childs[0].type[1])['actual_name']  # pascal大小写不敏感，故输出时以定义时为准
         self.start_expression = Expressions.Expression(node.childs[1],
                                                        symboltable, typestable)
         self.end_expression = Expressions.Expression(node.childs[2],

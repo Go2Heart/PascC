@@ -14,7 +14,7 @@ if __name__ == "__main__":
     parser = pparser.Parser()  # 语法分析器
     analyzer = Analyzer(symboltable, typestable)  # 语义分析器
     generator = CodeGenerater(symboltable, typestable)  # 代码生成器
-    with open("test/test_parser.pas", "r") as f:
+    with open("test/gcd.pas", "r", encoding='utf-8') as f:
         node = parser.parse(f.read())  # 语法分析，得到抽象语法树根节点
         node.print()
         program = analyzer.analyse(node)  # 语义分析，得到语义语法树根节点

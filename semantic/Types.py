@@ -179,7 +179,7 @@ class FunctionType(object):  # 每个实例代表一个函数类型
     def __init__(self, type, params):
         self.name = 'function'
         self.type = type  # 返回值类型
-        self.params = params  # 参数列表。二元组（是否传引用，类型）：二元组列表
+        self.params = params  # 参数类型列表。
 
     def __str__(self):
         ans = str(self.type)
