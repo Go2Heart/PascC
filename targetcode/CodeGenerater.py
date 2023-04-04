@@ -20,10 +20,10 @@ class CodeGenerater(object):
             item = self.symboltable.getItem(id)
             print(item["type"].generate(id) + ';')
 
-        for id in program.var_idlist:
-            item = self.symboltable.getItem(id)
+        for ids in program.var_idlist:
+            item = self.symboltable.getItem(ids[0])
             # print(item)
-            print(item["type"].generate(id) + ';')
+            print(item["type"].generate(*ids) + ';')
 
         for subprogram in program.subprogram_list:
             self.symboltable.recover_function()
@@ -51,10 +51,10 @@ class CodeGenerater(object):
             item = self.symboltable.getItem(id)
             print(' ' * 4 * self.depth + item["type"].generate(id) + ';')
 
-        for id in subprogram.var_idlist:
-            item = self.symboltable.getItem(id)
+        for ids in subprogram.var_idlist:
+            item = self.symboltable.getItem(ids[0])
             # print(item)
-            print(' ' * 4 * self.depth + item["type"].generate(id) + ';')
+            print(' ' * 4 * self.depth + item["type"].generate(*ids) + ';')
 
         print('}')
 

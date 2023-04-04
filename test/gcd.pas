@@ -8,6 +8,7 @@ progrAm example;
         c:array[1..2,5..6] of char;
     function gcd(var e:boolean):integer;
         var dd,ab,CE,c,ce:array[-100..+100] of cHar;
+            a,B:array [50..60] OF BOOLEAN;
         begin 
             begin 
                 c := 0 ;

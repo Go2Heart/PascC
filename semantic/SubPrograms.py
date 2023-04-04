@@ -62,12 +62,14 @@ class SubProgram(object):
             for x in tmp.childs:  # x=var_declaration
                 type = typestable.get_type(x.childs[-1])
                 ids = [p.type[1] for p in x.childs if p.type[0] == 'id']
+                tmp_ids = []
                 for id in ids:
                     if symboltable.haveItem(id):
                         print("重复声明")
                     else:
                         symboltable.insertItem(id, type, [], [])
-                        self.var_idlist.append(id)
+                        tmp_ids.append(id)
+                self.var_idlist.append(tmp_ids)
         logging.debug('subprogram.var_idlist=' + str(self.var_idlist))
 
         # TODO :将子程序加入符号表。暂时没有这个语法，所以先注释掉

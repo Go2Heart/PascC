@@ -2,14 +2,18 @@ class IntegerType(object):
     def __init__(self):
         self.name = 'integer'
         self.cname = 'int'
+
     def __str__(self):
         return self.name
 
     def __repr__(self):
         return str(self)
 
-    def generate(self, id):
-        return 'int ' + id
+    def generate(self, *ids):
+        ans = 'int '+ids[0]
+        for i in range(1, len(ids)):
+            ans = ans + ',' + ids[i]
+        return ans
 
 
 
@@ -24,8 +28,11 @@ class RealType(object):
     def __repr__(self):
         return str(self)
 
-    def generate(self, id):
-        return 'double ' + id
+    def generate(self, *ids):
+        ans = 'double '+ids[0]
+        for i in range(1, len(ids)):
+            ans = ans + ',' + ids[i]
+        return ans
 
 
 
@@ -40,8 +47,11 @@ class BooleanType(object):
     def __repr__(self):
         return str(self)
 
-    def generate(self, id):
-        return 'bool ' + id
+    def generate(self, *ids):
+        ans = 'bool '+ids[0]
+        for i in range(1, len(ids)):
+            ans = ans + ',' + ids[i]
+        return ans
 
 
 class CharType(object):
@@ -55,8 +65,11 @@ class CharType(object):
     def __repr__(self):
         return str(self)
 
-    def generate(self, id):
-        return 'char ' + id
+    def generate(self, *ids):
+        ans = 'char '+ids[0]
+        for i in range(1, len(ids)):
+            ans = ans + ',' + ids[i]
+        return ans
 
 
 class VoidType(object):
@@ -70,8 +83,11 @@ class VoidType(object):
     def __repr__(self):
         return str(self)
 
-    def generate(self, id):
-        return 'void ' + id
+    def generate(self, *ids):
+        ans = 'void '+ids[0]
+        for i in range(1, len(ids)):
+            ans = ans + ',' + ids[i]
+        return ans
 
 
 class StringType(object):
@@ -85,8 +101,11 @@ class StringType(object):
     def __repr__(self):
         return str(self)
 
-    def generate(self, id):
-        return 'string ' + id  # TODO：C语言string怎么表示？
+    def generate(self, *ids):
+        ans = 'string '+ids[0]  # TODO：C语言string怎么表示？
+        for i in range(1, len(ids)):
+            ans = ans + ',' + ids[i]
+        return ans
 
 
 class ArrayType(object):  # 每个实例代表一个数组类型
@@ -108,12 +127,16 @@ class ArrayType(object):  # 每个实例代表一个数组类型
     def __repr__(self):
         return str(self)
 
-    def generate(self, id):
-        ans = self.type.generate(id)
+    def generate(self, *ids):
+        ans = self.type.generate(ids[0])
         for pair in self.period:
             ans += '[' + str(int(pair[1][1]) - int(pair[0][1]) + 1) + ']'
             # 输出是不输出数组下标的类型
             # pair[0][0]为下标类型，pair[0][1]为下标值
+        for i in range(1, len(ids)):
+            ans = ans + ',' + ids[i]
+            for pair in self.period:
+                ans += '[' + str(int(pair[1][1]) - int(pair[0][1]) + 1) + ']'
         return ans
 
 
