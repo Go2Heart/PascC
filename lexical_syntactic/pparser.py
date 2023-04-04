@@ -258,8 +258,9 @@ class Parser:
             p[0] = ASTNode(("variable"), ASTNode(("id", p[1])))
 
     def p_id_varpart(self, p):
-        """id_varpart : LBRACK expression RBRACK
+        """id_varpart : LBRACK expression_list RBRACK
                       | empty"""
+        # 错了！是expression_list
         if len(p) == 4:
             p[0] = ASTNode(("id_varpart"), p[2])
 
@@ -313,15 +314,22 @@ class Parser:
     def p_factor(self, p):
         """factor : number
                   | variable
+                  | LPAREN expression RPAREN
                   | ID LPAREN expression_list RPAREN
                   | NOTOP factor
                   | ADDOP factor"""
+        # 漏产生式了啊喂！ factor->(expression)
         if len(p) == 2:
-            p[0] = ASTNode(("factor"), p[1])
-        elif len(p) == 5:
-            p[0] = ASTNode(("factor"), ASTNode(("id", p[1])), p[3])
+            if p[1].type == "variable":
+                p[0] = ASTNode(("factor", "variable"), p[1])
+            else:
+                p[0] = ASTNode(("factor", "constant"), p[1])
         elif len(p) == 3:
-            p[0] = ASTNode(("factor"), p[1], p[2])
+            p[0] = ASTNode(("factor", 'factor'), p[1], p[2])
+        elif len(p) == 4:
+            p[0] = ASTNode(("factor", 'expression'), p[2])
+        elif len(p) == 5:
+            p[0] = ASTNode(("factor", 'function'), ASTNode(("id", p[1])), p[3])
 
     def p_number(self, p):
         """number : ICONST

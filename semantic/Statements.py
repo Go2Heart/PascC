@@ -1,59 +1,97 @@
+import Expressions
+
+
+class Statement(object):
+    def __init__(self, node, symboltable, typestable):
+        self.information = None
+        if node.type == 'assignment_statement':
+            self.information = AssignmentStatement(node, symboltable,
+                                                   typestable)
+        elif node.type == 'compound_statement':
+            self.information = CompoundStatement(node, symboltable, typestable)
+        elif node.type == 'empty_statement':
+            self.information = EmptyStatement(node, symboltable, typestable)
+        elif node.type == 'if_statement':
+            self.information = IfStatement(node, symboltable, typestable)
+        elif node.type == 'for_statement':
+            self.information = ForStatement(node, symboltable, typestable)
+        elif node.type == 'read_statement':
+            self.information = ReadStatement(node, symboltable, typestable)
+        elif node.type == 'write_statement':
+            self.information = WriteStatement(node, symboltable, typestable)
+
+
 class CompoundStatement(object):
     def __init__(self, node, symboltable, typestable):
         self.name = 'compound_statement'
         self.statements = []
         now = node.childs[0]  # now = statement_list
         for statement in now.childs:
-            if statement.type == 'assignment_statement':
-                self.statements.append(AssignmentStatement(statement))
-            elif statement.type == 'empty_statement':
-                self.statements.append(EmptyStatement(statement))
-            elif statement.type == 'if_statement':
-                self.statements.append(IfStatement(statement))
-            elif statement.type == 'for_statement':
-                self.statements.append(ForStatement(statement))
-            elif statement.type == 'read_statement':
-                self.statements.append(ReadStatement(statement))
-            elif statement.type == 'write_statement':
-                self.statements.append(WriteStatement(statement))
+            self.statements.append(
+                Statement(statement, symboltable, typestable))
 
 
 class AssignmentStatement(object):
-    def __init__(self, node):
+    def __init__(self, node, symboltable, typestable):
         # child[0] = variable,child[1]=expression
         self.name = 'assignment_statement'
-    pass
+        self.variable = Expressions.Variable(node.childs[0], symboltable,
+                                             typestable)
+        self.expression = Expressions.Expression(node.childs[1], symboltable,
+                                                 typestable)
 
 
 class EmptyStatement(object):
-    def __init__(self, node):
+    def __init__(self, node, symboltable, typestable):
         self.name = 'empty_statement'
-    pass
 
 
 class IfStatement(object):
-    def __init__(self, node):
+    def __init__(self, node, symboltable, typestable):
         # child[0]=expression,child[1]=statement,child[2]=else_part
         self.name = 'if_statement'
+        self.if_expression = Expressions.Expression(node.childs[0],
+                                                    symboltable, typestable)
+        self.then_statement = Statement(node.childs[1], symboltable,
+                                        typestable)
+        if node.childs[2] is not None:
+            self.else_statement = Statement(node.childs[2], symboltable,
+                                            typestable)
+        else:
+            self.else_statement = None
+
     pass
 
 
 class ForStatement(object):
-    def __init__(self, node):
+    def __init__(self, node, symboltable, typestable):
         # child[0]=id,child[1]=expression,child[2]=expression,child[3]=statement
         self.name = 'for_statement'
-    pass
+        self.id = node.childs[0].type[1]
+        self.start_expression = Expressions.Expression(node.childs[1],
+                                                       symboltable, typestable)
+        self.end_expression = Expressions.Expression(node.childs[2],
+                                                     symboltable, typestable)
+        self.statement = Statement(node.childs[3], symboltable, typestable)
 
 
 class ReadStatement(object):
-    def __init__(self, node):
+    def __init__(self, node, symboltable, typestable):
         # child[0]=variable_list
         self.name = 'read_statement'
-    pass
+        self.variable_list = [
+            Expressions.Variable(p, symboltable, typestable)
+            for p in node.childs[0].childs
+        ]
 
 
 class WriteStatement(object):
-    def __init__(self, node):
+    def __init__(self, node, symboltable, typestable):
         # child[0]=expression_list
         self.name = 'write_statement'
+        self.expression_list = [
+            Expressions.Expression(p, symboltable, typestable)
+            for p in node.childs[0].childs
+        ]
+
     pass
