@@ -5,6 +5,7 @@ parser = PParser()
 parser.parse(script)
 """
 import sys, os
+
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from ply.yacc import yacc
 from plexer import Lexer
@@ -70,7 +71,7 @@ class Parser:
             p[0] = None
 
     def p_const_declaration(self, p):
-        """const_declaration : ID EQU const_value 
+        """const_declaration : ID EQU const_value
                              | const_declaration SEMI ID EQU const_value"""
         if len(p) == 4:
             p[0] = [
@@ -83,15 +84,24 @@ class Parser:
 
     def p_const_value(self, p):
         """const_value : ADDOP ICONST
-                       | ICONST
-                       | CCONST"""
+                    | ICONST
+                    | RCONST
+                    | CCONST
+                    | BCONST
+                    | string"""
+        # 进行了一个大改
         if len(p) == 3:
-            p[0] = ASTNode(("integer", p[1] + str(p[2])))
-        else:
-            if isinstance(p[1], int):
-                p[0] = ASTNode(("integer", p[1]))
-            else:
-                p[0] = ASTNode(("char", p[1]))
+            p[0] = ASTNode(("integer", int(p[1] + str(p[2]))))
+        elif isinstance(p[1], int):
+            p[0] = ASTNode(("integer", p[1]))
+        elif isinstance(p[1], float):
+            p[0] = ASTNode(("real", p[1]))
+        elif isinstance(p[1], str):
+            p[0] = ASTNode(("char", p[1]))
+        elif isinstance(p[1], bool):
+            p[0] = ASTNode(("boolean", p[1]))
+        elif isinstance(p[1], ASTNode):
+            p[0] = p[1]
 
     def p_var_declarations(self, p):
         """var_declarations : VAR var_declaration SEMI
@@ -121,8 +131,8 @@ class Parser:
         """basic_type : INTEGER
                       | REAL
                       | CHAR
-                      | STRING
                       | BOOLEAN"""
+        # 多了一个STRING
         p[0] = ASTNode((p[1], ))
 
     def p_my_period_part(self, p):
@@ -136,7 +146,6 @@ class Parser:
                 p[0] = ASTNode(("integer", p[1]))
             else:
                 p[0] = ASTNode(("char", p[1]))
-
 
     def p_period(self, p):
         """period : my_period_part DOTDOT my_period_part
@@ -223,14 +232,16 @@ class Parser:
                      | IF expression THEN statement else_part
                      | FOR ID ASSIGN expression TO expression DO statement
                      | READ LPAREN variable_list RPAREN
-                     | WRITE LPAREN expression_list RPAREN"""
+                     | WRITE LPAREN expression_list RPAREN
+                     | READLN LPAREN variable_list RPAREN
+                     | WRITELN LPAREN expression_list RPAREN"""
         # 删去了不可能归约的产生式 | ID ASSIGN expression，以免产生混淆
         if len(p) == 4:
             p[0] = ASTNode(("assignment_statement"), p[1], p[3])
         elif len(p) == 2:
             if isinstance(p[1], ASTNode):  # compound
                 p[0] = p[1]
-            else: # p[1] is None
+            else:  # p[1] is None
                 p[0] = ASTNode(("empty_statement"))
         elif len(p) == 6:
             p[0] = ASTNode(("if_statement"), p[2], p[4], p[5])
@@ -241,6 +252,10 @@ class Parser:
             p[0] = ASTNode(("read_statement"), p[3])
         elif p[1].lower() == "write":
             p[0] = ASTNode(("write_statement"), p[3])
+        elif p[1].lower() == "readln":
+            p[0] = ASTNode(("read_statement"), p[3], True)
+        elif p[1].lower() == "writeln":
+            p[0] = ASTNode(("write_statement"), p[3], True)
 
     def p_variable_list(self, p):
         """variable_list : variable_list COMMA variable
@@ -312,7 +327,7 @@ class Parser:
             p[0] = ASTNode(("term"), p[1])
 
     def p_factor(self, p):
-        """factor : number
+        """factor : const_value
                   | variable
                   | LPAREN expression RPAREN
                   | ID LPAREN expression_list RPAREN
@@ -331,10 +346,12 @@ class Parser:
         elif len(p) == 5:
             p[0] = ASTNode(("factor", 'function'), ASTNode(("id", p[1])), p[3])
 
-    def p_number(self, p):
-        """number : ICONST
-                  | RCONST"""
-        p[0] = ASTNode(("number", p[1]))
+    def p_string(self, p):
+        """string : STRING"""
+        p[0] = ASTNode(("string", p[1]))
+
+
+    
 
     def p_empty(self, p):
         """empty :"""

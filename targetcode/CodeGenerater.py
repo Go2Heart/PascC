@@ -18,12 +18,12 @@ class CodeGenerater(object):
 
         for id in program.const_idlist:
             item = self.symboltable.getItem(id)
-            print(item["type"].generate(id) + ';')
+            print(item["type"].generate(False, id) + ';')
 
         for ids in program.var_idlist:
             item = self.symboltable.getItem(ids[0])
             # print(item)
-            print(item["type"].generate(*ids) + ';')
+            print(item["type"].generate(False, *ids) + ';')
 
         for subprogram in program.subprogram_list:
             self.symboltable.recover_function()
@@ -46,19 +46,19 @@ class CodeGenerater(object):
         self.symboltable.recover_const_var()
 
         item = self.symboltable.getItem(subprogram.name)
-        print(item["type"].generate(subprogram.name,
+        print(item["type"].generate(False, subprogram.name,
                                     subprogram.parameter_idlist))
 
         print('{')
         self.depth += 1
         for id in subprogram.const_idlist:
             item = self.symboltable.getItem(id)
-            print(' ' * 4 * self.depth + item["type"].generate(id) + ';')
+            print(' ' * 4 * self.depth + item["type"].generate(False, id) + ';')
 
         for ids in subprogram.var_idlist:
             item = self.symboltable.getItem(ids[0])
             # print(item)
-            print(' ' * 4 * self.depth + item["type"].generate(*ids) + ';')
+            print(' ' * 4 * self.depth + item["type"].generate(False, *ids) + ';')
 
         self.CompoundGenerate(subprogram.compound_statement)
         self.depth -= 1
@@ -93,8 +93,12 @@ class CodeGenerater(object):
             self.StatementGenerate(statement)
 
     def AssignmentGenerate(self, assignmentstatement):
-        print(' ' * 4 * self.depth + str(assignmentstatement.variable) +
-              ' = ' + str(assignmentstatement.expression) + ';')
+        if assignmentstatement.is_function:
+            print(' ' * 4 * self.depth + 'return ' +
+                  str(assignmentstatement.expression) + ';')
+        else:
+            print(' ' * 4 * self.depth + str(assignmentstatement.variable) +
+                  ' = ' + str(assignmentstatement.expression) + ';')
 
     def EmptyGenerate(self, statement):
         print(' ' * 4 * self.depth + ';')
@@ -119,11 +123,11 @@ class CodeGenerater(object):
                 self.depth -= 1
 
     def ForGenerate(self, forstatement):
-        print(' ' * 4 * self.depth + 'for (' + str(forstatement.id) +
-                ' = ' + str(forstatement.start_expression) + '; ' +
-                str(forstatement.id) + ' <= ' +
-                str(forstatement.end_expression) + '; ' +
-                str(forstatement.id) + '++)')
+        print(' ' * 4 * self.depth + 'for (' + str(forstatement.id) + ' = ' +
+              str(forstatement.start_expression) + '; ' +
+              str(forstatement.id) + ' <= ' +
+              str(forstatement.end_expression) + '; ' + str(forstatement.id) +
+              '++)')
         if forstatement.statement.information.name == 'compound_statement':
             self.StatementGenerate(forstatement.statement)
         else:
@@ -132,17 +136,25 @@ class CodeGenerater(object):
             self.depth -= 1
 
     def ReadGenerate(self, readstatement):
-        ans = 'scanf(""'
+        ans = 'scanf("'
         for p in readstatement.variable_list:
-            ans += ', &'+str(p)
+            ans += p.type.print_type
+        ans += '"'
+        for p in readstatement.variable_list:
+            ans += ', &' + str(p)
         ans += ');'
         print(' ' * 4 * self.depth + ans)
         return ans
-    
+
     def WriteGenerate(self, printstatement):
-        ans = 'print(""'
+        ans = 'printf("'
         for p in printstatement.expression_list:
-            ans += ', '+str(p)
+            ans += p.type.print_type
+            if printstatement.newline:
+                ans += '\\n'
+        ans += '"'
+        for p in printstatement.expression_list:
+            ans += ', ' + str(p)
         ans += ');'
         print(' ' * 4 * self.depth + ans)
         return ans

@@ -33,12 +33,17 @@ class CompoundStatement(object):
 
 class AssignmentStatement(object):
     def __init__(self, node, symboltable, typestable):
-        # child[0] = variable,child[1]=expression
+        # child[0] = variable,child[1] = expression
         self.name = 'assignment_statement'
         self.variable = Expressions.Variable(node.childs[0], symboltable,
                                              typestable)
         self.expression = Expressions.Expression(node.childs[1], symboltable,
                                                  typestable)
+        item = symboltable.getItem(self.variable.id)
+        if item is not None and item['type'].name == 'function':
+            self.is_function = True
+        else:
+            self.is_function = False
 
 
 class EmptyStatement(object):
@@ -83,6 +88,10 @@ class ReadStatement(object):
             Expressions.Variable(p, symboltable, typestable)
             for p in node.childs[0].childs
         ]
+        if len(node.childs) > 1:
+            self.newline = True
+        else:
+            self.newline = False
 
 
 class WriteStatement(object):
@@ -93,5 +102,9 @@ class WriteStatement(object):
             Expressions.Expression(p, symboltable, typestable)
             for p in node.childs[0].childs
         ]
+        if len(node.childs) > 1:
+            self.newline = True
+        else:
+            self.newline = False
 
     pass

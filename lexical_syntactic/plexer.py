@@ -40,6 +40,8 @@ class Lexer:
         'with' : 'WITH',
         'read' : 'READ',
         'write' : 'WRITE',
+        'readln' : 'READLN',
+        'writeln' : 'WRITELN',
         'in' : 'INOP',
         'not' : 'NOTOP',
         'or' : 'OROP'
@@ -173,14 +175,14 @@ class Lexer:
 
     def t_CCONST(self,t):
         r'\'([ -~]|\\n|\\f|\\t|\\r|\\b|\\v)\''
-        t.value = t.value
+        t.value = str(t.value) # 不修改为[1:-1]
         t.type = 'CCONST'
         t.lexer.lineno += t.value.count('\n') 
         return t
 
     def t_STRING(self,t):
-        r"'([^']|\\\\|\\'|\\n|\\t)*'"
-        t.value = str(t.value[1:-1])
+        r"'([^']|\\\\|\\'|\\n|\\t)*'" 
+        t.value = '"'+str(t.value[1:-1])+'"' # 不修改为[1:-1]
         t.type = 'STRING'
         t.lexer.lineno += t.value.count('\n')
         return t

@@ -11,12 +11,14 @@ class Expression(object):
             ]
             self.operator = node.childs[1]
             # '=' | '<>' | '<' | '<=' | '>' | '>='
+            self.type = self.childs[0].type  # TODO 类型计算，这里暂定为第一个表达式的类型
         else:
             self.child_cnt = 1
             self.childs = [
                 SimpleExpression(node.childs[0], symboltable, typestable)
             ]
             self.operator = None
+            self.type = self.childs[0].type
 
     def __str__(self):
         operator = self.operator
@@ -42,10 +44,12 @@ class SimpleExpression(object):
             ]
             self.operator = node.childs[1]
             # '+' | '-' | 'or'
+            self.type = self.childs[0].type  # TODO 类型计算，这里暂定为第一个表达式的类型
         else:
             self.child_cnt = 1
             self.childs = [Term(node.childs[0], symboltable, typestable)]
             self.operator = None
+            self.type = self.childs[0].type
 
     def __str__(self):
         operator = self.operator
@@ -70,10 +74,12 @@ class Term(object):
             ]
             self.operator = node.childs[1]
             # '*' | '/' | 'div' | 'mod' | 'and'
+            self.type = self.childs[0].type  # TODO 类型计算，这里暂定为第一个表达式的类型
         else:
             self.child_cnt = 1
             self.childs = [Factor(node.childs[0], symboltable, typestable)]
             self.operator = None
+            self.type = self.childs[0].type
 
     def __str__(self):
         operator = self.operator
@@ -121,6 +127,7 @@ class Factor(object):
             self.child_cnt = 1
             self.childs = [Function(node, symboltable, typestable)]
             self.operator = None
+        self.type = self.childs[0].type
 
     def __str__(self):
         operator =self.operator
@@ -140,6 +147,8 @@ class Factor(object):
 class Constant(object):
     def __init__(self, node, symboltable, typestable):
         self.name = 'constant'
+        node.print()
+        self.type = typestable.get_type(node) # 常量类型
         self.val = node.type[1]
 
     def __str__(self):
@@ -151,20 +160,24 @@ class Variable(object):
         self.name = 'variable'
         node.print()
         self.id = node.childs[0].type[1]
+        self.id_period = None
         print('---'+self.id)
         if len(node.childs) > 1:
             self.part_expression_list = [
                 Expression(p, symboltable, typestable)
                 for p in node.childs[1].childs[0].childs
             ]
+            self.type = symboltable.getItem(self.id)['type'].type  # 元素类型
+            self.id_period = symboltable.getItem(self.id)['type'].period  # 维数
         else:
             self.part_expression_list = None
+            self.type = symboltable.getItem(self.id)['type']
 
     def __str__(self):
         ans = self.id
         if self.part_expression_list is not None:
-            for p in self.part_expression_list:
-                ans += '['+str(p)+']'
+            for i in range(len(self.part_expression_list)):
+                ans += '[('+str(self.part_expression_list[i]) + ') - (' + str(self.id_period[i][0][1]) + ')]'
         return ans
 
 class Function(object):
@@ -175,6 +188,7 @@ class Function(object):
             Expression(p, symboltable, typestable)
             for p in node.childs[1].childs
         ]
+        self.type = symboltable.getItem(self.id)['type'].type  # 返回值类型
 
     def __str__(self):
         return self.id+'('+', '.join([str(p) for p in self.expression_list])+')'

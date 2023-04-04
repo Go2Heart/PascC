@@ -2,6 +2,7 @@ class IntegerType(object):
     def __init__(self):
         self.name = 'integer'
         self.cname = 'int'
+        self.print_type = '%d'
 
     def __str__(self):
         return self.name
@@ -9,10 +10,13 @@ class IntegerType(object):
     def __repr__(self):
         return str(self)
 
-    def generate(self, *ids):
-        ans = 'int '+ids[0]
-        for i in range(1, len(ids)):
-            ans = ans + ',' + ids[i]
+    def generate(self, const,* ids):
+        if const:
+            ans = 'const int '+ids[0]
+        else:
+            ans = 'int '+ids[0]
+            for i in range(1, len(ids)):
+                ans = ans + ',' + ids[i]
         return ans
 
 
@@ -21,6 +25,7 @@ class RealType(object):
     def __init__(self):
         self.name = 'real'
         self.cname = 'double'
+        self.print_type = '%lf'
 
     def __str__(self):
         return self.name
@@ -28,10 +33,13 @@ class RealType(object):
     def __repr__(self):
         return str(self)
 
-    def generate(self, *ids):
-        ans = 'double '+ids[0]
-        for i in range(1, len(ids)):
-            ans = ans + ',' + ids[i]
+    def generate(self, const, *ids):
+        if const:
+            ans = 'const double '+ids[0]
+        else:
+            ans = 'double '+ids[0]
+            for i in range(1, len(ids)):
+                ans = ans + ',' + ids[i]
         return ans
 
 
@@ -40,6 +48,7 @@ class BooleanType(object):
     def __init__(self):
         self.name = 'boolean'
         self.cname = 'bool'
+        self.print_type = '%d'
 
     def __str__(self):
         return self.name
@@ -47,10 +56,13 @@ class BooleanType(object):
     def __repr__(self):
         return str(self)
 
-    def generate(self, *ids):
-        ans = 'bool '+ids[0]
-        for i in range(1, len(ids)):
-            ans = ans + ',' + ids[i]
+    def generate(self, const, *ids):
+        if const:
+            ans = 'const bool '+ids[0]
+        else:
+            ans = 'bool '+ids[0]
+            for i in range(1, len(ids)):
+                ans = ans + ',' + ids[i]
         return ans
 
 
@@ -58,6 +70,7 @@ class CharType(object):
     def __init__(self):
         self.name = 'char'
         self.cname = 'char'
+        self.print_type = '%c'
 
     def __str__(self):
         return self.name
@@ -65,10 +78,13 @@ class CharType(object):
     def __repr__(self):
         return str(self)
 
-    def generate(self, *ids):
-        ans = 'char '+ids[0]
-        for i in range(1, len(ids)):
-            ans = ans + ',' + ids[i]
+    def generate(self, const, *ids):
+        if const:
+            ans = 'const char '+ids[0]
+        else:
+            ans = 'char '+ids[0]
+            for i in range(1, len(ids)):
+                ans = ans + ',' + ids[i]
         return ans
 
 
@@ -83,17 +99,18 @@ class VoidType(object):
     def __repr__(self):
         return str(self)
 
-    def generate(self, *ids):
-        ans = 'void '+ids[0]
-        for i in range(1, len(ids)):
+    def generate(self,const, *ids): 
+        ans = 'void '+ids[0] # 不考虑const,认为不可能const
+        for i in range(1, len(ids)): # 实际上只会有一个id
             ans = ans + ',' + ids[i]
         return ans
 
 
-class StringType(object):
+class StringType(object):  # 暂时不考虑一个变量是string类型的情况，只考虑常量字符串
     def __init__(self):
         self.name = 'string'
-        self.cname = 'string'
+        self.cname = 'char*'
+        self.print_type = '%s'
 
     def __str__(self):
         return self.name
@@ -101,16 +118,19 @@ class StringType(object):
     def __repr__(self):
         return str(self)
 
-    def generate(self, *ids):
-        ans = 'string '+ids[0]  # TODO：C语言string怎么表示？
-        for i in range(1, len(ids)):
-            ans = ans + ',' + ids[i]
+    def generate(self, const, *ids):
+        if const:
+            ans = 'const char '+ids[0] + '[]'
+        else:
+            ans = 'std::string '+ids[0]  # TODO C语言string变量怎么表示？得C++
+            for i in range(1, len(ids)):
+                ans = ans + ',' + ids[i]
         return ans
 
 
 class ArrayType(object):  # 每个实例代表一个数组类型
-    def __init__(self, period,
-                 type):  # 根据ast_node.py,node.childs=(period, type)
+    def __init__(self, period, type):
+        # 根据ast_node.py,node.childs=(period, type)
         self.name = 'array'
         self.period = period  # 数组各维度下标范围（起始，终止）：二元组列表
         # 起始和终止又分别是二元组。形如('integer', 1)。既包括类型又包括值。
@@ -127,16 +147,19 @@ class ArrayType(object):  # 每个实例代表一个数组类型
     def __repr__(self):
         return str(self)
 
-    def generate(self, *ids):
-        ans = self.type.generate(ids[0])
-        for pair in self.period:
-            ans += '[' + str(int(pair[1][1]) - int(pair[0][1]) + 1) + ']'
-            # 输出是不输出数组下标的类型
-            # pair[0][0]为下标类型，pair[0][1]为下标值
-        for i in range(1, len(ids)):
-            ans = ans + ',' + ids[i]
+    def generate(self, const, *ids):
+        if const:
+            ans = self.type.generate(const,ids[0])+"[]" # const 则只考虑一个id
+        else:
+            ans = self.type.generate(const,ids[0])
             for pair in self.period:
                 ans += '[' + str(int(pair[1][1]) - int(pair[0][1]) + 1) + ']'
+                # 输出是不输出数组下标的类型
+                # pair[0][0]为下标类型，pair[0][1]为下标值
+            for i in range(1, len(ids)):
+                ans = ans + ',' + ids[i]
+                for pair in self.period:
+                    ans += '[' + str(int(pair[1][1]) - int(pair[0][1]) + 1) + ']'
         return ans
 
 
@@ -174,8 +197,8 @@ class FunctionType(object):  # 每个实例代表一个函数类型
     def __repr__(self):
         return str(self)
     
-    def generate(self, id, param_list):
-        ans = self.type.generate(id)
+    def generate(self, const, id, param_list): # 不考虑const
+        ans = self.type.generate(const, id)
         ans += '('
         first = True
         for i in range(len(param_list)):
@@ -183,7 +206,7 @@ class FunctionType(object):  # 每个实例代表一个函数类型
                 first = False
             else:
                 ans += ','
-            ans += self.params[i].generate(param_list[i])
+            ans += self.params[i].generate(False, param_list[i])
         ans += ')'
         return ans
 
@@ -200,8 +223,8 @@ class ConstType(object):  # 每个实例代表一个常量类型
     def __repr__(self):
         return str(self)
 
-    def generate(self, id):
-        return 'const ' + self.type.generate(id) + ' = ' + str(self.value)
+    def generate(self, const, id): # 不考虑const
+        return self.type.generate(True, id) + ' = ' + str(self.value)
 
 
 class ReferenceType(object):  # 每个实例代表一个引用传参类型
@@ -215,8 +238,8 @@ class ReferenceType(object):  # 每个实例代表一个引用传参类型
     def __repr__(self):
         return str(self)
 
-    def generate(self, id):
-        return self.type.generate('(*' + id + ')')
+    def generate(self, const, id):
+        return self.type.generate(const, '(*' + id + ')')
 
 
 class TypesTable(object):
