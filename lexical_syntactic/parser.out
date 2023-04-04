@@ -2,7 +2,6 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
-    BCONST
     DOWNTO
     EOF
     FORWARD
@@ -31,172 +30,178 @@ Rule 9     const_declaration -> ID EQU const_value
 Rule 10    const_declaration -> const_declaration SEMI ID EQU const_value
 Rule 11    const_value -> ADDOP ICONST
 Rule 12    const_value -> ICONST
-Rule 13    const_value -> CCONST
-Rule 14    var_declarations -> VAR var_declaration SEMI
-Rule 15    var_declarations -> empty
-Rule 16    var_declaration -> idlist COLON type
-Rule 17    var_declaration -> var_declaration SEMI idlist COLON type
-Rule 18    type -> basic_type
-Rule 19    type -> ARRAY LBRACK period RBRACK OF basic_type
-Rule 20    basic_type -> INTEGER
-Rule 21    basic_type -> REAL
-Rule 22    basic_type -> CHAR
-Rule 23    basic_type -> STRING
-Rule 24    basic_type -> BOOLEAN
-Rule 25    my_period_part -> ADDOP ICONST
-Rule 26    my_period_part -> ICONST
-Rule 27    my_period_part -> CCONST
-Rule 28    period -> my_period_part DOTDOT my_period_part
-Rule 29    period -> period COMMA my_period_part DOTDOT my_period_part
-Rule 30    subprogram_declarations -> subprogram_declarations subprogram SEMI
-Rule 31    subprogram_declarations -> empty
-Rule 32    subprogram -> subprogram_head SEMI subprogram_body
-Rule 33    subprogram_head -> PROCEDURE ID formal_parameter
-Rule 34    subprogram_head -> FUNCTION ID formal_parameter COLON basic_type
-Rule 35    formal_parameter -> LPAREN parameter_list RPAREN
-Rule 36    formal_parameter -> empty
-Rule 37    parameter_list -> parameter_list SEMI parameter
-Rule 38    parameter_list -> parameter
-Rule 39    parameter -> var_parameter
-Rule 40    parameter -> value_parameter
-Rule 41    var_parameter -> VAR value_parameter
-Rule 42    value_parameter -> idlist COLON basic_type
-Rule 43    subprogram_body -> const_declarations var_declarations compound_statement
-Rule 44    compound_statement -> BEGIN statement_list END
-Rule 45    statement_list -> statement_list SEMI statement
-Rule 46    statement_list -> statement
-Rule 47    statement -> empty
-Rule 48    statement -> variable ASSIGN expression
-Rule 49    statement -> procedure_call
-Rule 50    statement -> compound_statement
-Rule 51    statement -> IF expression THEN statement else_part
-Rule 52    statement -> FOR ID ASSIGN expression TO expression DO statement
-Rule 53    statement -> READ LPAREN variable_list RPAREN
-Rule 54    statement -> WRITE LPAREN expression_list RPAREN
-Rule 55    variable_list -> variable_list COMMA variable
-Rule 56    variable_list -> variable
-Rule 57    variable -> ID id_varpart
-Rule 58    id_varpart -> LBRACK expression RBRACK
-Rule 59    id_varpart -> empty
-Rule 60    procedure_call -> ID
-Rule 61    procedure_call -> ID LPAREN expression_list RPAREN
-Rule 62    else_part -> ELSE statement
-Rule 63    else_part -> empty
-Rule 64    expression_list -> expression_list COMMA expression
-Rule 65    expression_list -> expression
-Rule 66    expression -> simple_expression RELOP simple_expression
-Rule 67    expression -> simple_expression EQU simple_expression
-Rule 68    expression -> simple_expression
-Rule 69    simple_expression -> simple_expression ADDOP term
-Rule 70    simple_expression -> term
-Rule 71    term -> term MULDIVANDOP factor
-Rule 72    term -> factor
-Rule 73    factor -> number
-Rule 74    factor -> variable
-Rule 75    factor -> ID LPAREN expression_list RPAREN
-Rule 76    factor -> NOTOP factor
-Rule 77    factor -> ADDOP factor
-Rule 78    number -> ICONST
-Rule 79    number -> RCONST
-Rule 80    empty -> <empty>
+Rule 13    const_value -> RCONST
+Rule 14    const_value -> CCONST
+Rule 15    const_value -> BCONST
+Rule 16    const_value -> string
+Rule 17    var_declarations -> VAR var_declaration SEMI
+Rule 18    var_declarations -> empty
+Rule 19    var_declaration -> idlist COLON type
+Rule 20    var_declaration -> var_declaration SEMI idlist COLON type
+Rule 21    type -> basic_type
+Rule 22    type -> ARRAY LBRACK period RBRACK OF basic_type
+Rule 23    basic_type -> INTEGER
+Rule 24    basic_type -> REAL
+Rule 25    basic_type -> CHAR
+Rule 26    basic_type -> BOOLEAN
+Rule 27    my_period_part -> ADDOP ICONST
+Rule 28    my_period_part -> ICONST
+Rule 29    my_period_part -> CCONST
+Rule 30    period -> my_period_part DOTDOT my_period_part
+Rule 31    period -> period COMMA my_period_part DOTDOT my_period_part
+Rule 32    subprogram_declarations -> subprogram_declarations subprogram SEMI
+Rule 33    subprogram_declarations -> empty
+Rule 34    subprogram -> subprogram_head SEMI subprogram_body
+Rule 35    subprogram_head -> PROCEDURE ID formal_parameter
+Rule 36    subprogram_head -> FUNCTION ID formal_parameter COLON basic_type
+Rule 37    formal_parameter -> LPAREN parameter_list RPAREN
+Rule 38    formal_parameter -> empty
+Rule 39    parameter_list -> parameter_list SEMI parameter
+Rule 40    parameter_list -> parameter
+Rule 41    parameter -> var_parameter
+Rule 42    parameter -> value_parameter
+Rule 43    var_parameter -> VAR value_parameter
+Rule 44    value_parameter -> idlist COLON basic_type
+Rule 45    subprogram_body -> const_declarations var_declarations compound_statement
+Rule 46    compound_statement -> BEGIN statement_list END
+Rule 47    statement_list -> statement_list SEMI statement
+Rule 48    statement_list -> statement
+Rule 49    statement -> empty
+Rule 50    statement -> variable ASSIGN expression
+Rule 51    statement -> procedure_call
+Rule 52    statement -> compound_statement
+Rule 53    statement -> IF expression THEN statement else_part
+Rule 54    statement -> FOR ID ASSIGN expression TO expression DO statement
+Rule 55    statement -> READ LPAREN variable_list RPAREN
+Rule 56    statement -> WRITE LPAREN expression_list RPAREN
+Rule 57    statement -> READLN LPAREN variable_list RPAREN
+Rule 58    statement -> WRITELN LPAREN expression_list RPAREN
+Rule 59    variable_list -> variable_list COMMA variable
+Rule 60    variable_list -> variable
+Rule 61    variable -> ID id_varpart
+Rule 62    id_varpart -> LBRACK expression_list RBRACK
+Rule 63    id_varpart -> empty
+Rule 64    procedure_call -> ID
+Rule 65    procedure_call -> ID LPAREN expression_list RPAREN
+Rule 66    else_part -> ELSE statement
+Rule 67    else_part -> empty
+Rule 68    expression_list -> expression_list COMMA expression
+Rule 69    expression_list -> expression
+Rule 70    expression -> simple_expression RELOP simple_expression
+Rule 71    expression -> simple_expression EQU simple_expression
+Rule 72    expression -> simple_expression
+Rule 73    simple_expression -> simple_expression ADDOP term
+Rule 74    simple_expression -> term
+Rule 75    term -> term MULDIVANDOP factor
+Rule 76    term -> factor
+Rule 77    factor -> const_value
+Rule 78    factor -> variable
+Rule 79    factor -> LPAREN expression RPAREN
+Rule 80    factor -> ID LPAREN expression_list RPAREN
+Rule 81    factor -> NOTOP factor
+Rule 82    factor -> ADDOP factor
+Rule 83    string -> STRING
+Rule 84    empty -> <empty>
 
 Terminals, with rules where they appear
 
-ADDOP                : 11 25 69 77
-ARRAY                : 19
-ASSIGN               : 48 52
-BCONST               : 
-BEGIN                : 44
-BOOLEAN              : 24
-CCONST               : 13 27
-CHAR                 : 22
-COLON                : 16 17 34 42
-COMMA                : 4 29 55 64
+ADDOP                : 11 27 73 82
+ARRAY                : 22
+ASSIGN               : 50 54
+BCONST               : 15
+BEGIN                : 46
+BOOLEAN              : 26
+CCONST               : 14 29
+CHAR                 : 25
+COLON                : 19 20 36 44
+COMMA                : 4 31 59 68
 CONST                : 7
-DO                   : 52
+DO                   : 54
 DOT                  : 1
-DOTDOT               : 28 29
+DOTDOT               : 30 31
 DOWNTO               : 
-ELSE                 : 62
-END                  : 44
+ELSE                 : 66
+END                  : 46
 EOF                  : 
-EQU                  : 9 10 67
-FOR                  : 52
+EQU                  : 9 10 71
+FOR                  : 54
 FORWARD              : 
-FUNCTION             : 34
-ICONST               : 11 12 25 26 78
-ID                   : 2 3 4 5 9 10 33 34 52 57 60 61 75
-IF                   : 51
+FUNCTION             : 36
+ICONST               : 11 12 27 28
+ID                   : 2 3 4 5 9 10 35 36 54 61 64 65 80
+IF                   : 53
 INOP                 : 
-INTEGER              : 20
-LBRACK               : 19 58
+INTEGER              : 23
+LBRACK               : 22 62
 LCURL                : 
-LPAREN               : 3 35 53 54 61 75
-MULDIVANDOP          : 71
-NOTOP                : 76
-OF                   : 19
+LPAREN               : 3 37 55 56 57 58 65 79 80
+MULDIVANDOP          : 75
+NOTOP                : 81
+OF                   : 22
 OROP                 : 
-PROCEDURE            : 33
+PROCEDURE            : 35
 PROGRAM              : 2 3
-RBRACK               : 19 58
-RCONST               : 79
+RBRACK               : 22 62
+RCONST               : 13
 RCURL                : 
-READ                 : 53
-REAL                 : 21
+READ                 : 55
+READLN               : 57
+REAL                 : 24
 RECORD               : 
-RELOP                : 66
-RPAREN               : 3 35 53 54 61 75
-SEMI                 : 1 7 10 14 17 30 32 37 45
+RELOP                : 70
+RPAREN               : 3 37 55 56 57 58 65 79 80
+SEMI                 : 1 7 10 17 20 32 34 39 47
 SET                  : 
-STRING               : 23
-THEN                 : 51
-TO                   : 52
+STRING               : 83
+THEN                 : 53
+TO                   : 54
 TYPE                 : 
-VAR                  : 14 41
+VAR                  : 17 43
 WHILE                : 
 WITH                 : 
-WRITE                : 54
+WRITE                : 56
+WRITELN              : 58
 error                : 
 
 Nonterminals, with rules where they appear
 
-basic_type           : 18 19 34 42
-compound_statement   : 6 43 50
+basic_type           : 21 22 36 44
+compound_statement   : 6 45 52
 const_declaration    : 7 10
-const_declarations   : 6 43
-const_value          : 9 10
-else_part            : 51
-empty                : 8 15 31 36 47 59 63
-expression           : 48 51 52 52 58 64 65
-expression_list      : 54 61 64 75
-factor               : 71 72 76 77
-formal_parameter     : 33 34
-id_varpart           : 57
-idlist               : 3 4 16 17 42
-my_period_part       : 28 28 29 29
-number               : 73
-parameter            : 37 38
-parameter_list       : 35 37
-period               : 19 29
-procedure_call       : 49
+const_declarations   : 6 45
+const_value          : 9 10 77
+else_part            : 53
+empty                : 8 18 33 38 49 63 67
+expression           : 50 53 54 54 68 69 79
+expression_list      : 56 58 62 65 68 80
+factor               : 75 76 81 82
+formal_parameter     : 35 36
+id_varpart           : 61
+idlist               : 3 4 19 20 44
+my_period_part       : 30 30 31 31
+parameter            : 39 40
+parameter_list       : 37 39
+period               : 22 31
+procedure_call       : 51
 program              : 0
 program_body         : 1
 program_head         : 1
-simple_expression    : 66 66 67 67 68 69
-statement            : 45 46 51 52 62
-statement_list       : 44 45
-subprogram           : 30
-subprogram_body      : 32
-subprogram_declarations : 6 30
-subprogram_head      : 32
-term                 : 69 70 71
-type                 : 16 17
-value_parameter      : 40 41
-var_declaration      : 14 17
-var_declarations     : 6 43
-var_parameter        : 39
-variable             : 48 55 56 74
-variable_list        : 53 55
+simple_expression    : 70 70 71 71 72 73
+statement            : 47 48 53 54 66
+statement_list       : 46 47
+string               : 16
+subprogram           : 32
+subprogram_body      : 34
+subprogram_declarations : 6 32
+subprogram_head      : 34
+term                 : 73 74 75
+type                 : 19 20
+value_parameter      : 42 43
+var_declaration      : 17 20
+var_declarations     : 6 45
+var_parameter        : 41
+variable             : 50 59 60 78
+variable_list        : 55 57 59
 
 Parsing method: LALR
 
@@ -239,13 +244,13 @@ state 4
     (6) program_body -> . const_declarations var_declarations subprogram_declarations compound_statement
     (7) const_declarations -> . CONST const_declaration SEMI
     (8) const_declarations -> . empty
-    (80) empty -> .
+    (84) empty -> .
 
     CONST           shift and go to state 8
-    VAR             reduce using rule 80 (empty -> .)
-    BEGIN           reduce using rule 80 (empty -> .)
-    PROCEDURE       reduce using rule 80 (empty -> .)
-    FUNCTION        reduce using rule 80 (empty -> .)
+    VAR             reduce using rule 84 (empty -> .)
+    BEGIN           reduce using rule 84 (empty -> .)
+    PROCEDURE       reduce using rule 84 (empty -> .)
+    FUNCTION        reduce using rule 84 (empty -> .)
 
     program_body                   shift and go to state 6
     const_declarations             shift and go to state 7
@@ -270,14 +275,14 @@ state 6
 state 7
 
     (6) program_body -> const_declarations . var_declarations subprogram_declarations compound_statement
-    (14) var_declarations -> . VAR var_declaration SEMI
-    (15) var_declarations -> . empty
-    (80) empty -> .
+    (17) var_declarations -> . VAR var_declaration SEMI
+    (18) var_declarations -> . empty
+    (84) empty -> .
 
     VAR             shift and go to state 13
-    BEGIN           reduce using rule 80 (empty -> .)
-    PROCEDURE       reduce using rule 80 (empty -> .)
-    FUNCTION        reduce using rule 80 (empty -> .)
+    BEGIN           reduce using rule 84 (empty -> .)
+    PROCEDURE       reduce using rule 84 (empty -> .)
+    FUNCTION        reduce using rule 84 (empty -> .)
 
     var_declarations               shift and go to state 12
     empty                          shift and go to state 14
@@ -322,22 +327,22 @@ state 11
 state 12
 
     (6) program_body -> const_declarations var_declarations . subprogram_declarations compound_statement
-    (30) subprogram_declarations -> . subprogram_declarations subprogram SEMI
-    (31) subprogram_declarations -> . empty
-    (80) empty -> .
+    (32) subprogram_declarations -> . subprogram_declarations subprogram SEMI
+    (33) subprogram_declarations -> . empty
+    (84) empty -> .
 
-    BEGIN           reduce using rule 80 (empty -> .)
-    PROCEDURE       reduce using rule 80 (empty -> .)
-    FUNCTION        reduce using rule 80 (empty -> .)
+    BEGIN           reduce using rule 84 (empty -> .)
+    PROCEDURE       reduce using rule 84 (empty -> .)
+    FUNCTION        reduce using rule 84 (empty -> .)
 
     subprogram_declarations        shift and go to state 19
     empty                          shift and go to state 20
 
 state 13
 
-    (14) var_declarations -> VAR . var_declaration SEMI
-    (16) var_declaration -> . idlist COLON type
-    (17) var_declaration -> . var_declaration SEMI idlist COLON type
+    (17) var_declarations -> VAR . var_declaration SEMI
+    (19) var_declaration -> . idlist COLON type
+    (20) var_declaration -> . var_declaration SEMI idlist COLON type
     (4) idlist -> . idlist COMMA ID
     (5) idlist -> . ID
 
@@ -348,11 +353,11 @@ state 13
 
 state 14
 
-    (15) var_declarations -> empty .
+    (18) var_declarations -> empty .
 
-    BEGIN           reduce using rule 15 (var_declarations -> empty .)
-    PROCEDURE       reduce using rule 15 (var_declarations -> empty .)
-    FUNCTION        reduce using rule 15 (var_declarations -> empty .)
+    BEGIN           reduce using rule 18 (var_declarations -> empty .)
+    PROCEDURE       reduce using rule 18 (var_declarations -> empty .)
+    FUNCTION        reduce using rule 18 (var_declarations -> empty .)
 
 
 state 15
@@ -391,11 +396,11 @@ state 18
 state 19
 
     (6) program_body -> const_declarations var_declarations subprogram_declarations . compound_statement
-    (30) subprogram_declarations -> subprogram_declarations . subprogram SEMI
-    (44) compound_statement -> . BEGIN statement_list END
-    (32) subprogram -> . subprogram_head SEMI subprogram_body
-    (33) subprogram_head -> . PROCEDURE ID formal_parameter
-    (34) subprogram_head -> . FUNCTION ID formal_parameter COLON basic_type
+    (32) subprogram_declarations -> subprogram_declarations . subprogram SEMI
+    (46) compound_statement -> . BEGIN statement_list END
+    (34) subprogram -> . subprogram_head SEMI subprogram_body
+    (35) subprogram_head -> . PROCEDURE ID formal_parameter
+    (36) subprogram_head -> . FUNCTION ID formal_parameter COLON basic_type
 
     BEGIN           shift and go to state 29
     PROCEDURE       shift and go to state 31
@@ -407,24 +412,24 @@ state 19
 
 state 20
 
-    (31) subprogram_declarations -> empty .
+    (33) subprogram_declarations -> empty .
 
-    BEGIN           reduce using rule 31 (subprogram_declarations -> empty .)
-    PROCEDURE       reduce using rule 31 (subprogram_declarations -> empty .)
-    FUNCTION        reduce using rule 31 (subprogram_declarations -> empty .)
+    BEGIN           reduce using rule 33 (subprogram_declarations -> empty .)
+    PROCEDURE       reduce using rule 33 (subprogram_declarations -> empty .)
+    FUNCTION        reduce using rule 33 (subprogram_declarations -> empty .)
 
 
 state 21
 
-    (14) var_declarations -> VAR var_declaration . SEMI
-    (17) var_declaration -> var_declaration . SEMI idlist COLON type
+    (17) var_declarations -> VAR var_declaration . SEMI
+    (20) var_declaration -> var_declaration . SEMI idlist COLON type
 
     SEMI            shift and go to state 33
 
 
 state 22
 
-    (16) var_declaration -> idlist . COLON type
+    (19) var_declaration -> idlist . COLON type
     (4) idlist -> idlist . COMMA ID
 
     COLON           shift and go to state 34
@@ -448,13 +453,21 @@ state 24
     (9) const_declaration -> ID EQU . const_value
     (11) const_value -> . ADDOP ICONST
     (12) const_value -> . ICONST
-    (13) const_value -> . CCONST
+    (13) const_value -> . RCONST
+    (14) const_value -> . CCONST
+    (15) const_value -> . BCONST
+    (16) const_value -> . string
+    (83) string -> . STRING
 
     ADDOP           shift and go to state 37
     ICONST          shift and go to state 38
-    CCONST          shift and go to state 39
+    RCONST          shift and go to state 39
+    CCONST          shift and go to state 40
+    BCONST          shift and go to state 41
+    STRING          shift and go to state 43
 
     const_value                    shift and go to state 36
+    string                         shift and go to state 42
 
 state 25
 
@@ -467,7 +480,7 @@ state 26
 
     (4) idlist -> idlist COMMA . ID
 
-    ID              shift and go to state 40
+    ID              shift and go to state 44
 
 
 state 27
@@ -479,107 +492,109 @@ state 27
 
 state 28
 
-    (30) subprogram_declarations -> subprogram_declarations subprogram . SEMI
+    (32) subprogram_declarations -> subprogram_declarations subprogram . SEMI
 
-    SEMI            shift and go to state 41
+    SEMI            shift and go to state 45
 
 
 state 29
 
-    (44) compound_statement -> BEGIN . statement_list END
-    (45) statement_list -> . statement_list SEMI statement
-    (46) statement_list -> . statement
-    (47) statement -> . empty
-    (48) statement -> . variable ASSIGN expression
-    (49) statement -> . procedure_call
-    (50) statement -> . compound_statement
-    (51) statement -> . IF expression THEN statement else_part
-    (52) statement -> . FOR ID ASSIGN expression TO expression DO statement
-    (53) statement -> . READ LPAREN variable_list RPAREN
-    (54) statement -> . WRITE LPAREN expression_list RPAREN
-    (80) empty -> .
-    (57) variable -> . ID id_varpart
-    (60) procedure_call -> . ID
-    (61) procedure_call -> . ID LPAREN expression_list RPAREN
-    (44) compound_statement -> . BEGIN statement_list END
+    (46) compound_statement -> BEGIN . statement_list END
+    (47) statement_list -> . statement_list SEMI statement
+    (48) statement_list -> . statement
+    (49) statement -> . empty
+    (50) statement -> . variable ASSIGN expression
+    (51) statement -> . procedure_call
+    (52) statement -> . compound_statement
+    (53) statement -> . IF expression THEN statement else_part
+    (54) statement -> . FOR ID ASSIGN expression TO expression DO statement
+    (55) statement -> . READ LPAREN variable_list RPAREN
+    (56) statement -> . WRITE LPAREN expression_list RPAREN
+    (57) statement -> . READLN LPAREN variable_list RPAREN
+    (58) statement -> . WRITELN LPAREN expression_list RPAREN
+    (84) empty -> .
+    (61) variable -> . ID id_varpart
+    (64) procedure_call -> . ID
+    (65) procedure_call -> . ID LPAREN expression_list RPAREN
+    (46) compound_statement -> . BEGIN statement_list END
 
-    IF              shift and go to state 48
-    FOR             shift and go to state 49
-    READ            shift and go to state 51
-    WRITE           shift and go to state 52
-    END             reduce using rule 80 (empty -> .)
-    SEMI            reduce using rule 80 (empty -> .)
-    ID              shift and go to state 50
+    IF              shift and go to state 52
+    FOR             shift and go to state 53
+    READ            shift and go to state 55
+    WRITE           shift and go to state 56
+    READLN          shift and go to state 57
+    WRITELN         shift and go to state 58
+    END             reduce using rule 84 (empty -> .)
+    SEMI            reduce using rule 84 (empty -> .)
+    ID              shift and go to state 54
     BEGIN           shift and go to state 29
 
-    statement_list                 shift and go to state 42
-    statement                      shift and go to state 43
-    empty                          shift and go to state 44
-    variable                       shift and go to state 45
-    procedure_call                 shift and go to state 46
-    compound_statement             shift and go to state 47
+    statement_list                 shift and go to state 46
+    statement                      shift and go to state 47
+    empty                          shift and go to state 48
+    variable                       shift and go to state 49
+    procedure_call                 shift and go to state 50
+    compound_statement             shift and go to state 51
 
 state 30
 
-    (32) subprogram -> subprogram_head . SEMI subprogram_body
+    (34) subprogram -> subprogram_head . SEMI subprogram_body
 
-    SEMI            shift and go to state 53
+    SEMI            shift and go to state 59
 
 
 state 31
 
-    (33) subprogram_head -> PROCEDURE . ID formal_parameter
+    (35) subprogram_head -> PROCEDURE . ID formal_parameter
 
-    ID              shift and go to state 54
+    ID              shift and go to state 60
 
 
 state 32
 
-    (34) subprogram_head -> FUNCTION . ID formal_parameter COLON basic_type
+    (36) subprogram_head -> FUNCTION . ID formal_parameter COLON basic_type
 
-    ID              shift and go to state 55
+    ID              shift and go to state 61
 
 
 state 33
 
-    (14) var_declarations -> VAR var_declaration SEMI .
-    (17) var_declaration -> var_declaration SEMI . idlist COLON type
+    (17) var_declarations -> VAR var_declaration SEMI .
+    (20) var_declaration -> var_declaration SEMI . idlist COLON type
     (4) idlist -> . idlist COMMA ID
     (5) idlist -> . ID
 
-    BEGIN           reduce using rule 14 (var_declarations -> VAR var_declaration SEMI .)
-    PROCEDURE       reduce using rule 14 (var_declarations -> VAR var_declaration SEMI .)
-    FUNCTION        reduce using rule 14 (var_declarations -> VAR var_declaration SEMI .)
+    BEGIN           reduce using rule 17 (var_declarations -> VAR var_declaration SEMI .)
+    PROCEDURE       reduce using rule 17 (var_declarations -> VAR var_declaration SEMI .)
+    FUNCTION        reduce using rule 17 (var_declarations -> VAR var_declaration SEMI .)
     ID              shift and go to state 17
 
-    idlist                         shift and go to state 56
+    idlist                         shift and go to state 62
 
 state 34
 
-    (16) var_declaration -> idlist COLON . type
-    (18) type -> . basic_type
-    (19) type -> . ARRAY LBRACK period RBRACK OF basic_type
-    (20) basic_type -> . INTEGER
-    (21) basic_type -> . REAL
-    (22) basic_type -> . CHAR
-    (23) basic_type -> . STRING
-    (24) basic_type -> . BOOLEAN
+    (19) var_declaration -> idlist COLON . type
+    (21) type -> . basic_type
+    (22) type -> . ARRAY LBRACK period RBRACK OF basic_type
+    (23) basic_type -> . INTEGER
+    (24) basic_type -> . REAL
+    (25) basic_type -> . CHAR
+    (26) basic_type -> . BOOLEAN
 
-    ARRAY           shift and go to state 59
-    INTEGER         shift and go to state 60
-    REAL            shift and go to state 61
-    CHAR            shift and go to state 62
-    STRING          shift and go to state 63
-    BOOLEAN         shift and go to state 64
+    ARRAY           shift and go to state 65
+    INTEGER         shift and go to state 66
+    REAL            shift and go to state 67
+    CHAR            shift and go to state 68
+    BOOLEAN         shift and go to state 69
 
-    type                           shift and go to state 57
-    basic_type                     shift and go to state 58
+    type                           shift and go to state 63
+    basic_type                     shift and go to state 64
 
 state 35
 
     (10) const_declaration -> const_declaration SEMI ID . EQU const_value
 
-    EQU             shift and go to state 65
+    EQU             shift and go to state 70
 
 
 state 36
@@ -593,7 +608,7 @@ state 37
 
     (11) const_value -> ADDOP . ICONST
 
-    ICONST          shift and go to state 66
+    ICONST          shift and go to state 71
 
 
 state 38
@@ -601,16 +616,116 @@ state 38
     (12) const_value -> ICONST .
 
     SEMI            reduce using rule 12 (const_value -> ICONST .)
+    MULDIVANDOP     reduce using rule 12 (const_value -> ICONST .)
+    RELOP           reduce using rule 12 (const_value -> ICONST .)
+    EQU             reduce using rule 12 (const_value -> ICONST .)
+    ADDOP           reduce using rule 12 (const_value -> ICONST .)
+    THEN            reduce using rule 12 (const_value -> ICONST .)
+    END             reduce using rule 12 (const_value -> ICONST .)
+    ELSE            reduce using rule 12 (const_value -> ICONST .)
+    RPAREN          reduce using rule 12 (const_value -> ICONST .)
+    COMMA           reduce using rule 12 (const_value -> ICONST .)
+    RBRACK          reduce using rule 12 (const_value -> ICONST .)
+    TO              reduce using rule 12 (const_value -> ICONST .)
+    DO              reduce using rule 12 (const_value -> ICONST .)
 
 
 state 39
 
-    (13) const_value -> CCONST .
+    (13) const_value -> RCONST .
 
-    SEMI            reduce using rule 13 (const_value -> CCONST .)
+    SEMI            reduce using rule 13 (const_value -> RCONST .)
+    MULDIVANDOP     reduce using rule 13 (const_value -> RCONST .)
+    RELOP           reduce using rule 13 (const_value -> RCONST .)
+    EQU             reduce using rule 13 (const_value -> RCONST .)
+    ADDOP           reduce using rule 13 (const_value -> RCONST .)
+    THEN            reduce using rule 13 (const_value -> RCONST .)
+    END             reduce using rule 13 (const_value -> RCONST .)
+    ELSE            reduce using rule 13 (const_value -> RCONST .)
+    RPAREN          reduce using rule 13 (const_value -> RCONST .)
+    COMMA           reduce using rule 13 (const_value -> RCONST .)
+    RBRACK          reduce using rule 13 (const_value -> RCONST .)
+    TO              reduce using rule 13 (const_value -> RCONST .)
+    DO              reduce using rule 13 (const_value -> RCONST .)
 
 
 state 40
+
+    (14) const_value -> CCONST .
+
+    SEMI            reduce using rule 14 (const_value -> CCONST .)
+    MULDIVANDOP     reduce using rule 14 (const_value -> CCONST .)
+    RELOP           reduce using rule 14 (const_value -> CCONST .)
+    EQU             reduce using rule 14 (const_value -> CCONST .)
+    ADDOP           reduce using rule 14 (const_value -> CCONST .)
+    THEN            reduce using rule 14 (const_value -> CCONST .)
+    END             reduce using rule 14 (const_value -> CCONST .)
+    ELSE            reduce using rule 14 (const_value -> CCONST .)
+    RPAREN          reduce using rule 14 (const_value -> CCONST .)
+    COMMA           reduce using rule 14 (const_value -> CCONST .)
+    RBRACK          reduce using rule 14 (const_value -> CCONST .)
+    TO              reduce using rule 14 (const_value -> CCONST .)
+    DO              reduce using rule 14 (const_value -> CCONST .)
+
+
+state 41
+
+    (15) const_value -> BCONST .
+
+    SEMI            reduce using rule 15 (const_value -> BCONST .)
+    MULDIVANDOP     reduce using rule 15 (const_value -> BCONST .)
+    RELOP           reduce using rule 15 (const_value -> BCONST .)
+    EQU             reduce using rule 15 (const_value -> BCONST .)
+    ADDOP           reduce using rule 15 (const_value -> BCONST .)
+    THEN            reduce using rule 15 (const_value -> BCONST .)
+    END             reduce using rule 15 (const_value -> BCONST .)
+    ELSE            reduce using rule 15 (const_value -> BCONST .)
+    RPAREN          reduce using rule 15 (const_value -> BCONST .)
+    COMMA           reduce using rule 15 (const_value -> BCONST .)
+    RBRACK          reduce using rule 15 (const_value -> BCONST .)
+    TO              reduce using rule 15 (const_value -> BCONST .)
+    DO              reduce using rule 15 (const_value -> BCONST .)
+
+
+state 42
+
+    (16) const_value -> string .
+
+    SEMI            reduce using rule 16 (const_value -> string .)
+    MULDIVANDOP     reduce using rule 16 (const_value -> string .)
+    RELOP           reduce using rule 16 (const_value -> string .)
+    EQU             reduce using rule 16 (const_value -> string .)
+    ADDOP           reduce using rule 16 (const_value -> string .)
+    THEN            reduce using rule 16 (const_value -> string .)
+    END             reduce using rule 16 (const_value -> string .)
+    ELSE            reduce using rule 16 (const_value -> string .)
+    RPAREN          reduce using rule 16 (const_value -> string .)
+    COMMA           reduce using rule 16 (const_value -> string .)
+    RBRACK          reduce using rule 16 (const_value -> string .)
+    TO              reduce using rule 16 (const_value -> string .)
+    DO              reduce using rule 16 (const_value -> string .)
+
+
+state 43
+
+    (83) string -> STRING .
+
+    SEMI            reduce using rule 83 (string -> STRING .)
+    MULDIVANDOP     reduce using rule 83 (string -> STRING .)
+    RELOP           reduce using rule 83 (string -> STRING .)
+    EQU             reduce using rule 83 (string -> STRING .)
+    ADDOP           reduce using rule 83 (string -> STRING .)
+    THEN            reduce using rule 83 (string -> STRING .)
+    END             reduce using rule 83 (string -> STRING .)
+    ELSE            reduce using rule 83 (string -> STRING .)
+    RPAREN          reduce using rule 83 (string -> STRING .)
+    COMMA           reduce using rule 83 (string -> STRING .)
+    RBRACK          reduce using rule 83 (string -> STRING .)
+    TO              reduce using rule 83 (string -> STRING .)
+    DO              reduce using rule 83 (string -> STRING .)
+
+
+state 44
 
     (4) idlist -> idlist COMMA ID .
 
@@ -619,1829 +734,2198 @@ state 40
     COLON           reduce using rule 4 (idlist -> idlist COMMA ID .)
 
 
-state 41
-
-    (30) subprogram_declarations -> subprogram_declarations subprogram SEMI .
-
-    BEGIN           reduce using rule 30 (subprogram_declarations -> subprogram_declarations subprogram SEMI .)
-    PROCEDURE       reduce using rule 30 (subprogram_declarations -> subprogram_declarations subprogram SEMI .)
-    FUNCTION        reduce using rule 30 (subprogram_declarations -> subprogram_declarations subprogram SEMI .)
-
-
-state 42
-
-    (44) compound_statement -> BEGIN statement_list . END
-    (45) statement_list -> statement_list . SEMI statement
-
-    END             shift and go to state 67
-    SEMI            shift and go to state 68
-
-
-state 43
-
-    (46) statement_list -> statement .
-
-    END             reduce using rule 46 (statement_list -> statement .)
-    SEMI            reduce using rule 46 (statement_list -> statement .)
-
-
-state 44
-
-    (47) statement -> empty .
-
-    END             reduce using rule 47 (statement -> empty .)
-    SEMI            reduce using rule 47 (statement -> empty .)
-    ELSE            reduce using rule 47 (statement -> empty .)
-
-
 state 45
 
-    (48) statement -> variable . ASSIGN expression
+    (32) subprogram_declarations -> subprogram_declarations subprogram SEMI .
 
-    ASSIGN          shift and go to state 69
+    BEGIN           reduce using rule 32 (subprogram_declarations -> subprogram_declarations subprogram SEMI .)
+    PROCEDURE       reduce using rule 32 (subprogram_declarations -> subprogram_declarations subprogram SEMI .)
+    FUNCTION        reduce using rule 32 (subprogram_declarations -> subprogram_declarations subprogram SEMI .)
 
 
 state 46
 
-    (49) statement -> procedure_call .
+    (46) compound_statement -> BEGIN statement_list . END
+    (47) statement_list -> statement_list . SEMI statement
 
-    END             reduce using rule 49 (statement -> procedure_call .)
-    SEMI            reduce using rule 49 (statement -> procedure_call .)
-    ELSE            reduce using rule 49 (statement -> procedure_call .)
+    END             shift and go to state 72
+    SEMI            shift and go to state 73
 
 
 state 47
 
-    (50) statement -> compound_statement .
+    (48) statement_list -> statement .
 
-    END             reduce using rule 50 (statement -> compound_statement .)
-    SEMI            reduce using rule 50 (statement -> compound_statement .)
-    ELSE            reduce using rule 50 (statement -> compound_statement .)
+    END             reduce using rule 48 (statement_list -> statement .)
+    SEMI            reduce using rule 48 (statement_list -> statement .)
 
 
 state 48
 
-    (51) statement -> IF . expression THEN statement else_part
-    (66) expression -> . simple_expression RELOP simple_expression
-    (67) expression -> . simple_expression EQU simple_expression
-    (68) expression -> . simple_expression
-    (69) simple_expression -> . simple_expression ADDOP term
-    (70) simple_expression -> . term
-    (71) term -> . term MULDIVANDOP factor
-    (72) term -> . factor
-    (73) factor -> . number
-    (74) factor -> . variable
-    (75) factor -> . ID LPAREN expression_list RPAREN
-    (76) factor -> . NOTOP factor
-    (77) factor -> . ADDOP factor
-    (78) number -> . ICONST
-    (79) number -> . RCONST
-    (57) variable -> . ID id_varpart
+    (49) statement -> empty .
 
-    ID              shift and go to state 77
-    NOTOP           shift and go to state 78
-    ADDOP           shift and go to state 72
-    ICONST          shift and go to state 79
-    RCONST          shift and go to state 80
+    END             reduce using rule 49 (statement -> empty .)
+    SEMI            reduce using rule 49 (statement -> empty .)
+    ELSE            reduce using rule 49 (statement -> empty .)
 
-    expression                     shift and go to state 70
-    simple_expression              shift and go to state 71
-    term                           shift and go to state 73
-    factor                         shift and go to state 74
-    number                         shift and go to state 75
-    variable                       shift and go to state 76
 
 state 49
 
-    (52) statement -> FOR . ID ASSIGN expression TO expression DO statement
+    (50) statement -> variable . ASSIGN expression
 
-    ID              shift and go to state 81
+    ASSIGN          shift and go to state 74
 
 
 state 50
 
-    (57) variable -> ID . id_varpart
-    (60) procedure_call -> ID .
-    (61) procedure_call -> ID . LPAREN expression_list RPAREN
-    (58) id_varpart -> . LBRACK expression RBRACK
-    (59) id_varpart -> . empty
-    (80) empty -> .
+    (51) statement -> procedure_call .
 
-    END             reduce using rule 60 (procedure_call -> ID .)
-    SEMI            reduce using rule 60 (procedure_call -> ID .)
-    ELSE            reduce using rule 60 (procedure_call -> ID .)
-    LPAREN          shift and go to state 83
-    LBRACK          shift and go to state 84
-    ASSIGN          reduce using rule 80 (empty -> .)
+    END             reduce using rule 51 (statement -> procedure_call .)
+    SEMI            reduce using rule 51 (statement -> procedure_call .)
+    ELSE            reduce using rule 51 (statement -> procedure_call .)
 
-    id_varpart                     shift and go to state 82
-    empty                          shift and go to state 85
 
 state 51
 
-    (53) statement -> READ . LPAREN variable_list RPAREN
+    (52) statement -> compound_statement .
 
-    LPAREN          shift and go to state 86
+    END             reduce using rule 52 (statement -> compound_statement .)
+    SEMI            reduce using rule 52 (statement -> compound_statement .)
+    ELSE            reduce using rule 52 (statement -> compound_statement .)
 
 
 state 52
 
-    (54) statement -> WRITE . LPAREN expression_list RPAREN
+    (53) statement -> IF . expression THEN statement else_part
+    (70) expression -> . simple_expression RELOP simple_expression
+    (71) expression -> . simple_expression EQU simple_expression
+    (72) expression -> . simple_expression
+    (73) simple_expression -> . simple_expression ADDOP term
+    (74) simple_expression -> . term
+    (75) term -> . term MULDIVANDOP factor
+    (76) term -> . factor
+    (77) factor -> . const_value
+    (78) factor -> . variable
+    (79) factor -> . LPAREN expression RPAREN
+    (80) factor -> . ID LPAREN expression_list RPAREN
+    (81) factor -> . NOTOP factor
+    (82) factor -> . ADDOP factor
+    (11) const_value -> . ADDOP ICONST
+    (12) const_value -> . ICONST
+    (13) const_value -> . RCONST
+    (14) const_value -> . CCONST
+    (15) const_value -> . BCONST
+    (16) const_value -> . string
+    (61) variable -> . ID id_varpart
+    (83) string -> . STRING
 
-    LPAREN          shift and go to state 87
+    LPAREN          shift and go to state 82
+    ID              shift and go to state 83
+    NOTOP           shift and go to state 84
+    ADDOP           shift and go to state 77
+    ICONST          shift and go to state 38
+    RCONST          shift and go to state 39
+    CCONST          shift and go to state 40
+    BCONST          shift and go to state 41
+    STRING          shift and go to state 43
 
+    expression                     shift and go to state 75
+    simple_expression              shift and go to state 76
+    term                           shift and go to state 78
+    factor                         shift and go to state 79
+    const_value                    shift and go to state 80
+    variable                       shift and go to state 81
+    string                         shift and go to state 42
 
 state 53
 
-    (32) subprogram -> subprogram_head SEMI . subprogram_body
-    (43) subprogram_body -> . const_declarations var_declarations compound_statement
-    (7) const_declarations -> . CONST const_declaration SEMI
-    (8) const_declarations -> . empty
-    (80) empty -> .
+    (54) statement -> FOR . ID ASSIGN expression TO expression DO statement
 
-    CONST           shift and go to state 8
-    VAR             reduce using rule 80 (empty -> .)
-    BEGIN           reduce using rule 80 (empty -> .)
+    ID              shift and go to state 85
 
-    subprogram_body                shift and go to state 88
-    const_declarations             shift and go to state 89
-    empty                          shift and go to state 9
 
 state 54
 
-    (33) subprogram_head -> PROCEDURE ID . formal_parameter
-    (35) formal_parameter -> . LPAREN parameter_list RPAREN
-    (36) formal_parameter -> . empty
-    (80) empty -> .
+    (61) variable -> ID . id_varpart
+    (64) procedure_call -> ID .
+    (65) procedure_call -> ID . LPAREN expression_list RPAREN
+    (62) id_varpart -> . LBRACK expression_list RBRACK
+    (63) id_varpart -> . empty
+    (84) empty -> .
 
-    LPAREN          shift and go to state 91
-    SEMI            reduce using rule 80 (empty -> .)
+    END             reduce using rule 64 (procedure_call -> ID .)
+    SEMI            reduce using rule 64 (procedure_call -> ID .)
+    ELSE            reduce using rule 64 (procedure_call -> ID .)
+    LPAREN          shift and go to state 87
+    LBRACK          shift and go to state 88
+    ASSIGN          reduce using rule 84 (empty -> .)
 
-    formal_parameter               shift and go to state 90
-    empty                          shift and go to state 92
+    id_varpart                     shift and go to state 86
+    empty                          shift and go to state 89
 
 state 55
 
-    (34) subprogram_head -> FUNCTION ID . formal_parameter COLON basic_type
-    (35) formal_parameter -> . LPAREN parameter_list RPAREN
-    (36) formal_parameter -> . empty
-    (80) empty -> .
+    (55) statement -> READ . LPAREN variable_list RPAREN
 
-    LPAREN          shift and go to state 91
-    COLON           reduce using rule 80 (empty -> .)
+    LPAREN          shift and go to state 90
 
-    formal_parameter               shift and go to state 93
-    empty                          shift and go to state 92
 
 state 56
 
-    (17) var_declaration -> var_declaration SEMI idlist . COLON type
-    (4) idlist -> idlist . COMMA ID
+    (56) statement -> WRITE . LPAREN expression_list RPAREN
 
-    COLON           shift and go to state 94
-    COMMA           shift and go to state 26
+    LPAREN          shift and go to state 91
 
 
 state 57
 
-    (16) var_declaration -> idlist COLON type .
+    (57) statement -> READLN . LPAREN variable_list RPAREN
 
-    SEMI            reduce using rule 16 (var_declaration -> idlist COLON type .)
+    LPAREN          shift and go to state 92
 
 
 state 58
 
-    (18) type -> basic_type .
+    (58) statement -> WRITELN . LPAREN expression_list RPAREN
 
-    SEMI            reduce using rule 18 (type -> basic_type .)
+    LPAREN          shift and go to state 93
 
 
 state 59
 
-    (19) type -> ARRAY . LBRACK period RBRACK OF basic_type
+    (34) subprogram -> subprogram_head SEMI . subprogram_body
+    (45) subprogram_body -> . const_declarations var_declarations compound_statement
+    (7) const_declarations -> . CONST const_declaration SEMI
+    (8) const_declarations -> . empty
+    (84) empty -> .
 
-    LBRACK          shift and go to state 95
+    CONST           shift and go to state 8
+    VAR             reduce using rule 84 (empty -> .)
+    BEGIN           reduce using rule 84 (empty -> .)
 
+    subprogram_body                shift and go to state 94
+    const_declarations             shift and go to state 95
+    empty                          shift and go to state 9
 
 state 60
 
-    (20) basic_type -> INTEGER .
+    (35) subprogram_head -> PROCEDURE ID . formal_parameter
+    (37) formal_parameter -> . LPAREN parameter_list RPAREN
+    (38) formal_parameter -> . empty
+    (84) empty -> .
 
-    SEMI            reduce using rule 20 (basic_type -> INTEGER .)
-    RPAREN          reduce using rule 20 (basic_type -> INTEGER .)
+    LPAREN          shift and go to state 97
+    SEMI            reduce using rule 84 (empty -> .)
 
+    formal_parameter               shift and go to state 96
+    empty                          shift and go to state 98
 
 state 61
 
-    (21) basic_type -> REAL .
+    (36) subprogram_head -> FUNCTION ID . formal_parameter COLON basic_type
+    (37) formal_parameter -> . LPAREN parameter_list RPAREN
+    (38) formal_parameter -> . empty
+    (84) empty -> .
 
-    SEMI            reduce using rule 21 (basic_type -> REAL .)
-    RPAREN          reduce using rule 21 (basic_type -> REAL .)
+    LPAREN          shift and go to state 97
+    COLON           reduce using rule 84 (empty -> .)
 
+    formal_parameter               shift and go to state 99
+    empty                          shift and go to state 98
 
 state 62
 
-    (22) basic_type -> CHAR .
+    (20) var_declaration -> var_declaration SEMI idlist . COLON type
+    (4) idlist -> idlist . COMMA ID
 
-    SEMI            reduce using rule 22 (basic_type -> CHAR .)
-    RPAREN          reduce using rule 22 (basic_type -> CHAR .)
+    COLON           shift and go to state 100
+    COMMA           shift and go to state 26
 
 
 state 63
 
-    (23) basic_type -> STRING .
+    (19) var_declaration -> idlist COLON type .
 
-    SEMI            reduce using rule 23 (basic_type -> STRING .)
-    RPAREN          reduce using rule 23 (basic_type -> STRING .)
+    SEMI            reduce using rule 19 (var_declaration -> idlist COLON type .)
 
 
 state 64
 
-    (24) basic_type -> BOOLEAN .
+    (21) type -> basic_type .
 
-    SEMI            reduce using rule 24 (basic_type -> BOOLEAN .)
-    RPAREN          reduce using rule 24 (basic_type -> BOOLEAN .)
+    SEMI            reduce using rule 21 (type -> basic_type .)
 
 
 state 65
 
+    (22) type -> ARRAY . LBRACK period RBRACK OF basic_type
+
+    LBRACK          shift and go to state 101
+
+
+state 66
+
+    (23) basic_type -> INTEGER .
+
+    SEMI            reduce using rule 23 (basic_type -> INTEGER .)
+    RPAREN          reduce using rule 23 (basic_type -> INTEGER .)
+
+
+state 67
+
+    (24) basic_type -> REAL .
+
+    SEMI            reduce using rule 24 (basic_type -> REAL .)
+    RPAREN          reduce using rule 24 (basic_type -> REAL .)
+
+
+state 68
+
+    (25) basic_type -> CHAR .
+
+    SEMI            reduce using rule 25 (basic_type -> CHAR .)
+    RPAREN          reduce using rule 25 (basic_type -> CHAR .)
+
+
+state 69
+
+    (26) basic_type -> BOOLEAN .
+
+    SEMI            reduce using rule 26 (basic_type -> BOOLEAN .)
+    RPAREN          reduce using rule 26 (basic_type -> BOOLEAN .)
+
+
+state 70
+
     (10) const_declaration -> const_declaration SEMI ID EQU . const_value
     (11) const_value -> . ADDOP ICONST
     (12) const_value -> . ICONST
-    (13) const_value -> . CCONST
+    (13) const_value -> . RCONST
+    (14) const_value -> . CCONST
+    (15) const_value -> . BCONST
+    (16) const_value -> . string
+    (83) string -> . STRING
 
     ADDOP           shift and go to state 37
     ICONST          shift and go to state 38
-    CCONST          shift and go to state 39
+    RCONST          shift and go to state 39
+    CCONST          shift and go to state 40
+    BCONST          shift and go to state 41
+    STRING          shift and go to state 43
 
-    const_value                    shift and go to state 96
+    const_value                    shift and go to state 102
+    string                         shift and go to state 42
 
-state 66
+state 71
 
     (11) const_value -> ADDOP ICONST .
 
     SEMI            reduce using rule 11 (const_value -> ADDOP ICONST .)
 
 
-state 67
-
-    (44) compound_statement -> BEGIN statement_list END .
-
-    DOT             reduce using rule 44 (compound_statement -> BEGIN statement_list END .)
-    END             reduce using rule 44 (compound_statement -> BEGIN statement_list END .)
-    SEMI            reduce using rule 44 (compound_statement -> BEGIN statement_list END .)
-    ELSE            reduce using rule 44 (compound_statement -> BEGIN statement_list END .)
-
-
-state 68
-
-    (45) statement_list -> statement_list SEMI . statement
-    (47) statement -> . empty
-    (48) statement -> . variable ASSIGN expression
-    (49) statement -> . procedure_call
-    (50) statement -> . compound_statement
-    (51) statement -> . IF expression THEN statement else_part
-    (52) statement -> . FOR ID ASSIGN expression TO expression DO statement
-    (53) statement -> . READ LPAREN variable_list RPAREN
-    (54) statement -> . WRITE LPAREN expression_list RPAREN
-    (80) empty -> .
-    (57) variable -> . ID id_varpart
-    (60) procedure_call -> . ID
-    (61) procedure_call -> . ID LPAREN expression_list RPAREN
-    (44) compound_statement -> . BEGIN statement_list END
-
-    IF              shift and go to state 48
-    FOR             shift and go to state 49
-    READ            shift and go to state 51
-    WRITE           shift and go to state 52
-    END             reduce using rule 80 (empty -> .)
-    SEMI            reduce using rule 80 (empty -> .)
-    ID              shift and go to state 50
-    BEGIN           shift and go to state 29
-
-    statement                      shift and go to state 97
-    empty                          shift and go to state 44
-    variable                       shift and go to state 45
-    procedure_call                 shift and go to state 46
-    compound_statement             shift and go to state 47
-
-state 69
-
-    (48) statement -> variable ASSIGN . expression
-    (66) expression -> . simple_expression RELOP simple_expression
-    (67) expression -> . simple_expression EQU simple_expression
-    (68) expression -> . simple_expression
-    (69) simple_expression -> . simple_expression ADDOP term
-    (70) simple_expression -> . term
-    (71) term -> . term MULDIVANDOP factor
-    (72) term -> . factor
-    (73) factor -> . number
-    (74) factor -> . variable
-    (75) factor -> . ID LPAREN expression_list RPAREN
-    (76) factor -> . NOTOP factor
-    (77) factor -> . ADDOP factor
-    (78) number -> . ICONST
-    (79) number -> . RCONST
-    (57) variable -> . ID id_varpart
-
-    ID              shift and go to state 77
-    NOTOP           shift and go to state 78
-    ADDOP           shift and go to state 72
-    ICONST          shift and go to state 79
-    RCONST          shift and go to state 80
-
-    variable                       shift and go to state 76
-    expression                     shift and go to state 98
-    simple_expression              shift and go to state 71
-    term                           shift and go to state 73
-    factor                         shift and go to state 74
-    number                         shift and go to state 75
-
-state 70
-
-    (51) statement -> IF expression . THEN statement else_part
-
-    THEN            shift and go to state 99
-
-
-state 71
-
-    (66) expression -> simple_expression . RELOP simple_expression
-    (67) expression -> simple_expression . EQU simple_expression
-    (68) expression -> simple_expression .
-    (69) simple_expression -> simple_expression . ADDOP term
-
-    RELOP           shift and go to state 100
-    EQU             shift and go to state 101
-    THEN            reduce using rule 68 (expression -> simple_expression .)
-    END             reduce using rule 68 (expression -> simple_expression .)
-    SEMI            reduce using rule 68 (expression -> simple_expression .)
-    ELSE            reduce using rule 68 (expression -> simple_expression .)
-    RPAREN          reduce using rule 68 (expression -> simple_expression .)
-    COMMA           reduce using rule 68 (expression -> simple_expression .)
-    RBRACK          reduce using rule 68 (expression -> simple_expression .)
-    TO              reduce using rule 68 (expression -> simple_expression .)
-    DO              reduce using rule 68 (expression -> simple_expression .)
-    ADDOP           shift and go to state 102
-
-
 state 72
 
-    (77) factor -> ADDOP . factor
-    (73) factor -> . number
-    (74) factor -> . variable
-    (75) factor -> . ID LPAREN expression_list RPAREN
-    (76) factor -> . NOTOP factor
-    (77) factor -> . ADDOP factor
-    (78) number -> . ICONST
-    (79) number -> . RCONST
-    (57) variable -> . ID id_varpart
+    (46) compound_statement -> BEGIN statement_list END .
 
-    ID              shift and go to state 77
-    NOTOP           shift and go to state 78
-    ADDOP           shift and go to state 72
-    ICONST          shift and go to state 79
-    RCONST          shift and go to state 80
+    DOT             reduce using rule 46 (compound_statement -> BEGIN statement_list END .)
+    END             reduce using rule 46 (compound_statement -> BEGIN statement_list END .)
+    SEMI            reduce using rule 46 (compound_statement -> BEGIN statement_list END .)
+    ELSE            reduce using rule 46 (compound_statement -> BEGIN statement_list END .)
 
-    factor                         shift and go to state 103
-    number                         shift and go to state 75
-    variable                       shift and go to state 76
 
 state 73
 
-    (70) simple_expression -> term .
-    (71) term -> term . MULDIVANDOP factor
+    (47) statement_list -> statement_list SEMI . statement
+    (49) statement -> . empty
+    (50) statement -> . variable ASSIGN expression
+    (51) statement -> . procedure_call
+    (52) statement -> . compound_statement
+    (53) statement -> . IF expression THEN statement else_part
+    (54) statement -> . FOR ID ASSIGN expression TO expression DO statement
+    (55) statement -> . READ LPAREN variable_list RPAREN
+    (56) statement -> . WRITE LPAREN expression_list RPAREN
+    (57) statement -> . READLN LPAREN variable_list RPAREN
+    (58) statement -> . WRITELN LPAREN expression_list RPAREN
+    (84) empty -> .
+    (61) variable -> . ID id_varpart
+    (64) procedure_call -> . ID
+    (65) procedure_call -> . ID LPAREN expression_list RPAREN
+    (46) compound_statement -> . BEGIN statement_list END
 
-    RELOP           reduce using rule 70 (simple_expression -> term .)
-    EQU             reduce using rule 70 (simple_expression -> term .)
-    ADDOP           reduce using rule 70 (simple_expression -> term .)
-    THEN            reduce using rule 70 (simple_expression -> term .)
-    END             reduce using rule 70 (simple_expression -> term .)
-    SEMI            reduce using rule 70 (simple_expression -> term .)
-    ELSE            reduce using rule 70 (simple_expression -> term .)
-    RPAREN          reduce using rule 70 (simple_expression -> term .)
-    COMMA           reduce using rule 70 (simple_expression -> term .)
-    RBRACK          reduce using rule 70 (simple_expression -> term .)
-    TO              reduce using rule 70 (simple_expression -> term .)
-    DO              reduce using rule 70 (simple_expression -> term .)
-    MULDIVANDOP     shift and go to state 104
+    IF              shift and go to state 52
+    FOR             shift and go to state 53
+    READ            shift and go to state 55
+    WRITE           shift and go to state 56
+    READLN          shift and go to state 57
+    WRITELN         shift and go to state 58
+    END             reduce using rule 84 (empty -> .)
+    SEMI            reduce using rule 84 (empty -> .)
+    ID              shift and go to state 54
+    BEGIN           shift and go to state 29
 
+    statement                      shift and go to state 103
+    empty                          shift and go to state 48
+    variable                       shift and go to state 49
+    procedure_call                 shift and go to state 50
+    compound_statement             shift and go to state 51
 
 state 74
 
-    (72) term -> factor .
+    (50) statement -> variable ASSIGN . expression
+    (70) expression -> . simple_expression RELOP simple_expression
+    (71) expression -> . simple_expression EQU simple_expression
+    (72) expression -> . simple_expression
+    (73) simple_expression -> . simple_expression ADDOP term
+    (74) simple_expression -> . term
+    (75) term -> . term MULDIVANDOP factor
+    (76) term -> . factor
+    (77) factor -> . const_value
+    (78) factor -> . variable
+    (79) factor -> . LPAREN expression RPAREN
+    (80) factor -> . ID LPAREN expression_list RPAREN
+    (81) factor -> . NOTOP factor
+    (82) factor -> . ADDOP factor
+    (11) const_value -> . ADDOP ICONST
+    (12) const_value -> . ICONST
+    (13) const_value -> . RCONST
+    (14) const_value -> . CCONST
+    (15) const_value -> . BCONST
+    (16) const_value -> . string
+    (61) variable -> . ID id_varpart
+    (83) string -> . STRING
 
-    MULDIVANDOP     reduce using rule 72 (term -> factor .)
-    RELOP           reduce using rule 72 (term -> factor .)
-    EQU             reduce using rule 72 (term -> factor .)
-    ADDOP           reduce using rule 72 (term -> factor .)
-    THEN            reduce using rule 72 (term -> factor .)
-    END             reduce using rule 72 (term -> factor .)
-    SEMI            reduce using rule 72 (term -> factor .)
-    ELSE            reduce using rule 72 (term -> factor .)
-    RPAREN          reduce using rule 72 (term -> factor .)
-    COMMA           reduce using rule 72 (term -> factor .)
-    RBRACK          reduce using rule 72 (term -> factor .)
-    TO              reduce using rule 72 (term -> factor .)
-    DO              reduce using rule 72 (term -> factor .)
+    LPAREN          shift and go to state 82
+    ID              shift and go to state 83
+    NOTOP           shift and go to state 84
+    ADDOP           shift and go to state 77
+    ICONST          shift and go to state 38
+    RCONST          shift and go to state 39
+    CCONST          shift and go to state 40
+    BCONST          shift and go to state 41
+    STRING          shift and go to state 43
 
+    variable                       shift and go to state 81
+    expression                     shift and go to state 104
+    simple_expression              shift and go to state 76
+    term                           shift and go to state 78
+    factor                         shift and go to state 79
+    const_value                    shift and go to state 80
+    string                         shift and go to state 42
 
 state 75
 
-    (73) factor -> number .
+    (53) statement -> IF expression . THEN statement else_part
 
-    MULDIVANDOP     reduce using rule 73 (factor -> number .)
-    RELOP           reduce using rule 73 (factor -> number .)
-    EQU             reduce using rule 73 (factor -> number .)
-    ADDOP           reduce using rule 73 (factor -> number .)
-    THEN            reduce using rule 73 (factor -> number .)
-    END             reduce using rule 73 (factor -> number .)
-    SEMI            reduce using rule 73 (factor -> number .)
-    ELSE            reduce using rule 73 (factor -> number .)
-    RPAREN          reduce using rule 73 (factor -> number .)
-    COMMA           reduce using rule 73 (factor -> number .)
-    RBRACK          reduce using rule 73 (factor -> number .)
-    TO              reduce using rule 73 (factor -> number .)
-    DO              reduce using rule 73 (factor -> number .)
+    THEN            shift and go to state 105
 
 
 state 76
 
-    (74) factor -> variable .
+    (70) expression -> simple_expression . RELOP simple_expression
+    (71) expression -> simple_expression . EQU simple_expression
+    (72) expression -> simple_expression .
+    (73) simple_expression -> simple_expression . ADDOP term
 
-    MULDIVANDOP     reduce using rule 74 (factor -> variable .)
-    RELOP           reduce using rule 74 (factor -> variable .)
-    EQU             reduce using rule 74 (factor -> variable .)
-    ADDOP           reduce using rule 74 (factor -> variable .)
-    THEN            reduce using rule 74 (factor -> variable .)
-    END             reduce using rule 74 (factor -> variable .)
-    SEMI            reduce using rule 74 (factor -> variable .)
-    ELSE            reduce using rule 74 (factor -> variable .)
-    RPAREN          reduce using rule 74 (factor -> variable .)
-    COMMA           reduce using rule 74 (factor -> variable .)
-    RBRACK          reduce using rule 74 (factor -> variable .)
-    TO              reduce using rule 74 (factor -> variable .)
-    DO              reduce using rule 74 (factor -> variable .)
+    RELOP           shift and go to state 106
+    EQU             shift and go to state 107
+    THEN            reduce using rule 72 (expression -> simple_expression .)
+    END             reduce using rule 72 (expression -> simple_expression .)
+    SEMI            reduce using rule 72 (expression -> simple_expression .)
+    ELSE            reduce using rule 72 (expression -> simple_expression .)
+    RPAREN          reduce using rule 72 (expression -> simple_expression .)
+    COMMA           reduce using rule 72 (expression -> simple_expression .)
+    RBRACK          reduce using rule 72 (expression -> simple_expression .)
+    TO              reduce using rule 72 (expression -> simple_expression .)
+    DO              reduce using rule 72 (expression -> simple_expression .)
+    ADDOP           shift and go to state 108
 
 
 state 77
 
-    (75) factor -> ID . LPAREN expression_list RPAREN
-    (57) variable -> ID . id_varpart
-    (58) id_varpart -> . LBRACK expression RBRACK
-    (59) id_varpart -> . empty
-    (80) empty -> .
+    (82) factor -> ADDOP . factor
+    (11) const_value -> ADDOP . ICONST
+    (77) factor -> . const_value
+    (78) factor -> . variable
+    (79) factor -> . LPAREN expression RPAREN
+    (80) factor -> . ID LPAREN expression_list RPAREN
+    (81) factor -> . NOTOP factor
+    (82) factor -> . ADDOP factor
+    (11) const_value -> . ADDOP ICONST
+    (12) const_value -> . ICONST
+    (13) const_value -> . RCONST
+    (14) const_value -> . CCONST
+    (15) const_value -> . BCONST
+    (16) const_value -> . string
+    (61) variable -> . ID id_varpart
+    (83) string -> . STRING
 
-    LPAREN          shift and go to state 105
-    LBRACK          shift and go to state 84
-    MULDIVANDOP     reduce using rule 80 (empty -> .)
-    RELOP           reduce using rule 80 (empty -> .)
-    EQU             reduce using rule 80 (empty -> .)
-    ADDOP           reduce using rule 80 (empty -> .)
-    THEN            reduce using rule 80 (empty -> .)
-    END             reduce using rule 80 (empty -> .)
-    SEMI            reduce using rule 80 (empty -> .)
-    ELSE            reduce using rule 80 (empty -> .)
-    RPAREN          reduce using rule 80 (empty -> .)
-    COMMA           reduce using rule 80 (empty -> .)
-    RBRACK          reduce using rule 80 (empty -> .)
-    TO              reduce using rule 80 (empty -> .)
-    DO              reduce using rule 80 (empty -> .)
+    ICONST          shift and go to state 110
+    LPAREN          shift and go to state 82
+    ID              shift and go to state 83
+    NOTOP           shift and go to state 84
+    ADDOP           shift and go to state 77
+    RCONST          shift and go to state 39
+    CCONST          shift and go to state 40
+    BCONST          shift and go to state 41
+    STRING          shift and go to state 43
 
-    id_varpart                     shift and go to state 82
-    empty                          shift and go to state 85
+    factor                         shift and go to state 109
+    const_value                    shift and go to state 80
+    variable                       shift and go to state 81
+    string                         shift and go to state 42
 
 state 78
 
-    (76) factor -> NOTOP . factor
-    (73) factor -> . number
-    (74) factor -> . variable
-    (75) factor -> . ID LPAREN expression_list RPAREN
-    (76) factor -> . NOTOP factor
-    (77) factor -> . ADDOP factor
-    (78) number -> . ICONST
-    (79) number -> . RCONST
-    (57) variable -> . ID id_varpart
+    (74) simple_expression -> term .
+    (75) term -> term . MULDIVANDOP factor
 
-    ID              shift and go to state 77
-    NOTOP           shift and go to state 78
-    ADDOP           shift and go to state 72
-    ICONST          shift and go to state 79
-    RCONST          shift and go to state 80
+    RELOP           reduce using rule 74 (simple_expression -> term .)
+    EQU             reduce using rule 74 (simple_expression -> term .)
+    ADDOP           reduce using rule 74 (simple_expression -> term .)
+    THEN            reduce using rule 74 (simple_expression -> term .)
+    END             reduce using rule 74 (simple_expression -> term .)
+    SEMI            reduce using rule 74 (simple_expression -> term .)
+    ELSE            reduce using rule 74 (simple_expression -> term .)
+    RPAREN          reduce using rule 74 (simple_expression -> term .)
+    COMMA           reduce using rule 74 (simple_expression -> term .)
+    RBRACK          reduce using rule 74 (simple_expression -> term .)
+    TO              reduce using rule 74 (simple_expression -> term .)
+    DO              reduce using rule 74 (simple_expression -> term .)
+    MULDIVANDOP     shift and go to state 111
 
-    factor                         shift and go to state 106
-    number                         shift and go to state 75
-    variable                       shift and go to state 76
 
 state 79
 
-    (78) number -> ICONST .
+    (76) term -> factor .
 
-    MULDIVANDOP     reduce using rule 78 (number -> ICONST .)
-    RELOP           reduce using rule 78 (number -> ICONST .)
-    EQU             reduce using rule 78 (number -> ICONST .)
-    ADDOP           reduce using rule 78 (number -> ICONST .)
-    THEN            reduce using rule 78 (number -> ICONST .)
-    END             reduce using rule 78 (number -> ICONST .)
-    SEMI            reduce using rule 78 (number -> ICONST .)
-    ELSE            reduce using rule 78 (number -> ICONST .)
-    RPAREN          reduce using rule 78 (number -> ICONST .)
-    COMMA           reduce using rule 78 (number -> ICONST .)
-    RBRACK          reduce using rule 78 (number -> ICONST .)
-    TO              reduce using rule 78 (number -> ICONST .)
-    DO              reduce using rule 78 (number -> ICONST .)
+    MULDIVANDOP     reduce using rule 76 (term -> factor .)
+    RELOP           reduce using rule 76 (term -> factor .)
+    EQU             reduce using rule 76 (term -> factor .)
+    ADDOP           reduce using rule 76 (term -> factor .)
+    THEN            reduce using rule 76 (term -> factor .)
+    END             reduce using rule 76 (term -> factor .)
+    SEMI            reduce using rule 76 (term -> factor .)
+    ELSE            reduce using rule 76 (term -> factor .)
+    RPAREN          reduce using rule 76 (term -> factor .)
+    COMMA           reduce using rule 76 (term -> factor .)
+    RBRACK          reduce using rule 76 (term -> factor .)
+    TO              reduce using rule 76 (term -> factor .)
+    DO              reduce using rule 76 (term -> factor .)
 
 
 state 80
 
-    (79) number -> RCONST .
+    (77) factor -> const_value .
 
-    MULDIVANDOP     reduce using rule 79 (number -> RCONST .)
-    RELOP           reduce using rule 79 (number -> RCONST .)
-    EQU             reduce using rule 79 (number -> RCONST .)
-    ADDOP           reduce using rule 79 (number -> RCONST .)
-    THEN            reduce using rule 79 (number -> RCONST .)
-    END             reduce using rule 79 (number -> RCONST .)
-    SEMI            reduce using rule 79 (number -> RCONST .)
-    ELSE            reduce using rule 79 (number -> RCONST .)
-    RPAREN          reduce using rule 79 (number -> RCONST .)
-    COMMA           reduce using rule 79 (number -> RCONST .)
-    RBRACK          reduce using rule 79 (number -> RCONST .)
-    TO              reduce using rule 79 (number -> RCONST .)
-    DO              reduce using rule 79 (number -> RCONST .)
+    MULDIVANDOP     reduce using rule 77 (factor -> const_value .)
+    RELOP           reduce using rule 77 (factor -> const_value .)
+    EQU             reduce using rule 77 (factor -> const_value .)
+    ADDOP           reduce using rule 77 (factor -> const_value .)
+    THEN            reduce using rule 77 (factor -> const_value .)
+    END             reduce using rule 77 (factor -> const_value .)
+    SEMI            reduce using rule 77 (factor -> const_value .)
+    ELSE            reduce using rule 77 (factor -> const_value .)
+    RPAREN          reduce using rule 77 (factor -> const_value .)
+    COMMA           reduce using rule 77 (factor -> const_value .)
+    RBRACK          reduce using rule 77 (factor -> const_value .)
+    TO              reduce using rule 77 (factor -> const_value .)
+    DO              reduce using rule 77 (factor -> const_value .)
 
 
 state 81
 
-    (52) statement -> FOR ID . ASSIGN expression TO expression DO statement
+    (78) factor -> variable .
 
-    ASSIGN          shift and go to state 107
+    MULDIVANDOP     reduce using rule 78 (factor -> variable .)
+    RELOP           reduce using rule 78 (factor -> variable .)
+    EQU             reduce using rule 78 (factor -> variable .)
+    ADDOP           reduce using rule 78 (factor -> variable .)
+    THEN            reduce using rule 78 (factor -> variable .)
+    END             reduce using rule 78 (factor -> variable .)
+    SEMI            reduce using rule 78 (factor -> variable .)
+    ELSE            reduce using rule 78 (factor -> variable .)
+    RPAREN          reduce using rule 78 (factor -> variable .)
+    COMMA           reduce using rule 78 (factor -> variable .)
+    RBRACK          reduce using rule 78 (factor -> variable .)
+    TO              reduce using rule 78 (factor -> variable .)
+    DO              reduce using rule 78 (factor -> variable .)
 
 
 state 82
 
-    (57) variable -> ID id_varpart .
+    (79) factor -> LPAREN . expression RPAREN
+    (70) expression -> . simple_expression RELOP simple_expression
+    (71) expression -> . simple_expression EQU simple_expression
+    (72) expression -> . simple_expression
+    (73) simple_expression -> . simple_expression ADDOP term
+    (74) simple_expression -> . term
+    (75) term -> . term MULDIVANDOP factor
+    (76) term -> . factor
+    (77) factor -> . const_value
+    (78) factor -> . variable
+    (79) factor -> . LPAREN expression RPAREN
+    (80) factor -> . ID LPAREN expression_list RPAREN
+    (81) factor -> . NOTOP factor
+    (82) factor -> . ADDOP factor
+    (11) const_value -> . ADDOP ICONST
+    (12) const_value -> . ICONST
+    (13) const_value -> . RCONST
+    (14) const_value -> . CCONST
+    (15) const_value -> . BCONST
+    (16) const_value -> . string
+    (61) variable -> . ID id_varpart
+    (83) string -> . STRING
 
-    ASSIGN          reduce using rule 57 (variable -> ID id_varpart .)
-    MULDIVANDOP     reduce using rule 57 (variable -> ID id_varpart .)
-    RELOP           reduce using rule 57 (variable -> ID id_varpart .)
-    EQU             reduce using rule 57 (variable -> ID id_varpart .)
-    ADDOP           reduce using rule 57 (variable -> ID id_varpart .)
-    THEN            reduce using rule 57 (variable -> ID id_varpart .)
-    END             reduce using rule 57 (variable -> ID id_varpart .)
-    SEMI            reduce using rule 57 (variable -> ID id_varpart .)
-    ELSE            reduce using rule 57 (variable -> ID id_varpart .)
-    RPAREN          reduce using rule 57 (variable -> ID id_varpart .)
-    COMMA           reduce using rule 57 (variable -> ID id_varpart .)
-    RBRACK          reduce using rule 57 (variable -> ID id_varpart .)
-    TO              reduce using rule 57 (variable -> ID id_varpart .)
-    DO              reduce using rule 57 (variable -> ID id_varpart .)
+    LPAREN          shift and go to state 82
+    ID              shift and go to state 83
+    NOTOP           shift and go to state 84
+    ADDOP           shift and go to state 77
+    ICONST          shift and go to state 38
+    RCONST          shift and go to state 39
+    CCONST          shift and go to state 40
+    BCONST          shift and go to state 41
+    STRING          shift and go to state 43
 
+    expression                     shift and go to state 112
+    simple_expression              shift and go to state 76
+    term                           shift and go to state 78
+    factor                         shift and go to state 79
+    const_value                    shift and go to state 80
+    variable                       shift and go to state 81
+    string                         shift and go to state 42
 
 state 83
 
-    (61) procedure_call -> ID LPAREN . expression_list RPAREN
-    (64) expression_list -> . expression_list COMMA expression
-    (65) expression_list -> . expression
-    (66) expression -> . simple_expression RELOP simple_expression
-    (67) expression -> . simple_expression EQU simple_expression
-    (68) expression -> . simple_expression
-    (69) simple_expression -> . simple_expression ADDOP term
-    (70) simple_expression -> . term
-    (71) term -> . term MULDIVANDOP factor
-    (72) term -> . factor
-    (73) factor -> . number
-    (74) factor -> . variable
-    (75) factor -> . ID LPAREN expression_list RPAREN
-    (76) factor -> . NOTOP factor
-    (77) factor -> . ADDOP factor
-    (78) number -> . ICONST
-    (79) number -> . RCONST
-    (57) variable -> . ID id_varpart
+    (80) factor -> ID . LPAREN expression_list RPAREN
+    (61) variable -> ID . id_varpart
+    (62) id_varpart -> . LBRACK expression_list RBRACK
+    (63) id_varpart -> . empty
+    (84) empty -> .
 
-    ID              shift and go to state 77
-    NOTOP           shift and go to state 78
-    ADDOP           shift and go to state 72
-    ICONST          shift and go to state 79
-    RCONST          shift and go to state 80
+    LPAREN          shift and go to state 113
+    LBRACK          shift and go to state 88
+    MULDIVANDOP     reduce using rule 84 (empty -> .)
+    RELOP           reduce using rule 84 (empty -> .)
+    EQU             reduce using rule 84 (empty -> .)
+    ADDOP           reduce using rule 84 (empty -> .)
+    THEN            reduce using rule 84 (empty -> .)
+    END             reduce using rule 84 (empty -> .)
+    SEMI            reduce using rule 84 (empty -> .)
+    ELSE            reduce using rule 84 (empty -> .)
+    RPAREN          reduce using rule 84 (empty -> .)
+    COMMA           reduce using rule 84 (empty -> .)
+    RBRACK          reduce using rule 84 (empty -> .)
+    TO              reduce using rule 84 (empty -> .)
+    DO              reduce using rule 84 (empty -> .)
 
-    expression_list                shift and go to state 108
-    expression                     shift and go to state 109
-    simple_expression              shift and go to state 71
-    term                           shift and go to state 73
-    factor                         shift and go to state 74
-    number                         shift and go to state 75
-    variable                       shift and go to state 76
+    id_varpart                     shift and go to state 86
+    empty                          shift and go to state 89
 
 state 84
 
-    (58) id_varpart -> LBRACK . expression RBRACK
-    (66) expression -> . simple_expression RELOP simple_expression
-    (67) expression -> . simple_expression EQU simple_expression
-    (68) expression -> . simple_expression
-    (69) simple_expression -> . simple_expression ADDOP term
-    (70) simple_expression -> . term
-    (71) term -> . term MULDIVANDOP factor
-    (72) term -> . factor
-    (73) factor -> . number
-    (74) factor -> . variable
-    (75) factor -> . ID LPAREN expression_list RPAREN
-    (76) factor -> . NOTOP factor
-    (77) factor -> . ADDOP factor
-    (78) number -> . ICONST
-    (79) number -> . RCONST
-    (57) variable -> . ID id_varpart
+    (81) factor -> NOTOP . factor
+    (77) factor -> . const_value
+    (78) factor -> . variable
+    (79) factor -> . LPAREN expression RPAREN
+    (80) factor -> . ID LPAREN expression_list RPAREN
+    (81) factor -> . NOTOP factor
+    (82) factor -> . ADDOP factor
+    (11) const_value -> . ADDOP ICONST
+    (12) const_value -> . ICONST
+    (13) const_value -> . RCONST
+    (14) const_value -> . CCONST
+    (15) const_value -> . BCONST
+    (16) const_value -> . string
+    (61) variable -> . ID id_varpart
+    (83) string -> . STRING
 
-    ID              shift and go to state 77
-    NOTOP           shift and go to state 78
-    ADDOP           shift and go to state 72
-    ICONST          shift and go to state 79
-    RCONST          shift and go to state 80
+    LPAREN          shift and go to state 82
+    ID              shift and go to state 83
+    NOTOP           shift and go to state 84
+    ADDOP           shift and go to state 77
+    ICONST          shift and go to state 38
+    RCONST          shift and go to state 39
+    CCONST          shift and go to state 40
+    BCONST          shift and go to state 41
+    STRING          shift and go to state 43
 
-    expression                     shift and go to state 110
-    simple_expression              shift and go to state 71
-    term                           shift and go to state 73
-    factor                         shift and go to state 74
-    number                         shift and go to state 75
-    variable                       shift and go to state 76
+    factor                         shift and go to state 114
+    const_value                    shift and go to state 80
+    variable                       shift and go to state 81
+    string                         shift and go to state 42
 
 state 85
 
-    (59) id_varpart -> empty .
+    (54) statement -> FOR ID . ASSIGN expression TO expression DO statement
 
-    ASSIGN          reduce using rule 59 (id_varpart -> empty .)
-    MULDIVANDOP     reduce using rule 59 (id_varpart -> empty .)
-    RELOP           reduce using rule 59 (id_varpart -> empty .)
-    EQU             reduce using rule 59 (id_varpart -> empty .)
-    ADDOP           reduce using rule 59 (id_varpart -> empty .)
-    THEN            reduce using rule 59 (id_varpart -> empty .)
-    END             reduce using rule 59 (id_varpart -> empty .)
-    SEMI            reduce using rule 59 (id_varpart -> empty .)
-    ELSE            reduce using rule 59 (id_varpart -> empty .)
-    RPAREN          reduce using rule 59 (id_varpart -> empty .)
-    COMMA           reduce using rule 59 (id_varpart -> empty .)
-    RBRACK          reduce using rule 59 (id_varpart -> empty .)
-    TO              reduce using rule 59 (id_varpart -> empty .)
-    DO              reduce using rule 59 (id_varpart -> empty .)
+    ASSIGN          shift and go to state 115
 
 
 state 86
 
-    (53) statement -> READ LPAREN . variable_list RPAREN
-    (55) variable_list -> . variable_list COMMA variable
-    (56) variable_list -> . variable
-    (57) variable -> . ID id_varpart
+    (61) variable -> ID id_varpart .
 
-    ID              shift and go to state 113
+    ASSIGN          reduce using rule 61 (variable -> ID id_varpart .)
+    MULDIVANDOP     reduce using rule 61 (variable -> ID id_varpart .)
+    RELOP           reduce using rule 61 (variable -> ID id_varpart .)
+    EQU             reduce using rule 61 (variable -> ID id_varpart .)
+    ADDOP           reduce using rule 61 (variable -> ID id_varpart .)
+    THEN            reduce using rule 61 (variable -> ID id_varpart .)
+    END             reduce using rule 61 (variable -> ID id_varpart .)
+    SEMI            reduce using rule 61 (variable -> ID id_varpart .)
+    ELSE            reduce using rule 61 (variable -> ID id_varpart .)
+    RPAREN          reduce using rule 61 (variable -> ID id_varpart .)
+    COMMA           reduce using rule 61 (variable -> ID id_varpart .)
+    RBRACK          reduce using rule 61 (variable -> ID id_varpart .)
+    TO              reduce using rule 61 (variable -> ID id_varpart .)
+    DO              reduce using rule 61 (variable -> ID id_varpart .)
 
-    variable_list                  shift and go to state 111
-    variable                       shift and go to state 112
 
 state 87
 
-    (54) statement -> WRITE LPAREN . expression_list RPAREN
-    (64) expression_list -> . expression_list COMMA expression
-    (65) expression_list -> . expression
-    (66) expression -> . simple_expression RELOP simple_expression
-    (67) expression -> . simple_expression EQU simple_expression
-    (68) expression -> . simple_expression
-    (69) simple_expression -> . simple_expression ADDOP term
-    (70) simple_expression -> . term
-    (71) term -> . term MULDIVANDOP factor
-    (72) term -> . factor
-    (73) factor -> . number
-    (74) factor -> . variable
-    (75) factor -> . ID LPAREN expression_list RPAREN
-    (76) factor -> . NOTOP factor
-    (77) factor -> . ADDOP factor
-    (78) number -> . ICONST
-    (79) number -> . RCONST
-    (57) variable -> . ID id_varpart
+    (65) procedure_call -> ID LPAREN . expression_list RPAREN
+    (68) expression_list -> . expression_list COMMA expression
+    (69) expression_list -> . expression
+    (70) expression -> . simple_expression RELOP simple_expression
+    (71) expression -> . simple_expression EQU simple_expression
+    (72) expression -> . simple_expression
+    (73) simple_expression -> . simple_expression ADDOP term
+    (74) simple_expression -> . term
+    (75) term -> . term MULDIVANDOP factor
+    (76) term -> . factor
+    (77) factor -> . const_value
+    (78) factor -> . variable
+    (79) factor -> . LPAREN expression RPAREN
+    (80) factor -> . ID LPAREN expression_list RPAREN
+    (81) factor -> . NOTOP factor
+    (82) factor -> . ADDOP factor
+    (11) const_value -> . ADDOP ICONST
+    (12) const_value -> . ICONST
+    (13) const_value -> . RCONST
+    (14) const_value -> . CCONST
+    (15) const_value -> . BCONST
+    (16) const_value -> . string
+    (61) variable -> . ID id_varpart
+    (83) string -> . STRING
 
-    ID              shift and go to state 77
-    NOTOP           shift and go to state 78
-    ADDOP           shift and go to state 72
-    ICONST          shift and go to state 79
-    RCONST          shift and go to state 80
+    LPAREN          shift and go to state 82
+    ID              shift and go to state 83
+    NOTOP           shift and go to state 84
+    ADDOP           shift and go to state 77
+    ICONST          shift and go to state 38
+    RCONST          shift and go to state 39
+    CCONST          shift and go to state 40
+    BCONST          shift and go to state 41
+    STRING          shift and go to state 43
 
-    expression_list                shift and go to state 114
-    expression                     shift and go to state 109
-    simple_expression              shift and go to state 71
-    term                           shift and go to state 73
-    factor                         shift and go to state 74
-    number                         shift and go to state 75
-    variable                       shift and go to state 76
+    expression_list                shift and go to state 116
+    expression                     shift and go to state 117
+    simple_expression              shift and go to state 76
+    term                           shift and go to state 78
+    factor                         shift and go to state 79
+    const_value                    shift and go to state 80
+    variable                       shift and go to state 81
+    string                         shift and go to state 42
 
 state 88
 
-    (32) subprogram -> subprogram_head SEMI subprogram_body .
+    (62) id_varpart -> LBRACK . expression_list RBRACK
+    (68) expression_list -> . expression_list COMMA expression
+    (69) expression_list -> . expression
+    (70) expression -> . simple_expression RELOP simple_expression
+    (71) expression -> . simple_expression EQU simple_expression
+    (72) expression -> . simple_expression
+    (73) simple_expression -> . simple_expression ADDOP term
+    (74) simple_expression -> . term
+    (75) term -> . term MULDIVANDOP factor
+    (76) term -> . factor
+    (77) factor -> . const_value
+    (78) factor -> . variable
+    (79) factor -> . LPAREN expression RPAREN
+    (80) factor -> . ID LPAREN expression_list RPAREN
+    (81) factor -> . NOTOP factor
+    (82) factor -> . ADDOP factor
+    (11) const_value -> . ADDOP ICONST
+    (12) const_value -> . ICONST
+    (13) const_value -> . RCONST
+    (14) const_value -> . CCONST
+    (15) const_value -> . BCONST
+    (16) const_value -> . string
+    (61) variable -> . ID id_varpart
+    (83) string -> . STRING
 
-    SEMI            reduce using rule 32 (subprogram -> subprogram_head SEMI subprogram_body .)
+    LPAREN          shift and go to state 82
+    ID              shift and go to state 83
+    NOTOP           shift and go to state 84
+    ADDOP           shift and go to state 77
+    ICONST          shift and go to state 38
+    RCONST          shift and go to state 39
+    CCONST          shift and go to state 40
+    BCONST          shift and go to state 41
+    STRING          shift and go to state 43
 
+    expression_list                shift and go to state 118
+    expression                     shift and go to state 117
+    simple_expression              shift and go to state 76
+    term                           shift and go to state 78
+    factor                         shift and go to state 79
+    const_value                    shift and go to state 80
+    variable                       shift and go to state 81
+    string                         shift and go to state 42
 
 state 89
 
-    (43) subprogram_body -> const_declarations . var_declarations compound_statement
-    (14) var_declarations -> . VAR var_declaration SEMI
-    (15) var_declarations -> . empty
-    (80) empty -> .
+    (63) id_varpart -> empty .
 
-    VAR             shift and go to state 13
-    BEGIN           reduce using rule 80 (empty -> .)
+    ASSIGN          reduce using rule 63 (id_varpart -> empty .)
+    MULDIVANDOP     reduce using rule 63 (id_varpart -> empty .)
+    RELOP           reduce using rule 63 (id_varpart -> empty .)
+    EQU             reduce using rule 63 (id_varpart -> empty .)
+    ADDOP           reduce using rule 63 (id_varpart -> empty .)
+    THEN            reduce using rule 63 (id_varpart -> empty .)
+    END             reduce using rule 63 (id_varpart -> empty .)
+    SEMI            reduce using rule 63 (id_varpart -> empty .)
+    ELSE            reduce using rule 63 (id_varpart -> empty .)
+    RPAREN          reduce using rule 63 (id_varpart -> empty .)
+    COMMA           reduce using rule 63 (id_varpart -> empty .)
+    RBRACK          reduce using rule 63 (id_varpart -> empty .)
+    TO              reduce using rule 63 (id_varpart -> empty .)
+    DO              reduce using rule 63 (id_varpart -> empty .)
 
-    var_declarations               shift and go to state 115
-    empty                          shift and go to state 14
 
 state 90
 
-    (33) subprogram_head -> PROCEDURE ID formal_parameter .
+    (55) statement -> READ LPAREN . variable_list RPAREN
+    (59) variable_list -> . variable_list COMMA variable
+    (60) variable_list -> . variable
+    (61) variable -> . ID id_varpart
 
-    SEMI            reduce using rule 33 (subprogram_head -> PROCEDURE ID formal_parameter .)
+    ID              shift and go to state 121
 
+    variable_list                  shift and go to state 119
+    variable                       shift and go to state 120
 
 state 91
 
-    (35) formal_parameter -> LPAREN . parameter_list RPAREN
-    (37) parameter_list -> . parameter_list SEMI parameter
-    (38) parameter_list -> . parameter
-    (39) parameter -> . var_parameter
-    (40) parameter -> . value_parameter
-    (41) var_parameter -> . VAR value_parameter
-    (42) value_parameter -> . idlist COLON basic_type
-    (4) idlist -> . idlist COMMA ID
-    (5) idlist -> . ID
+    (56) statement -> WRITE LPAREN . expression_list RPAREN
+    (68) expression_list -> . expression_list COMMA expression
+    (69) expression_list -> . expression
+    (70) expression -> . simple_expression RELOP simple_expression
+    (71) expression -> . simple_expression EQU simple_expression
+    (72) expression -> . simple_expression
+    (73) simple_expression -> . simple_expression ADDOP term
+    (74) simple_expression -> . term
+    (75) term -> . term MULDIVANDOP factor
+    (76) term -> . factor
+    (77) factor -> . const_value
+    (78) factor -> . variable
+    (79) factor -> . LPAREN expression RPAREN
+    (80) factor -> . ID LPAREN expression_list RPAREN
+    (81) factor -> . NOTOP factor
+    (82) factor -> . ADDOP factor
+    (11) const_value -> . ADDOP ICONST
+    (12) const_value -> . ICONST
+    (13) const_value -> . RCONST
+    (14) const_value -> . CCONST
+    (15) const_value -> . BCONST
+    (16) const_value -> . string
+    (61) variable -> . ID id_varpart
+    (83) string -> . STRING
 
-    VAR             shift and go to state 120
-    ID              shift and go to state 17
+    LPAREN          shift and go to state 82
+    ID              shift and go to state 83
+    NOTOP           shift and go to state 84
+    ADDOP           shift and go to state 77
+    ICONST          shift and go to state 38
+    RCONST          shift and go to state 39
+    CCONST          shift and go to state 40
+    BCONST          shift and go to state 41
+    STRING          shift and go to state 43
 
-    parameter_list                 shift and go to state 116
-    parameter                      shift and go to state 117
-    var_parameter                  shift and go to state 118
-    value_parameter                shift and go to state 119
-    idlist                         shift and go to state 121
+    expression_list                shift and go to state 122
+    expression                     shift and go to state 117
+    simple_expression              shift and go to state 76
+    term                           shift and go to state 78
+    factor                         shift and go to state 79
+    const_value                    shift and go to state 80
+    variable                       shift and go to state 81
+    string                         shift and go to state 42
 
 state 92
 
-    (36) formal_parameter -> empty .
+    (57) statement -> READLN LPAREN . variable_list RPAREN
+    (59) variable_list -> . variable_list COMMA variable
+    (60) variable_list -> . variable
+    (61) variable -> . ID id_varpart
 
-    SEMI            reduce using rule 36 (formal_parameter -> empty .)
-    COLON           reduce using rule 36 (formal_parameter -> empty .)
+    ID              shift and go to state 121
 
+    variable_list                  shift and go to state 123
+    variable                       shift and go to state 120
 
 state 93
 
-    (34) subprogram_head -> FUNCTION ID formal_parameter . COLON basic_type
+    (58) statement -> WRITELN LPAREN . expression_list RPAREN
+    (68) expression_list -> . expression_list COMMA expression
+    (69) expression_list -> . expression
+    (70) expression -> . simple_expression RELOP simple_expression
+    (71) expression -> . simple_expression EQU simple_expression
+    (72) expression -> . simple_expression
+    (73) simple_expression -> . simple_expression ADDOP term
+    (74) simple_expression -> . term
+    (75) term -> . term MULDIVANDOP factor
+    (76) term -> . factor
+    (77) factor -> . const_value
+    (78) factor -> . variable
+    (79) factor -> . LPAREN expression RPAREN
+    (80) factor -> . ID LPAREN expression_list RPAREN
+    (81) factor -> . NOTOP factor
+    (82) factor -> . ADDOP factor
+    (11) const_value -> . ADDOP ICONST
+    (12) const_value -> . ICONST
+    (13) const_value -> . RCONST
+    (14) const_value -> . CCONST
+    (15) const_value -> . BCONST
+    (16) const_value -> . string
+    (61) variable -> . ID id_varpart
+    (83) string -> . STRING
 
-    COLON           shift and go to state 122
+    LPAREN          shift and go to state 82
+    ID              shift and go to state 83
+    NOTOP           shift and go to state 84
+    ADDOP           shift and go to state 77
+    ICONST          shift and go to state 38
+    RCONST          shift and go to state 39
+    CCONST          shift and go to state 40
+    BCONST          shift and go to state 41
+    STRING          shift and go to state 43
 
+    expression_list                shift and go to state 124
+    expression                     shift and go to state 117
+    simple_expression              shift and go to state 76
+    term                           shift and go to state 78
+    factor                         shift and go to state 79
+    const_value                    shift and go to state 80
+    variable                       shift and go to state 81
+    string                         shift and go to state 42
 
 state 94
 
-    (17) var_declaration -> var_declaration SEMI idlist COLON . type
-    (18) type -> . basic_type
-    (19) type -> . ARRAY LBRACK period RBRACK OF basic_type
-    (20) basic_type -> . INTEGER
-    (21) basic_type -> . REAL
-    (22) basic_type -> . CHAR
-    (23) basic_type -> . STRING
-    (24) basic_type -> . BOOLEAN
+    (34) subprogram -> subprogram_head SEMI subprogram_body .
 
-    ARRAY           shift and go to state 59
-    INTEGER         shift and go to state 60
-    REAL            shift and go to state 61
-    CHAR            shift and go to state 62
-    STRING          shift and go to state 63
-    BOOLEAN         shift and go to state 64
+    SEMI            reduce using rule 34 (subprogram -> subprogram_head SEMI subprogram_body .)
 
-    type                           shift and go to state 123
-    basic_type                     shift and go to state 58
 
 state 95
 
-    (19) type -> ARRAY LBRACK . period RBRACK OF basic_type
-    (28) period -> . my_period_part DOTDOT my_period_part
-    (29) period -> . period COMMA my_period_part DOTDOT my_period_part
-    (25) my_period_part -> . ADDOP ICONST
-    (26) my_period_part -> . ICONST
-    (27) my_period_part -> . CCONST
+    (45) subprogram_body -> const_declarations . var_declarations compound_statement
+    (17) var_declarations -> . VAR var_declaration SEMI
+    (18) var_declarations -> . empty
+    (84) empty -> .
 
-    ADDOP           shift and go to state 126
-    ICONST          shift and go to state 127
-    CCONST          shift and go to state 128
+    VAR             shift and go to state 13
+    BEGIN           reduce using rule 84 (empty -> .)
 
-    period                         shift and go to state 124
-    my_period_part                 shift and go to state 125
+    var_declarations               shift and go to state 125
+    empty                          shift and go to state 14
 
 state 96
+
+    (35) subprogram_head -> PROCEDURE ID formal_parameter .
+
+    SEMI            reduce using rule 35 (subprogram_head -> PROCEDURE ID formal_parameter .)
+
+
+state 97
+
+    (37) formal_parameter -> LPAREN . parameter_list RPAREN
+    (39) parameter_list -> . parameter_list SEMI parameter
+    (40) parameter_list -> . parameter
+    (41) parameter -> . var_parameter
+    (42) parameter -> . value_parameter
+    (43) var_parameter -> . VAR value_parameter
+    (44) value_parameter -> . idlist COLON basic_type
+    (4) idlist -> . idlist COMMA ID
+    (5) idlist -> . ID
+
+    VAR             shift and go to state 130
+    ID              shift and go to state 17
+
+    parameter_list                 shift and go to state 126
+    parameter                      shift and go to state 127
+    var_parameter                  shift and go to state 128
+    value_parameter                shift and go to state 129
+    idlist                         shift and go to state 131
+
+state 98
+
+    (38) formal_parameter -> empty .
+
+    SEMI            reduce using rule 38 (formal_parameter -> empty .)
+    COLON           reduce using rule 38 (formal_parameter -> empty .)
+
+
+state 99
+
+    (36) subprogram_head -> FUNCTION ID formal_parameter . COLON basic_type
+
+    COLON           shift and go to state 132
+
+
+state 100
+
+    (20) var_declaration -> var_declaration SEMI idlist COLON . type
+    (21) type -> . basic_type
+    (22) type -> . ARRAY LBRACK period RBRACK OF basic_type
+    (23) basic_type -> . INTEGER
+    (24) basic_type -> . REAL
+    (25) basic_type -> . CHAR
+    (26) basic_type -> . BOOLEAN
+
+    ARRAY           shift and go to state 65
+    INTEGER         shift and go to state 66
+    REAL            shift and go to state 67
+    CHAR            shift and go to state 68
+    BOOLEAN         shift and go to state 69
+
+    type                           shift and go to state 133
+    basic_type                     shift and go to state 64
+
+state 101
+
+    (22) type -> ARRAY LBRACK . period RBRACK OF basic_type
+    (30) period -> . my_period_part DOTDOT my_period_part
+    (31) period -> . period COMMA my_period_part DOTDOT my_period_part
+    (27) my_period_part -> . ADDOP ICONST
+    (28) my_period_part -> . ICONST
+    (29) my_period_part -> . CCONST
+
+    ADDOP           shift and go to state 136
+    ICONST          shift and go to state 137
+    CCONST          shift and go to state 138
+
+    period                         shift and go to state 134
+    my_period_part                 shift and go to state 135
+
+state 102
 
     (10) const_declaration -> const_declaration SEMI ID EQU const_value .
 
     SEMI            reduce using rule 10 (const_declaration -> const_declaration SEMI ID EQU const_value .)
 
 
-state 97
-
-    (45) statement_list -> statement_list SEMI statement .
-
-    END             reduce using rule 45 (statement_list -> statement_list SEMI statement .)
-    SEMI            reduce using rule 45 (statement_list -> statement_list SEMI statement .)
-
-
-state 98
-
-    (48) statement -> variable ASSIGN expression .
-
-    END             reduce using rule 48 (statement -> variable ASSIGN expression .)
-    SEMI            reduce using rule 48 (statement -> variable ASSIGN expression .)
-    ELSE            reduce using rule 48 (statement -> variable ASSIGN expression .)
-
-
-state 99
-
-    (51) statement -> IF expression THEN . statement else_part
-    (47) statement -> . empty
-    (48) statement -> . variable ASSIGN expression
-    (49) statement -> . procedure_call
-    (50) statement -> . compound_statement
-    (51) statement -> . IF expression THEN statement else_part
-    (52) statement -> . FOR ID ASSIGN expression TO expression DO statement
-    (53) statement -> . READ LPAREN variable_list RPAREN
-    (54) statement -> . WRITE LPAREN expression_list RPAREN
-    (80) empty -> .
-    (57) variable -> . ID id_varpart
-    (60) procedure_call -> . ID
-    (61) procedure_call -> . ID LPAREN expression_list RPAREN
-    (44) compound_statement -> . BEGIN statement_list END
-
-    IF              shift and go to state 48
-    FOR             shift and go to state 49
-    READ            shift and go to state 51
-    WRITE           shift and go to state 52
-    ELSE            reduce using rule 80 (empty -> .)
-    END             reduce using rule 80 (empty -> .)
-    SEMI            reduce using rule 80 (empty -> .)
-    ID              shift and go to state 50
-    BEGIN           shift and go to state 29
-
-    statement                      shift and go to state 129
-    empty                          shift and go to state 44
-    variable                       shift and go to state 45
-    procedure_call                 shift and go to state 46
-    compound_statement             shift and go to state 47
-
-state 100
-
-    (66) expression -> simple_expression RELOP . simple_expression
-    (69) simple_expression -> . simple_expression ADDOP term
-    (70) simple_expression -> . term
-    (71) term -> . term MULDIVANDOP factor
-    (72) term -> . factor
-    (73) factor -> . number
-    (74) factor -> . variable
-    (75) factor -> . ID LPAREN expression_list RPAREN
-    (76) factor -> . NOTOP factor
-    (77) factor -> . ADDOP factor
-    (78) number -> . ICONST
-    (79) number -> . RCONST
-    (57) variable -> . ID id_varpart
-
-    ID              shift and go to state 77
-    NOTOP           shift and go to state 78
-    ADDOP           shift and go to state 72
-    ICONST          shift and go to state 79
-    RCONST          shift and go to state 80
-
-    simple_expression              shift and go to state 130
-    term                           shift and go to state 73
-    factor                         shift and go to state 74
-    number                         shift and go to state 75
-    variable                       shift and go to state 76
-
-state 101
-
-    (67) expression -> simple_expression EQU . simple_expression
-    (69) simple_expression -> . simple_expression ADDOP term
-    (70) simple_expression -> . term
-    (71) term -> . term MULDIVANDOP factor
-    (72) term -> . factor
-    (73) factor -> . number
-    (74) factor -> . variable
-    (75) factor -> . ID LPAREN expression_list RPAREN
-    (76) factor -> . NOTOP factor
-    (77) factor -> . ADDOP factor
-    (78) number -> . ICONST
-    (79) number -> . RCONST
-    (57) variable -> . ID id_varpart
-
-    ID              shift and go to state 77
-    NOTOP           shift and go to state 78
-    ADDOP           shift and go to state 72
-    ICONST          shift and go to state 79
-    RCONST          shift and go to state 80
-
-    simple_expression              shift and go to state 131
-    term                           shift and go to state 73
-    factor                         shift and go to state 74
-    number                         shift and go to state 75
-    variable                       shift and go to state 76
-
-state 102
-
-    (69) simple_expression -> simple_expression ADDOP . term
-    (71) term -> . term MULDIVANDOP factor
-    (72) term -> . factor
-    (73) factor -> . number
-    (74) factor -> . variable
-    (75) factor -> . ID LPAREN expression_list RPAREN
-    (76) factor -> . NOTOP factor
-    (77) factor -> . ADDOP factor
-    (78) number -> . ICONST
-    (79) number -> . RCONST
-    (57) variable -> . ID id_varpart
-
-    ID              shift and go to state 77
-    NOTOP           shift and go to state 78
-    ADDOP           shift and go to state 72
-    ICONST          shift and go to state 79
-    RCONST          shift and go to state 80
-
-    term                           shift and go to state 132
-    factor                         shift and go to state 74
-    number                         shift and go to state 75
-    variable                       shift and go to state 76
-
 state 103
 
-    (77) factor -> ADDOP factor .
+    (47) statement_list -> statement_list SEMI statement .
 
-    MULDIVANDOP     reduce using rule 77 (factor -> ADDOP factor .)
-    RELOP           reduce using rule 77 (factor -> ADDOP factor .)
-    EQU             reduce using rule 77 (factor -> ADDOP factor .)
-    ADDOP           reduce using rule 77 (factor -> ADDOP factor .)
-    THEN            reduce using rule 77 (factor -> ADDOP factor .)
-    END             reduce using rule 77 (factor -> ADDOP factor .)
-    SEMI            reduce using rule 77 (factor -> ADDOP factor .)
-    ELSE            reduce using rule 77 (factor -> ADDOP factor .)
-    RPAREN          reduce using rule 77 (factor -> ADDOP factor .)
-    COMMA           reduce using rule 77 (factor -> ADDOP factor .)
-    RBRACK          reduce using rule 77 (factor -> ADDOP factor .)
-    TO              reduce using rule 77 (factor -> ADDOP factor .)
-    DO              reduce using rule 77 (factor -> ADDOP factor .)
+    END             reduce using rule 47 (statement_list -> statement_list SEMI statement .)
+    SEMI            reduce using rule 47 (statement_list -> statement_list SEMI statement .)
 
 
 state 104
 
-    (71) term -> term MULDIVANDOP . factor
-    (73) factor -> . number
-    (74) factor -> . variable
-    (75) factor -> . ID LPAREN expression_list RPAREN
-    (76) factor -> . NOTOP factor
-    (77) factor -> . ADDOP factor
-    (78) number -> . ICONST
-    (79) number -> . RCONST
-    (57) variable -> . ID id_varpart
+    (50) statement -> variable ASSIGN expression .
 
-    ID              shift and go to state 77
-    NOTOP           shift and go to state 78
-    ADDOP           shift and go to state 72
-    ICONST          shift and go to state 79
-    RCONST          shift and go to state 80
+    END             reduce using rule 50 (statement -> variable ASSIGN expression .)
+    SEMI            reduce using rule 50 (statement -> variable ASSIGN expression .)
+    ELSE            reduce using rule 50 (statement -> variable ASSIGN expression .)
 
-    factor                         shift and go to state 133
-    number                         shift and go to state 75
-    variable                       shift and go to state 76
 
 state 105
 
-    (75) factor -> ID LPAREN . expression_list RPAREN
-    (64) expression_list -> . expression_list COMMA expression
-    (65) expression_list -> . expression
-    (66) expression -> . simple_expression RELOP simple_expression
-    (67) expression -> . simple_expression EQU simple_expression
-    (68) expression -> . simple_expression
-    (69) simple_expression -> . simple_expression ADDOP term
-    (70) simple_expression -> . term
-    (71) term -> . term MULDIVANDOP factor
-    (72) term -> . factor
-    (73) factor -> . number
-    (74) factor -> . variable
-    (75) factor -> . ID LPAREN expression_list RPAREN
-    (76) factor -> . NOTOP factor
-    (77) factor -> . ADDOP factor
-    (78) number -> . ICONST
-    (79) number -> . RCONST
-    (57) variable -> . ID id_varpart
+    (53) statement -> IF expression THEN . statement else_part
+    (49) statement -> . empty
+    (50) statement -> . variable ASSIGN expression
+    (51) statement -> . procedure_call
+    (52) statement -> . compound_statement
+    (53) statement -> . IF expression THEN statement else_part
+    (54) statement -> . FOR ID ASSIGN expression TO expression DO statement
+    (55) statement -> . READ LPAREN variable_list RPAREN
+    (56) statement -> . WRITE LPAREN expression_list RPAREN
+    (57) statement -> . READLN LPAREN variable_list RPAREN
+    (58) statement -> . WRITELN LPAREN expression_list RPAREN
+    (84) empty -> .
+    (61) variable -> . ID id_varpart
+    (64) procedure_call -> . ID
+    (65) procedure_call -> . ID LPAREN expression_list RPAREN
+    (46) compound_statement -> . BEGIN statement_list END
 
-    ID              shift and go to state 77
-    NOTOP           shift and go to state 78
-    ADDOP           shift and go to state 72
-    ICONST          shift and go to state 79
-    RCONST          shift and go to state 80
+    IF              shift and go to state 52
+    FOR             shift and go to state 53
+    READ            shift and go to state 55
+    WRITE           shift and go to state 56
+    READLN          shift and go to state 57
+    WRITELN         shift and go to state 58
+    ELSE            reduce using rule 84 (empty -> .)
+    END             reduce using rule 84 (empty -> .)
+    SEMI            reduce using rule 84 (empty -> .)
+    ID              shift and go to state 54
+    BEGIN           shift and go to state 29
 
-    expression_list                shift and go to state 134
-    expression                     shift and go to state 109
-    simple_expression              shift and go to state 71
-    term                           shift and go to state 73
-    factor                         shift and go to state 74
-    number                         shift and go to state 75
-    variable                       shift and go to state 76
+    statement                      shift and go to state 139
+    empty                          shift and go to state 48
+    variable                       shift and go to state 49
+    procedure_call                 shift and go to state 50
+    compound_statement             shift and go to state 51
 
 state 106
 
-    (76) factor -> NOTOP factor .
+    (70) expression -> simple_expression RELOP . simple_expression
+    (73) simple_expression -> . simple_expression ADDOP term
+    (74) simple_expression -> . term
+    (75) term -> . term MULDIVANDOP factor
+    (76) term -> . factor
+    (77) factor -> . const_value
+    (78) factor -> . variable
+    (79) factor -> . LPAREN expression RPAREN
+    (80) factor -> . ID LPAREN expression_list RPAREN
+    (81) factor -> . NOTOP factor
+    (82) factor -> . ADDOP factor
+    (11) const_value -> . ADDOP ICONST
+    (12) const_value -> . ICONST
+    (13) const_value -> . RCONST
+    (14) const_value -> . CCONST
+    (15) const_value -> . BCONST
+    (16) const_value -> . string
+    (61) variable -> . ID id_varpart
+    (83) string -> . STRING
 
-    MULDIVANDOP     reduce using rule 76 (factor -> NOTOP factor .)
-    RELOP           reduce using rule 76 (factor -> NOTOP factor .)
-    EQU             reduce using rule 76 (factor -> NOTOP factor .)
-    ADDOP           reduce using rule 76 (factor -> NOTOP factor .)
-    THEN            reduce using rule 76 (factor -> NOTOP factor .)
-    END             reduce using rule 76 (factor -> NOTOP factor .)
-    SEMI            reduce using rule 76 (factor -> NOTOP factor .)
-    ELSE            reduce using rule 76 (factor -> NOTOP factor .)
-    RPAREN          reduce using rule 76 (factor -> NOTOP factor .)
-    COMMA           reduce using rule 76 (factor -> NOTOP factor .)
-    RBRACK          reduce using rule 76 (factor -> NOTOP factor .)
-    TO              reduce using rule 76 (factor -> NOTOP factor .)
-    DO              reduce using rule 76 (factor -> NOTOP factor .)
+    LPAREN          shift and go to state 82
+    ID              shift and go to state 83
+    NOTOP           shift and go to state 84
+    ADDOP           shift and go to state 77
+    ICONST          shift and go to state 38
+    RCONST          shift and go to state 39
+    CCONST          shift and go to state 40
+    BCONST          shift and go to state 41
+    STRING          shift and go to state 43
 
+    simple_expression              shift and go to state 140
+    term                           shift and go to state 78
+    factor                         shift and go to state 79
+    const_value                    shift and go to state 80
+    variable                       shift and go to state 81
+    string                         shift and go to state 42
 
 state 107
 
-    (52) statement -> FOR ID ASSIGN . expression TO expression DO statement
-    (66) expression -> . simple_expression RELOP simple_expression
-    (67) expression -> . simple_expression EQU simple_expression
-    (68) expression -> . simple_expression
-    (69) simple_expression -> . simple_expression ADDOP term
-    (70) simple_expression -> . term
-    (71) term -> . term MULDIVANDOP factor
-    (72) term -> . factor
-    (73) factor -> . number
-    (74) factor -> . variable
-    (75) factor -> . ID LPAREN expression_list RPAREN
-    (76) factor -> . NOTOP factor
-    (77) factor -> . ADDOP factor
-    (78) number -> . ICONST
-    (79) number -> . RCONST
-    (57) variable -> . ID id_varpart
+    (71) expression -> simple_expression EQU . simple_expression
+    (73) simple_expression -> . simple_expression ADDOP term
+    (74) simple_expression -> . term
+    (75) term -> . term MULDIVANDOP factor
+    (76) term -> . factor
+    (77) factor -> . const_value
+    (78) factor -> . variable
+    (79) factor -> . LPAREN expression RPAREN
+    (80) factor -> . ID LPAREN expression_list RPAREN
+    (81) factor -> . NOTOP factor
+    (82) factor -> . ADDOP factor
+    (11) const_value -> . ADDOP ICONST
+    (12) const_value -> . ICONST
+    (13) const_value -> . RCONST
+    (14) const_value -> . CCONST
+    (15) const_value -> . BCONST
+    (16) const_value -> . string
+    (61) variable -> . ID id_varpart
+    (83) string -> . STRING
 
-    ID              shift and go to state 77
-    NOTOP           shift and go to state 78
-    ADDOP           shift and go to state 72
-    ICONST          shift and go to state 79
-    RCONST          shift and go to state 80
+    LPAREN          shift and go to state 82
+    ID              shift and go to state 83
+    NOTOP           shift and go to state 84
+    ADDOP           shift and go to state 77
+    ICONST          shift and go to state 38
+    RCONST          shift and go to state 39
+    CCONST          shift and go to state 40
+    BCONST          shift and go to state 41
+    STRING          shift and go to state 43
 
-    expression                     shift and go to state 135
-    simple_expression              shift and go to state 71
-    term                           shift and go to state 73
-    factor                         shift and go to state 74
-    number                         shift and go to state 75
-    variable                       shift and go to state 76
+    simple_expression              shift and go to state 141
+    term                           shift and go to state 78
+    factor                         shift and go to state 79
+    const_value                    shift and go to state 80
+    variable                       shift and go to state 81
+    string                         shift and go to state 42
 
 state 108
 
-    (61) procedure_call -> ID LPAREN expression_list . RPAREN
-    (64) expression_list -> expression_list . COMMA expression
+    (73) simple_expression -> simple_expression ADDOP . term
+    (75) term -> . term MULDIVANDOP factor
+    (76) term -> . factor
+    (77) factor -> . const_value
+    (78) factor -> . variable
+    (79) factor -> . LPAREN expression RPAREN
+    (80) factor -> . ID LPAREN expression_list RPAREN
+    (81) factor -> . NOTOP factor
+    (82) factor -> . ADDOP factor
+    (11) const_value -> . ADDOP ICONST
+    (12) const_value -> . ICONST
+    (13) const_value -> . RCONST
+    (14) const_value -> . CCONST
+    (15) const_value -> . BCONST
+    (16) const_value -> . string
+    (61) variable -> . ID id_varpart
+    (83) string -> . STRING
 
-    RPAREN          shift and go to state 136
-    COMMA           shift and go to state 137
+    LPAREN          shift and go to state 82
+    ID              shift and go to state 83
+    NOTOP           shift and go to state 84
+    ADDOP           shift and go to state 77
+    ICONST          shift and go to state 38
+    RCONST          shift and go to state 39
+    CCONST          shift and go to state 40
+    BCONST          shift and go to state 41
+    STRING          shift and go to state 43
 
+    term                           shift and go to state 142
+    factor                         shift and go to state 79
+    const_value                    shift and go to state 80
+    variable                       shift and go to state 81
+    string                         shift and go to state 42
 
 state 109
 
-    (65) expression_list -> expression .
+    (82) factor -> ADDOP factor .
 
-    RPAREN          reduce using rule 65 (expression_list -> expression .)
-    COMMA           reduce using rule 65 (expression_list -> expression .)
+    MULDIVANDOP     reduce using rule 82 (factor -> ADDOP factor .)
+    RELOP           reduce using rule 82 (factor -> ADDOP factor .)
+    EQU             reduce using rule 82 (factor -> ADDOP factor .)
+    ADDOP           reduce using rule 82 (factor -> ADDOP factor .)
+    THEN            reduce using rule 82 (factor -> ADDOP factor .)
+    END             reduce using rule 82 (factor -> ADDOP factor .)
+    SEMI            reduce using rule 82 (factor -> ADDOP factor .)
+    ELSE            reduce using rule 82 (factor -> ADDOP factor .)
+    RPAREN          reduce using rule 82 (factor -> ADDOP factor .)
+    COMMA           reduce using rule 82 (factor -> ADDOP factor .)
+    RBRACK          reduce using rule 82 (factor -> ADDOP factor .)
+    TO              reduce using rule 82 (factor -> ADDOP factor .)
+    DO              reduce using rule 82 (factor -> ADDOP factor .)
 
 
 state 110
 
-    (58) id_varpart -> LBRACK expression . RBRACK
+    (11) const_value -> ADDOP ICONST .
+    (12) const_value -> ICONST .
 
-    RBRACK          shift and go to state 138
+  ! reduce/reduce conflict for MULDIVANDOP resolved using rule 11 (const_value -> ADDOP ICONST .)
+  ! reduce/reduce conflict for RELOP resolved using rule 11 (const_value -> ADDOP ICONST .)
+  ! reduce/reduce conflict for EQU resolved using rule 11 (const_value -> ADDOP ICONST .)
+  ! reduce/reduce conflict for ADDOP resolved using rule 11 (const_value -> ADDOP ICONST .)
+  ! reduce/reduce conflict for THEN resolved using rule 11 (const_value -> ADDOP ICONST .)
+  ! reduce/reduce conflict for END resolved using rule 11 (const_value -> ADDOP ICONST .)
+  ! reduce/reduce conflict for SEMI resolved using rule 11 (const_value -> ADDOP ICONST .)
+  ! reduce/reduce conflict for ELSE resolved using rule 11 (const_value -> ADDOP ICONST .)
+  ! reduce/reduce conflict for RPAREN resolved using rule 11 (const_value -> ADDOP ICONST .)
+  ! reduce/reduce conflict for COMMA resolved using rule 11 (const_value -> ADDOP ICONST .)
+  ! reduce/reduce conflict for RBRACK resolved using rule 11 (const_value -> ADDOP ICONST .)
+  ! reduce/reduce conflict for TO resolved using rule 11 (const_value -> ADDOP ICONST .)
+  ! reduce/reduce conflict for DO resolved using rule 11 (const_value -> ADDOP ICONST .)
+    MULDIVANDOP     reduce using rule 11 (const_value -> ADDOP ICONST .)
+    RELOP           reduce using rule 11 (const_value -> ADDOP ICONST .)
+    EQU             reduce using rule 11 (const_value -> ADDOP ICONST .)
+    ADDOP           reduce using rule 11 (const_value -> ADDOP ICONST .)
+    THEN            reduce using rule 11 (const_value -> ADDOP ICONST .)
+    END             reduce using rule 11 (const_value -> ADDOP ICONST .)
+    SEMI            reduce using rule 11 (const_value -> ADDOP ICONST .)
+    ELSE            reduce using rule 11 (const_value -> ADDOP ICONST .)
+    RPAREN          reduce using rule 11 (const_value -> ADDOP ICONST .)
+    COMMA           reduce using rule 11 (const_value -> ADDOP ICONST .)
+    RBRACK          reduce using rule 11 (const_value -> ADDOP ICONST .)
+    TO              reduce using rule 11 (const_value -> ADDOP ICONST .)
+    DO              reduce using rule 11 (const_value -> ADDOP ICONST .)
+
+  ! MULDIVANDOP     [ reduce using rule 12 (const_value -> ICONST .) ]
+  ! RELOP           [ reduce using rule 12 (const_value -> ICONST .) ]
+  ! EQU             [ reduce using rule 12 (const_value -> ICONST .) ]
+  ! ADDOP           [ reduce using rule 12 (const_value -> ICONST .) ]
+  ! THEN            [ reduce using rule 12 (const_value -> ICONST .) ]
+  ! END             [ reduce using rule 12 (const_value -> ICONST .) ]
+  ! SEMI            [ reduce using rule 12 (const_value -> ICONST .) ]
+  ! ELSE            [ reduce using rule 12 (const_value -> ICONST .) ]
+  ! RPAREN          [ reduce using rule 12 (const_value -> ICONST .) ]
+  ! COMMA           [ reduce using rule 12 (const_value -> ICONST .) ]
+  ! RBRACK          [ reduce using rule 12 (const_value -> ICONST .) ]
+  ! TO              [ reduce using rule 12 (const_value -> ICONST .) ]
+  ! DO              [ reduce using rule 12 (const_value -> ICONST .) ]
 
 
 state 111
 
-    (53) statement -> READ LPAREN variable_list . RPAREN
-    (55) variable_list -> variable_list . COMMA variable
+    (75) term -> term MULDIVANDOP . factor
+    (77) factor -> . const_value
+    (78) factor -> . variable
+    (79) factor -> . LPAREN expression RPAREN
+    (80) factor -> . ID LPAREN expression_list RPAREN
+    (81) factor -> . NOTOP factor
+    (82) factor -> . ADDOP factor
+    (11) const_value -> . ADDOP ICONST
+    (12) const_value -> . ICONST
+    (13) const_value -> . RCONST
+    (14) const_value -> . CCONST
+    (15) const_value -> . BCONST
+    (16) const_value -> . string
+    (61) variable -> . ID id_varpart
+    (83) string -> . STRING
 
-    RPAREN          shift and go to state 139
-    COMMA           shift and go to state 140
+    LPAREN          shift and go to state 82
+    ID              shift and go to state 83
+    NOTOP           shift and go to state 84
+    ADDOP           shift and go to state 77
+    ICONST          shift and go to state 38
+    RCONST          shift and go to state 39
+    CCONST          shift and go to state 40
+    BCONST          shift and go to state 41
+    STRING          shift and go to state 43
 
+    factor                         shift and go to state 143
+    const_value                    shift and go to state 80
+    variable                       shift and go to state 81
+    string                         shift and go to state 42
 
 state 112
 
-    (56) variable_list -> variable .
+    (79) factor -> LPAREN expression . RPAREN
 
-    RPAREN          reduce using rule 56 (variable_list -> variable .)
-    COMMA           reduce using rule 56 (variable_list -> variable .)
+    RPAREN          shift and go to state 144
 
 
 state 113
 
-    (57) variable -> ID . id_varpart
-    (58) id_varpart -> . LBRACK expression RBRACK
-    (59) id_varpart -> . empty
-    (80) empty -> .
+    (80) factor -> ID LPAREN . expression_list RPAREN
+    (68) expression_list -> . expression_list COMMA expression
+    (69) expression_list -> . expression
+    (70) expression -> . simple_expression RELOP simple_expression
+    (71) expression -> . simple_expression EQU simple_expression
+    (72) expression -> . simple_expression
+    (73) simple_expression -> . simple_expression ADDOP term
+    (74) simple_expression -> . term
+    (75) term -> . term MULDIVANDOP factor
+    (76) term -> . factor
+    (77) factor -> . const_value
+    (78) factor -> . variable
+    (79) factor -> . LPAREN expression RPAREN
+    (80) factor -> . ID LPAREN expression_list RPAREN
+    (81) factor -> . NOTOP factor
+    (82) factor -> . ADDOP factor
+    (11) const_value -> . ADDOP ICONST
+    (12) const_value -> . ICONST
+    (13) const_value -> . RCONST
+    (14) const_value -> . CCONST
+    (15) const_value -> . BCONST
+    (16) const_value -> . string
+    (61) variable -> . ID id_varpart
+    (83) string -> . STRING
 
-    LBRACK          shift and go to state 84
-    RPAREN          reduce using rule 80 (empty -> .)
-    COMMA           reduce using rule 80 (empty -> .)
+    LPAREN          shift and go to state 82
+    ID              shift and go to state 83
+    NOTOP           shift and go to state 84
+    ADDOP           shift and go to state 77
+    ICONST          shift and go to state 38
+    RCONST          shift and go to state 39
+    CCONST          shift and go to state 40
+    BCONST          shift and go to state 41
+    STRING          shift and go to state 43
 
-    id_varpart                     shift and go to state 82
-    empty                          shift and go to state 85
+    expression_list                shift and go to state 145
+    expression                     shift and go to state 117
+    simple_expression              shift and go to state 76
+    term                           shift and go to state 78
+    factor                         shift and go to state 79
+    const_value                    shift and go to state 80
+    variable                       shift and go to state 81
+    string                         shift and go to state 42
 
 state 114
 
-    (54) statement -> WRITE LPAREN expression_list . RPAREN
-    (64) expression_list -> expression_list . COMMA expression
+    (81) factor -> NOTOP factor .
 
-    RPAREN          shift and go to state 141
-    COMMA           shift and go to state 137
+    MULDIVANDOP     reduce using rule 81 (factor -> NOTOP factor .)
+    RELOP           reduce using rule 81 (factor -> NOTOP factor .)
+    EQU             reduce using rule 81 (factor -> NOTOP factor .)
+    ADDOP           reduce using rule 81 (factor -> NOTOP factor .)
+    THEN            reduce using rule 81 (factor -> NOTOP factor .)
+    END             reduce using rule 81 (factor -> NOTOP factor .)
+    SEMI            reduce using rule 81 (factor -> NOTOP factor .)
+    ELSE            reduce using rule 81 (factor -> NOTOP factor .)
+    RPAREN          reduce using rule 81 (factor -> NOTOP factor .)
+    COMMA           reduce using rule 81 (factor -> NOTOP factor .)
+    RBRACK          reduce using rule 81 (factor -> NOTOP factor .)
+    TO              reduce using rule 81 (factor -> NOTOP factor .)
+    DO              reduce using rule 81 (factor -> NOTOP factor .)
 
 
 state 115
 
-    (43) subprogram_body -> const_declarations var_declarations . compound_statement
-    (44) compound_statement -> . BEGIN statement_list END
+    (54) statement -> FOR ID ASSIGN . expression TO expression DO statement
+    (70) expression -> . simple_expression RELOP simple_expression
+    (71) expression -> . simple_expression EQU simple_expression
+    (72) expression -> . simple_expression
+    (73) simple_expression -> . simple_expression ADDOP term
+    (74) simple_expression -> . term
+    (75) term -> . term MULDIVANDOP factor
+    (76) term -> . factor
+    (77) factor -> . const_value
+    (78) factor -> . variable
+    (79) factor -> . LPAREN expression RPAREN
+    (80) factor -> . ID LPAREN expression_list RPAREN
+    (81) factor -> . NOTOP factor
+    (82) factor -> . ADDOP factor
+    (11) const_value -> . ADDOP ICONST
+    (12) const_value -> . ICONST
+    (13) const_value -> . RCONST
+    (14) const_value -> . CCONST
+    (15) const_value -> . BCONST
+    (16) const_value -> . string
+    (61) variable -> . ID id_varpart
+    (83) string -> . STRING
 
-    BEGIN           shift and go to state 29
+    LPAREN          shift and go to state 82
+    ID              shift and go to state 83
+    NOTOP           shift and go to state 84
+    ADDOP           shift and go to state 77
+    ICONST          shift and go to state 38
+    RCONST          shift and go to state 39
+    CCONST          shift and go to state 40
+    BCONST          shift and go to state 41
+    STRING          shift and go to state 43
 
-    compound_statement             shift and go to state 142
+    expression                     shift and go to state 146
+    simple_expression              shift and go to state 76
+    term                           shift and go to state 78
+    factor                         shift and go to state 79
+    const_value                    shift and go to state 80
+    variable                       shift and go to state 81
+    string                         shift and go to state 42
 
 state 116
 
-    (35) formal_parameter -> LPAREN parameter_list . RPAREN
-    (37) parameter_list -> parameter_list . SEMI parameter
+    (65) procedure_call -> ID LPAREN expression_list . RPAREN
+    (68) expression_list -> expression_list . COMMA expression
 
-    RPAREN          shift and go to state 143
-    SEMI            shift and go to state 144
+    RPAREN          shift and go to state 147
+    COMMA           shift and go to state 148
 
 
 state 117
 
-    (38) parameter_list -> parameter .
+    (69) expression_list -> expression .
 
-    RPAREN          reduce using rule 38 (parameter_list -> parameter .)
-    SEMI            reduce using rule 38 (parameter_list -> parameter .)
+    RPAREN          reduce using rule 69 (expression_list -> expression .)
+    COMMA           reduce using rule 69 (expression_list -> expression .)
+    RBRACK          reduce using rule 69 (expression_list -> expression .)
 
 
 state 118
 
-    (39) parameter -> var_parameter .
+    (62) id_varpart -> LBRACK expression_list . RBRACK
+    (68) expression_list -> expression_list . COMMA expression
 
-    RPAREN          reduce using rule 39 (parameter -> var_parameter .)
-    SEMI            reduce using rule 39 (parameter -> var_parameter .)
+    RBRACK          shift and go to state 149
+    COMMA           shift and go to state 148
 
 
 state 119
 
-    (40) parameter -> value_parameter .
+    (55) statement -> READ LPAREN variable_list . RPAREN
+    (59) variable_list -> variable_list . COMMA variable
 
-    RPAREN          reduce using rule 40 (parameter -> value_parameter .)
-    SEMI            reduce using rule 40 (parameter -> value_parameter .)
+    RPAREN          shift and go to state 150
+    COMMA           shift and go to state 151
 
 
 state 120
 
-    (41) var_parameter -> VAR . value_parameter
-    (42) value_parameter -> . idlist COLON basic_type
-    (4) idlist -> . idlist COMMA ID
-    (5) idlist -> . ID
+    (60) variable_list -> variable .
 
-    ID              shift and go to state 17
+    RPAREN          reduce using rule 60 (variable_list -> variable .)
+    COMMA           reduce using rule 60 (variable_list -> variable .)
 
-    value_parameter                shift and go to state 145
-    idlist                         shift and go to state 121
 
 state 121
 
-    (42) value_parameter -> idlist . COLON basic_type
-    (4) idlist -> idlist . COMMA ID
+    (61) variable -> ID . id_varpart
+    (62) id_varpart -> . LBRACK expression_list RBRACK
+    (63) id_varpart -> . empty
+    (84) empty -> .
 
-    COLON           shift and go to state 146
-    COMMA           shift and go to state 26
+    LBRACK          shift and go to state 88
+    RPAREN          reduce using rule 84 (empty -> .)
+    COMMA           reduce using rule 84 (empty -> .)
 
+    id_varpart                     shift and go to state 86
+    empty                          shift and go to state 89
 
 state 122
 
-    (34) subprogram_head -> FUNCTION ID formal_parameter COLON . basic_type
-    (20) basic_type -> . INTEGER
-    (21) basic_type -> . REAL
-    (22) basic_type -> . CHAR
-    (23) basic_type -> . STRING
-    (24) basic_type -> . BOOLEAN
+    (56) statement -> WRITE LPAREN expression_list . RPAREN
+    (68) expression_list -> expression_list . COMMA expression
 
-    INTEGER         shift and go to state 60
-    REAL            shift and go to state 61
-    CHAR            shift and go to state 62
-    STRING          shift and go to state 63
-    BOOLEAN         shift and go to state 64
+    RPAREN          shift and go to state 152
+    COMMA           shift and go to state 148
 
-    basic_type                     shift and go to state 147
 
 state 123
 
-    (17) var_declaration -> var_declaration SEMI idlist COLON type .
+    (57) statement -> READLN LPAREN variable_list . RPAREN
+    (59) variable_list -> variable_list . COMMA variable
 
-    SEMI            reduce using rule 17 (var_declaration -> var_declaration SEMI idlist COLON type .)
+    RPAREN          shift and go to state 153
+    COMMA           shift and go to state 151
 
 
 state 124
 
-    (19) type -> ARRAY LBRACK period . RBRACK OF basic_type
-    (29) period -> period . COMMA my_period_part DOTDOT my_period_part
+    (58) statement -> WRITELN LPAREN expression_list . RPAREN
+    (68) expression_list -> expression_list . COMMA expression
 
-    RBRACK          shift and go to state 148
-    COMMA           shift and go to state 149
+    RPAREN          shift and go to state 154
+    COMMA           shift and go to state 148
 
 
 state 125
 
-    (28) period -> my_period_part . DOTDOT my_period_part
+    (45) subprogram_body -> const_declarations var_declarations . compound_statement
+    (46) compound_statement -> . BEGIN statement_list END
 
-    DOTDOT          shift and go to state 150
+    BEGIN           shift and go to state 29
 
+    compound_statement             shift and go to state 155
 
 state 126
 
-    (25) my_period_part -> ADDOP . ICONST
+    (37) formal_parameter -> LPAREN parameter_list . RPAREN
+    (39) parameter_list -> parameter_list . SEMI parameter
 
-    ICONST          shift and go to state 151
+    RPAREN          shift and go to state 156
+    SEMI            shift and go to state 157
 
 
 state 127
 
-    (26) my_period_part -> ICONST .
+    (40) parameter_list -> parameter .
 
-    DOTDOT          reduce using rule 26 (my_period_part -> ICONST .)
-    RBRACK          reduce using rule 26 (my_period_part -> ICONST .)
-    COMMA           reduce using rule 26 (my_period_part -> ICONST .)
+    RPAREN          reduce using rule 40 (parameter_list -> parameter .)
+    SEMI            reduce using rule 40 (parameter_list -> parameter .)
 
 
 state 128
 
-    (27) my_period_part -> CCONST .
+    (41) parameter -> var_parameter .
 
-    DOTDOT          reduce using rule 27 (my_period_part -> CCONST .)
-    RBRACK          reduce using rule 27 (my_period_part -> CCONST .)
-    COMMA           reduce using rule 27 (my_period_part -> CCONST .)
+    RPAREN          reduce using rule 41 (parameter -> var_parameter .)
+    SEMI            reduce using rule 41 (parameter -> var_parameter .)
 
 
 state 129
 
-    (51) statement -> IF expression THEN statement . else_part
-    (62) else_part -> . ELSE statement
-    (63) else_part -> . empty
-    (80) empty -> .
+    (42) parameter -> value_parameter .
 
-  ! shift/reduce conflict for ELSE resolved as shift
-    ELSE            shift and go to state 153
-    END             reduce using rule 80 (empty -> .)
-    SEMI            reduce using rule 80 (empty -> .)
+    RPAREN          reduce using rule 42 (parameter -> value_parameter .)
+    SEMI            reduce using rule 42 (parameter -> value_parameter .)
 
-  ! ELSE            [ reduce using rule 80 (empty -> .) ]
-
-    else_part                      shift and go to state 152
-    empty                          shift and go to state 154
 
 state 130
 
-    (66) expression -> simple_expression RELOP simple_expression .
-    (69) simple_expression -> simple_expression . ADDOP term
+    (43) var_parameter -> VAR . value_parameter
+    (44) value_parameter -> . idlist COLON basic_type
+    (4) idlist -> . idlist COMMA ID
+    (5) idlist -> . ID
 
-    THEN            reduce using rule 66 (expression -> simple_expression RELOP simple_expression .)
-    END             reduce using rule 66 (expression -> simple_expression RELOP simple_expression .)
-    SEMI            reduce using rule 66 (expression -> simple_expression RELOP simple_expression .)
-    ELSE            reduce using rule 66 (expression -> simple_expression RELOP simple_expression .)
-    RPAREN          reduce using rule 66 (expression -> simple_expression RELOP simple_expression .)
-    COMMA           reduce using rule 66 (expression -> simple_expression RELOP simple_expression .)
-    RBRACK          reduce using rule 66 (expression -> simple_expression RELOP simple_expression .)
-    TO              reduce using rule 66 (expression -> simple_expression RELOP simple_expression .)
-    DO              reduce using rule 66 (expression -> simple_expression RELOP simple_expression .)
-    ADDOP           shift and go to state 102
+    ID              shift and go to state 17
 
+    value_parameter                shift and go to state 158
+    idlist                         shift and go to state 131
 
 state 131
 
-    (67) expression -> simple_expression EQU simple_expression .
-    (69) simple_expression -> simple_expression . ADDOP term
+    (44) value_parameter -> idlist . COLON basic_type
+    (4) idlist -> idlist . COMMA ID
 
-    THEN            reduce using rule 67 (expression -> simple_expression EQU simple_expression .)
-    END             reduce using rule 67 (expression -> simple_expression EQU simple_expression .)
-    SEMI            reduce using rule 67 (expression -> simple_expression EQU simple_expression .)
-    ELSE            reduce using rule 67 (expression -> simple_expression EQU simple_expression .)
-    RPAREN          reduce using rule 67 (expression -> simple_expression EQU simple_expression .)
-    COMMA           reduce using rule 67 (expression -> simple_expression EQU simple_expression .)
-    RBRACK          reduce using rule 67 (expression -> simple_expression EQU simple_expression .)
-    TO              reduce using rule 67 (expression -> simple_expression EQU simple_expression .)
-    DO              reduce using rule 67 (expression -> simple_expression EQU simple_expression .)
-    ADDOP           shift and go to state 102
+    COLON           shift and go to state 159
+    COMMA           shift and go to state 26
 
 
 state 132
 
-    (69) simple_expression -> simple_expression ADDOP term .
-    (71) term -> term . MULDIVANDOP factor
+    (36) subprogram_head -> FUNCTION ID formal_parameter COLON . basic_type
+    (23) basic_type -> . INTEGER
+    (24) basic_type -> . REAL
+    (25) basic_type -> . CHAR
+    (26) basic_type -> . BOOLEAN
 
-    RELOP           reduce using rule 69 (simple_expression -> simple_expression ADDOP term .)
-    EQU             reduce using rule 69 (simple_expression -> simple_expression ADDOP term .)
-    ADDOP           reduce using rule 69 (simple_expression -> simple_expression ADDOP term .)
-    THEN            reduce using rule 69 (simple_expression -> simple_expression ADDOP term .)
-    END             reduce using rule 69 (simple_expression -> simple_expression ADDOP term .)
-    SEMI            reduce using rule 69 (simple_expression -> simple_expression ADDOP term .)
-    ELSE            reduce using rule 69 (simple_expression -> simple_expression ADDOP term .)
-    RPAREN          reduce using rule 69 (simple_expression -> simple_expression ADDOP term .)
-    COMMA           reduce using rule 69 (simple_expression -> simple_expression ADDOP term .)
-    RBRACK          reduce using rule 69 (simple_expression -> simple_expression ADDOP term .)
-    TO              reduce using rule 69 (simple_expression -> simple_expression ADDOP term .)
-    DO              reduce using rule 69 (simple_expression -> simple_expression ADDOP term .)
-    MULDIVANDOP     shift and go to state 104
+    INTEGER         shift and go to state 66
+    REAL            shift and go to state 67
+    CHAR            shift and go to state 68
+    BOOLEAN         shift and go to state 69
 
+    basic_type                     shift and go to state 160
 
 state 133
 
-    (71) term -> term MULDIVANDOP factor .
+    (20) var_declaration -> var_declaration SEMI idlist COLON type .
 
-    MULDIVANDOP     reduce using rule 71 (term -> term MULDIVANDOP factor .)
-    RELOP           reduce using rule 71 (term -> term MULDIVANDOP factor .)
-    EQU             reduce using rule 71 (term -> term MULDIVANDOP factor .)
-    ADDOP           reduce using rule 71 (term -> term MULDIVANDOP factor .)
-    THEN            reduce using rule 71 (term -> term MULDIVANDOP factor .)
-    END             reduce using rule 71 (term -> term MULDIVANDOP factor .)
-    SEMI            reduce using rule 71 (term -> term MULDIVANDOP factor .)
-    ELSE            reduce using rule 71 (term -> term MULDIVANDOP factor .)
-    RPAREN          reduce using rule 71 (term -> term MULDIVANDOP factor .)
-    COMMA           reduce using rule 71 (term -> term MULDIVANDOP factor .)
-    RBRACK          reduce using rule 71 (term -> term MULDIVANDOP factor .)
-    TO              reduce using rule 71 (term -> term MULDIVANDOP factor .)
-    DO              reduce using rule 71 (term -> term MULDIVANDOP factor .)
+    SEMI            reduce using rule 20 (var_declaration -> var_declaration SEMI idlist COLON type .)
 
 
 state 134
 
-    (75) factor -> ID LPAREN expression_list . RPAREN
-    (64) expression_list -> expression_list . COMMA expression
+    (22) type -> ARRAY LBRACK period . RBRACK OF basic_type
+    (31) period -> period . COMMA my_period_part DOTDOT my_period_part
 
-    RPAREN          shift and go to state 155
-    COMMA           shift and go to state 137
+    RBRACK          shift and go to state 161
+    COMMA           shift and go to state 162
 
 
 state 135
 
-    (52) statement -> FOR ID ASSIGN expression . TO expression DO statement
+    (30) period -> my_period_part . DOTDOT my_period_part
 
-    TO              shift and go to state 156
+    DOTDOT          shift and go to state 163
 
 
 state 136
 
-    (61) procedure_call -> ID LPAREN expression_list RPAREN .
+    (27) my_period_part -> ADDOP . ICONST
 
-    END             reduce using rule 61 (procedure_call -> ID LPAREN expression_list RPAREN .)
-    SEMI            reduce using rule 61 (procedure_call -> ID LPAREN expression_list RPAREN .)
-    ELSE            reduce using rule 61 (procedure_call -> ID LPAREN expression_list RPAREN .)
+    ICONST          shift and go to state 164
 
 
 state 137
 
-    (64) expression_list -> expression_list COMMA . expression
-    (66) expression -> . simple_expression RELOP simple_expression
-    (67) expression -> . simple_expression EQU simple_expression
-    (68) expression -> . simple_expression
-    (69) simple_expression -> . simple_expression ADDOP term
-    (70) simple_expression -> . term
-    (71) term -> . term MULDIVANDOP factor
-    (72) term -> . factor
-    (73) factor -> . number
-    (74) factor -> . variable
-    (75) factor -> . ID LPAREN expression_list RPAREN
-    (76) factor -> . NOTOP factor
-    (77) factor -> . ADDOP factor
-    (78) number -> . ICONST
-    (79) number -> . RCONST
-    (57) variable -> . ID id_varpart
+    (28) my_period_part -> ICONST .
 
-    ID              shift and go to state 77
-    NOTOP           shift and go to state 78
-    ADDOP           shift and go to state 72
-    ICONST          shift and go to state 79
-    RCONST          shift and go to state 80
+    DOTDOT          reduce using rule 28 (my_period_part -> ICONST .)
+    RBRACK          reduce using rule 28 (my_period_part -> ICONST .)
+    COMMA           reduce using rule 28 (my_period_part -> ICONST .)
 
-    expression                     shift and go to state 157
-    simple_expression              shift and go to state 71
-    term                           shift and go to state 73
-    factor                         shift and go to state 74
-    number                         shift and go to state 75
-    variable                       shift and go to state 76
 
 state 138
 
-    (58) id_varpart -> LBRACK expression RBRACK .
+    (29) my_period_part -> CCONST .
 
-    ASSIGN          reduce using rule 58 (id_varpart -> LBRACK expression RBRACK .)
-    MULDIVANDOP     reduce using rule 58 (id_varpart -> LBRACK expression RBRACK .)
-    RELOP           reduce using rule 58 (id_varpart -> LBRACK expression RBRACK .)
-    EQU             reduce using rule 58 (id_varpart -> LBRACK expression RBRACK .)
-    ADDOP           reduce using rule 58 (id_varpart -> LBRACK expression RBRACK .)
-    THEN            reduce using rule 58 (id_varpart -> LBRACK expression RBRACK .)
-    END             reduce using rule 58 (id_varpart -> LBRACK expression RBRACK .)
-    SEMI            reduce using rule 58 (id_varpart -> LBRACK expression RBRACK .)
-    ELSE            reduce using rule 58 (id_varpart -> LBRACK expression RBRACK .)
-    RPAREN          reduce using rule 58 (id_varpart -> LBRACK expression RBRACK .)
-    COMMA           reduce using rule 58 (id_varpart -> LBRACK expression RBRACK .)
-    RBRACK          reduce using rule 58 (id_varpart -> LBRACK expression RBRACK .)
-    TO              reduce using rule 58 (id_varpart -> LBRACK expression RBRACK .)
-    DO              reduce using rule 58 (id_varpart -> LBRACK expression RBRACK .)
+    DOTDOT          reduce using rule 29 (my_period_part -> CCONST .)
+    RBRACK          reduce using rule 29 (my_period_part -> CCONST .)
+    COMMA           reduce using rule 29 (my_period_part -> CCONST .)
 
 
 state 139
 
-    (53) statement -> READ LPAREN variable_list RPAREN .
+    (53) statement -> IF expression THEN statement . else_part
+    (66) else_part -> . ELSE statement
+    (67) else_part -> . empty
+    (84) empty -> .
 
-    END             reduce using rule 53 (statement -> READ LPAREN variable_list RPAREN .)
-    SEMI            reduce using rule 53 (statement -> READ LPAREN variable_list RPAREN .)
-    ELSE            reduce using rule 53 (statement -> READ LPAREN variable_list RPAREN .)
+  ! shift/reduce conflict for ELSE resolved as shift
+    ELSE            shift and go to state 166
+    END             reduce using rule 84 (empty -> .)
+    SEMI            reduce using rule 84 (empty -> .)
 
+  ! ELSE            [ reduce using rule 84 (empty -> .) ]
+
+    else_part                      shift and go to state 165
+    empty                          shift and go to state 167
 
 state 140
 
-    (55) variable_list -> variable_list COMMA . variable
-    (57) variable -> . ID id_varpart
+    (70) expression -> simple_expression RELOP simple_expression .
+    (73) simple_expression -> simple_expression . ADDOP term
 
-    ID              shift and go to state 113
+    THEN            reduce using rule 70 (expression -> simple_expression RELOP simple_expression .)
+    END             reduce using rule 70 (expression -> simple_expression RELOP simple_expression .)
+    SEMI            reduce using rule 70 (expression -> simple_expression RELOP simple_expression .)
+    ELSE            reduce using rule 70 (expression -> simple_expression RELOP simple_expression .)
+    RPAREN          reduce using rule 70 (expression -> simple_expression RELOP simple_expression .)
+    COMMA           reduce using rule 70 (expression -> simple_expression RELOP simple_expression .)
+    RBRACK          reduce using rule 70 (expression -> simple_expression RELOP simple_expression .)
+    TO              reduce using rule 70 (expression -> simple_expression RELOP simple_expression .)
+    DO              reduce using rule 70 (expression -> simple_expression RELOP simple_expression .)
+    ADDOP           shift and go to state 108
 
-    variable                       shift and go to state 158
 
 state 141
 
-    (54) statement -> WRITE LPAREN expression_list RPAREN .
+    (71) expression -> simple_expression EQU simple_expression .
+    (73) simple_expression -> simple_expression . ADDOP term
 
-    END             reduce using rule 54 (statement -> WRITE LPAREN expression_list RPAREN .)
-    SEMI            reduce using rule 54 (statement -> WRITE LPAREN expression_list RPAREN .)
-    ELSE            reduce using rule 54 (statement -> WRITE LPAREN expression_list RPAREN .)
+    THEN            reduce using rule 71 (expression -> simple_expression EQU simple_expression .)
+    END             reduce using rule 71 (expression -> simple_expression EQU simple_expression .)
+    SEMI            reduce using rule 71 (expression -> simple_expression EQU simple_expression .)
+    ELSE            reduce using rule 71 (expression -> simple_expression EQU simple_expression .)
+    RPAREN          reduce using rule 71 (expression -> simple_expression EQU simple_expression .)
+    COMMA           reduce using rule 71 (expression -> simple_expression EQU simple_expression .)
+    RBRACK          reduce using rule 71 (expression -> simple_expression EQU simple_expression .)
+    TO              reduce using rule 71 (expression -> simple_expression EQU simple_expression .)
+    DO              reduce using rule 71 (expression -> simple_expression EQU simple_expression .)
+    ADDOP           shift and go to state 108
 
 
 state 142
 
-    (43) subprogram_body -> const_declarations var_declarations compound_statement .
+    (73) simple_expression -> simple_expression ADDOP term .
+    (75) term -> term . MULDIVANDOP factor
 
-    SEMI            reduce using rule 43 (subprogram_body -> const_declarations var_declarations compound_statement .)
+    RELOP           reduce using rule 73 (simple_expression -> simple_expression ADDOP term .)
+    EQU             reduce using rule 73 (simple_expression -> simple_expression ADDOP term .)
+    ADDOP           reduce using rule 73 (simple_expression -> simple_expression ADDOP term .)
+    THEN            reduce using rule 73 (simple_expression -> simple_expression ADDOP term .)
+    END             reduce using rule 73 (simple_expression -> simple_expression ADDOP term .)
+    SEMI            reduce using rule 73 (simple_expression -> simple_expression ADDOP term .)
+    ELSE            reduce using rule 73 (simple_expression -> simple_expression ADDOP term .)
+    RPAREN          reduce using rule 73 (simple_expression -> simple_expression ADDOP term .)
+    COMMA           reduce using rule 73 (simple_expression -> simple_expression ADDOP term .)
+    RBRACK          reduce using rule 73 (simple_expression -> simple_expression ADDOP term .)
+    TO              reduce using rule 73 (simple_expression -> simple_expression ADDOP term .)
+    DO              reduce using rule 73 (simple_expression -> simple_expression ADDOP term .)
+    MULDIVANDOP     shift and go to state 111
 
 
 state 143
 
-    (35) formal_parameter -> LPAREN parameter_list RPAREN .
+    (75) term -> term MULDIVANDOP factor .
 
-    SEMI            reduce using rule 35 (formal_parameter -> LPAREN parameter_list RPAREN .)
-    COLON           reduce using rule 35 (formal_parameter -> LPAREN parameter_list RPAREN .)
+    MULDIVANDOP     reduce using rule 75 (term -> term MULDIVANDOP factor .)
+    RELOP           reduce using rule 75 (term -> term MULDIVANDOP factor .)
+    EQU             reduce using rule 75 (term -> term MULDIVANDOP factor .)
+    ADDOP           reduce using rule 75 (term -> term MULDIVANDOP factor .)
+    THEN            reduce using rule 75 (term -> term MULDIVANDOP factor .)
+    END             reduce using rule 75 (term -> term MULDIVANDOP factor .)
+    SEMI            reduce using rule 75 (term -> term MULDIVANDOP factor .)
+    ELSE            reduce using rule 75 (term -> term MULDIVANDOP factor .)
+    RPAREN          reduce using rule 75 (term -> term MULDIVANDOP factor .)
+    COMMA           reduce using rule 75 (term -> term MULDIVANDOP factor .)
+    RBRACK          reduce using rule 75 (term -> term MULDIVANDOP factor .)
+    TO              reduce using rule 75 (term -> term MULDIVANDOP factor .)
+    DO              reduce using rule 75 (term -> term MULDIVANDOP factor .)
 
 
 state 144
 
-    (37) parameter_list -> parameter_list SEMI . parameter
-    (39) parameter -> . var_parameter
-    (40) parameter -> . value_parameter
-    (41) var_parameter -> . VAR value_parameter
-    (42) value_parameter -> . idlist COLON basic_type
-    (4) idlist -> . idlist COMMA ID
-    (5) idlist -> . ID
+    (79) factor -> LPAREN expression RPAREN .
 
-    VAR             shift and go to state 120
-    ID              shift and go to state 17
+    MULDIVANDOP     reduce using rule 79 (factor -> LPAREN expression RPAREN .)
+    RELOP           reduce using rule 79 (factor -> LPAREN expression RPAREN .)
+    EQU             reduce using rule 79 (factor -> LPAREN expression RPAREN .)
+    ADDOP           reduce using rule 79 (factor -> LPAREN expression RPAREN .)
+    THEN            reduce using rule 79 (factor -> LPAREN expression RPAREN .)
+    END             reduce using rule 79 (factor -> LPAREN expression RPAREN .)
+    SEMI            reduce using rule 79 (factor -> LPAREN expression RPAREN .)
+    ELSE            reduce using rule 79 (factor -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 79 (factor -> LPAREN expression RPAREN .)
+    COMMA           reduce using rule 79 (factor -> LPAREN expression RPAREN .)
+    RBRACK          reduce using rule 79 (factor -> LPAREN expression RPAREN .)
+    TO              reduce using rule 79 (factor -> LPAREN expression RPAREN .)
+    DO              reduce using rule 79 (factor -> LPAREN expression RPAREN .)
 
-    parameter                      shift and go to state 159
-    var_parameter                  shift and go to state 118
-    value_parameter                shift and go to state 119
-    idlist                         shift and go to state 121
 
 state 145
 
-    (41) var_parameter -> VAR value_parameter .
+    (80) factor -> ID LPAREN expression_list . RPAREN
+    (68) expression_list -> expression_list . COMMA expression
 
-    RPAREN          reduce using rule 41 (var_parameter -> VAR value_parameter .)
-    SEMI            reduce using rule 41 (var_parameter -> VAR value_parameter .)
+    RPAREN          shift and go to state 168
+    COMMA           shift and go to state 148
 
 
 state 146
 
-    (42) value_parameter -> idlist COLON . basic_type
-    (20) basic_type -> . INTEGER
-    (21) basic_type -> . REAL
-    (22) basic_type -> . CHAR
-    (23) basic_type -> . STRING
-    (24) basic_type -> . BOOLEAN
+    (54) statement -> FOR ID ASSIGN expression . TO expression DO statement
 
-    INTEGER         shift and go to state 60
-    REAL            shift and go to state 61
-    CHAR            shift and go to state 62
-    STRING          shift and go to state 63
-    BOOLEAN         shift and go to state 64
+    TO              shift and go to state 169
 
-    basic_type                     shift and go to state 160
 
 state 147
 
-    (34) subprogram_head -> FUNCTION ID formal_parameter COLON basic_type .
+    (65) procedure_call -> ID LPAREN expression_list RPAREN .
 
-    SEMI            reduce using rule 34 (subprogram_head -> FUNCTION ID formal_parameter COLON basic_type .)
+    END             reduce using rule 65 (procedure_call -> ID LPAREN expression_list RPAREN .)
+    SEMI            reduce using rule 65 (procedure_call -> ID LPAREN expression_list RPAREN .)
+    ELSE            reduce using rule 65 (procedure_call -> ID LPAREN expression_list RPAREN .)
 
 
 state 148
 
-    (19) type -> ARRAY LBRACK period RBRACK . OF basic_type
+    (68) expression_list -> expression_list COMMA . expression
+    (70) expression -> . simple_expression RELOP simple_expression
+    (71) expression -> . simple_expression EQU simple_expression
+    (72) expression -> . simple_expression
+    (73) simple_expression -> . simple_expression ADDOP term
+    (74) simple_expression -> . term
+    (75) term -> . term MULDIVANDOP factor
+    (76) term -> . factor
+    (77) factor -> . const_value
+    (78) factor -> . variable
+    (79) factor -> . LPAREN expression RPAREN
+    (80) factor -> . ID LPAREN expression_list RPAREN
+    (81) factor -> . NOTOP factor
+    (82) factor -> . ADDOP factor
+    (11) const_value -> . ADDOP ICONST
+    (12) const_value -> . ICONST
+    (13) const_value -> . RCONST
+    (14) const_value -> . CCONST
+    (15) const_value -> . BCONST
+    (16) const_value -> . string
+    (61) variable -> . ID id_varpart
+    (83) string -> . STRING
 
-    OF              shift and go to state 161
+    LPAREN          shift and go to state 82
+    ID              shift and go to state 83
+    NOTOP           shift and go to state 84
+    ADDOP           shift and go to state 77
+    ICONST          shift and go to state 38
+    RCONST          shift and go to state 39
+    CCONST          shift and go to state 40
+    BCONST          shift and go to state 41
+    STRING          shift and go to state 43
 
+    expression                     shift and go to state 170
+    simple_expression              shift and go to state 76
+    term                           shift and go to state 78
+    factor                         shift and go to state 79
+    const_value                    shift and go to state 80
+    variable                       shift and go to state 81
+    string                         shift and go to state 42
 
 state 149
 
-    (29) period -> period COMMA . my_period_part DOTDOT my_period_part
-    (25) my_period_part -> . ADDOP ICONST
-    (26) my_period_part -> . ICONST
-    (27) my_period_part -> . CCONST
+    (62) id_varpart -> LBRACK expression_list RBRACK .
 
-    ADDOP           shift and go to state 126
-    ICONST          shift and go to state 127
-    CCONST          shift and go to state 128
+    ASSIGN          reduce using rule 62 (id_varpart -> LBRACK expression_list RBRACK .)
+    MULDIVANDOP     reduce using rule 62 (id_varpart -> LBRACK expression_list RBRACK .)
+    RELOP           reduce using rule 62 (id_varpart -> LBRACK expression_list RBRACK .)
+    EQU             reduce using rule 62 (id_varpart -> LBRACK expression_list RBRACK .)
+    ADDOP           reduce using rule 62 (id_varpart -> LBRACK expression_list RBRACK .)
+    THEN            reduce using rule 62 (id_varpart -> LBRACK expression_list RBRACK .)
+    END             reduce using rule 62 (id_varpart -> LBRACK expression_list RBRACK .)
+    SEMI            reduce using rule 62 (id_varpart -> LBRACK expression_list RBRACK .)
+    ELSE            reduce using rule 62 (id_varpart -> LBRACK expression_list RBRACK .)
+    RPAREN          reduce using rule 62 (id_varpart -> LBRACK expression_list RBRACK .)
+    COMMA           reduce using rule 62 (id_varpart -> LBRACK expression_list RBRACK .)
+    RBRACK          reduce using rule 62 (id_varpart -> LBRACK expression_list RBRACK .)
+    TO              reduce using rule 62 (id_varpart -> LBRACK expression_list RBRACK .)
+    DO              reduce using rule 62 (id_varpart -> LBRACK expression_list RBRACK .)
 
-    my_period_part                 shift and go to state 162
 
 state 150
 
-    (28) period -> my_period_part DOTDOT . my_period_part
-    (25) my_period_part -> . ADDOP ICONST
-    (26) my_period_part -> . ICONST
-    (27) my_period_part -> . CCONST
+    (55) statement -> READ LPAREN variable_list RPAREN .
 
-    ADDOP           shift and go to state 126
-    ICONST          shift and go to state 127
-    CCONST          shift and go to state 128
+    END             reduce using rule 55 (statement -> READ LPAREN variable_list RPAREN .)
+    SEMI            reduce using rule 55 (statement -> READ LPAREN variable_list RPAREN .)
+    ELSE            reduce using rule 55 (statement -> READ LPAREN variable_list RPAREN .)
 
-    my_period_part                 shift and go to state 163
 
 state 151
 
-    (25) my_period_part -> ADDOP ICONST .
+    (59) variable_list -> variable_list COMMA . variable
+    (61) variable -> . ID id_varpart
 
-    DOTDOT          reduce using rule 25 (my_period_part -> ADDOP ICONST .)
-    RBRACK          reduce using rule 25 (my_period_part -> ADDOP ICONST .)
-    COMMA           reduce using rule 25 (my_period_part -> ADDOP ICONST .)
+    ID              shift and go to state 121
 
+    variable                       shift and go to state 171
 
 state 152
 
-    (51) statement -> IF expression THEN statement else_part .
+    (56) statement -> WRITE LPAREN expression_list RPAREN .
 
-    END             reduce using rule 51 (statement -> IF expression THEN statement else_part .)
-    SEMI            reduce using rule 51 (statement -> IF expression THEN statement else_part .)
-    ELSE            reduce using rule 51 (statement -> IF expression THEN statement else_part .)
+    END             reduce using rule 56 (statement -> WRITE LPAREN expression_list RPAREN .)
+    SEMI            reduce using rule 56 (statement -> WRITE LPAREN expression_list RPAREN .)
+    ELSE            reduce using rule 56 (statement -> WRITE LPAREN expression_list RPAREN .)
 
 
 state 153
 
-    (62) else_part -> ELSE . statement
-    (47) statement -> . empty
-    (48) statement -> . variable ASSIGN expression
-    (49) statement -> . procedure_call
-    (50) statement -> . compound_statement
-    (51) statement -> . IF expression THEN statement else_part
-    (52) statement -> . FOR ID ASSIGN expression TO expression DO statement
-    (53) statement -> . READ LPAREN variable_list RPAREN
-    (54) statement -> . WRITE LPAREN expression_list RPAREN
-    (80) empty -> .
-    (57) variable -> . ID id_varpart
-    (60) procedure_call -> . ID
-    (61) procedure_call -> . ID LPAREN expression_list RPAREN
-    (44) compound_statement -> . BEGIN statement_list END
+    (57) statement -> READLN LPAREN variable_list RPAREN .
 
-    IF              shift and go to state 48
-    FOR             shift and go to state 49
-    READ            shift and go to state 51
-    WRITE           shift and go to state 52
-    ELSE            reduce using rule 80 (empty -> .)
-    END             reduce using rule 80 (empty -> .)
-    SEMI            reduce using rule 80 (empty -> .)
-    ID              shift and go to state 50
-    BEGIN           shift and go to state 29
+    END             reduce using rule 57 (statement -> READLN LPAREN variable_list RPAREN .)
+    SEMI            reduce using rule 57 (statement -> READLN LPAREN variable_list RPAREN .)
+    ELSE            reduce using rule 57 (statement -> READLN LPAREN variable_list RPAREN .)
 
-    statement                      shift and go to state 164
-    empty                          shift and go to state 44
-    variable                       shift and go to state 45
-    procedure_call                 shift and go to state 46
-    compound_statement             shift and go to state 47
 
 state 154
 
-    (63) else_part -> empty .
+    (58) statement -> WRITELN LPAREN expression_list RPAREN .
 
-    ELSE            reduce using rule 63 (else_part -> empty .)
-    END             reduce using rule 63 (else_part -> empty .)
-    SEMI            reduce using rule 63 (else_part -> empty .)
+    END             reduce using rule 58 (statement -> WRITELN LPAREN expression_list RPAREN .)
+    SEMI            reduce using rule 58 (statement -> WRITELN LPAREN expression_list RPAREN .)
+    ELSE            reduce using rule 58 (statement -> WRITELN LPAREN expression_list RPAREN .)
 
 
 state 155
 
-    (75) factor -> ID LPAREN expression_list RPAREN .
+    (45) subprogram_body -> const_declarations var_declarations compound_statement .
 
-    MULDIVANDOP     reduce using rule 75 (factor -> ID LPAREN expression_list RPAREN .)
-    RELOP           reduce using rule 75 (factor -> ID LPAREN expression_list RPAREN .)
-    EQU             reduce using rule 75 (factor -> ID LPAREN expression_list RPAREN .)
-    ADDOP           reduce using rule 75 (factor -> ID LPAREN expression_list RPAREN .)
-    THEN            reduce using rule 75 (factor -> ID LPAREN expression_list RPAREN .)
-    END             reduce using rule 75 (factor -> ID LPAREN expression_list RPAREN .)
-    SEMI            reduce using rule 75 (factor -> ID LPAREN expression_list RPAREN .)
-    ELSE            reduce using rule 75 (factor -> ID LPAREN expression_list RPAREN .)
-    RPAREN          reduce using rule 75 (factor -> ID LPAREN expression_list RPAREN .)
-    COMMA           reduce using rule 75 (factor -> ID LPAREN expression_list RPAREN .)
-    RBRACK          reduce using rule 75 (factor -> ID LPAREN expression_list RPAREN .)
-    TO              reduce using rule 75 (factor -> ID LPAREN expression_list RPAREN .)
-    DO              reduce using rule 75 (factor -> ID LPAREN expression_list RPAREN .)
+    SEMI            reduce using rule 45 (subprogram_body -> const_declarations var_declarations compound_statement .)
 
 
 state 156
 
-    (52) statement -> FOR ID ASSIGN expression TO . expression DO statement
-    (66) expression -> . simple_expression RELOP simple_expression
-    (67) expression -> . simple_expression EQU simple_expression
-    (68) expression -> . simple_expression
-    (69) simple_expression -> . simple_expression ADDOP term
-    (70) simple_expression -> . term
-    (71) term -> . term MULDIVANDOP factor
-    (72) term -> . factor
-    (73) factor -> . number
-    (74) factor -> . variable
-    (75) factor -> . ID LPAREN expression_list RPAREN
-    (76) factor -> . NOTOP factor
-    (77) factor -> . ADDOP factor
-    (78) number -> . ICONST
-    (79) number -> . RCONST
-    (57) variable -> . ID id_varpart
+    (37) formal_parameter -> LPAREN parameter_list RPAREN .
 
-    ID              shift and go to state 77
-    NOTOP           shift and go to state 78
-    ADDOP           shift and go to state 72
-    ICONST          shift and go to state 79
-    RCONST          shift and go to state 80
+    SEMI            reduce using rule 37 (formal_parameter -> LPAREN parameter_list RPAREN .)
+    COLON           reduce using rule 37 (formal_parameter -> LPAREN parameter_list RPAREN .)
 
-    expression                     shift and go to state 165
-    simple_expression              shift and go to state 71
-    term                           shift and go to state 73
-    factor                         shift and go to state 74
-    number                         shift and go to state 75
-    variable                       shift and go to state 76
 
 state 157
 
-    (64) expression_list -> expression_list COMMA expression .
+    (39) parameter_list -> parameter_list SEMI . parameter
+    (41) parameter -> . var_parameter
+    (42) parameter -> . value_parameter
+    (43) var_parameter -> . VAR value_parameter
+    (44) value_parameter -> . idlist COLON basic_type
+    (4) idlist -> . idlist COMMA ID
+    (5) idlist -> . ID
 
-    RPAREN          reduce using rule 64 (expression_list -> expression_list COMMA expression .)
-    COMMA           reduce using rule 64 (expression_list -> expression_list COMMA expression .)
+    VAR             shift and go to state 130
+    ID              shift and go to state 17
 
+    parameter                      shift and go to state 172
+    var_parameter                  shift and go to state 128
+    value_parameter                shift and go to state 129
+    idlist                         shift and go to state 131
 
 state 158
 
-    (55) variable_list -> variable_list COMMA variable .
+    (43) var_parameter -> VAR value_parameter .
 
-    RPAREN          reduce using rule 55 (variable_list -> variable_list COMMA variable .)
-    COMMA           reduce using rule 55 (variable_list -> variable_list COMMA variable .)
+    RPAREN          reduce using rule 43 (var_parameter -> VAR value_parameter .)
+    SEMI            reduce using rule 43 (var_parameter -> VAR value_parameter .)
 
 
 state 159
 
-    (37) parameter_list -> parameter_list SEMI parameter .
+    (44) value_parameter -> idlist COLON . basic_type
+    (23) basic_type -> . INTEGER
+    (24) basic_type -> . REAL
+    (25) basic_type -> . CHAR
+    (26) basic_type -> . BOOLEAN
 
-    RPAREN          reduce using rule 37 (parameter_list -> parameter_list SEMI parameter .)
-    SEMI            reduce using rule 37 (parameter_list -> parameter_list SEMI parameter .)
+    INTEGER         shift and go to state 66
+    REAL            shift and go to state 67
+    CHAR            shift and go to state 68
+    BOOLEAN         shift and go to state 69
 
+    basic_type                     shift and go to state 173
 
 state 160
 
-    (42) value_parameter -> idlist COLON basic_type .
+    (36) subprogram_head -> FUNCTION ID formal_parameter COLON basic_type .
 
-    RPAREN          reduce using rule 42 (value_parameter -> idlist COLON basic_type .)
-    SEMI            reduce using rule 42 (value_parameter -> idlist COLON basic_type .)
+    SEMI            reduce using rule 36 (subprogram_head -> FUNCTION ID formal_parameter COLON basic_type .)
 
 
 state 161
 
-    (19) type -> ARRAY LBRACK period RBRACK OF . basic_type
-    (20) basic_type -> . INTEGER
-    (21) basic_type -> . REAL
-    (22) basic_type -> . CHAR
-    (23) basic_type -> . STRING
-    (24) basic_type -> . BOOLEAN
+    (22) type -> ARRAY LBRACK period RBRACK . OF basic_type
 
-    INTEGER         shift and go to state 60
-    REAL            shift and go to state 61
-    CHAR            shift and go to state 62
-    STRING          shift and go to state 63
-    BOOLEAN         shift and go to state 64
+    OF              shift and go to state 174
 
-    basic_type                     shift and go to state 166
 
 state 162
 
-    (29) period -> period COMMA my_period_part . DOTDOT my_period_part
+    (31) period -> period COMMA . my_period_part DOTDOT my_period_part
+    (27) my_period_part -> . ADDOP ICONST
+    (28) my_period_part -> . ICONST
+    (29) my_period_part -> . CCONST
 
-    DOTDOT          shift and go to state 167
+    ADDOP           shift and go to state 136
+    ICONST          shift and go to state 137
+    CCONST          shift and go to state 138
 
+    my_period_part                 shift and go to state 175
 
 state 163
 
-    (28) period -> my_period_part DOTDOT my_period_part .
+    (30) period -> my_period_part DOTDOT . my_period_part
+    (27) my_period_part -> . ADDOP ICONST
+    (28) my_period_part -> . ICONST
+    (29) my_period_part -> . CCONST
 
-    RBRACK          reduce using rule 28 (period -> my_period_part DOTDOT my_period_part .)
-    COMMA           reduce using rule 28 (period -> my_period_part DOTDOT my_period_part .)
+    ADDOP           shift and go to state 136
+    ICONST          shift and go to state 137
+    CCONST          shift and go to state 138
 
+    my_period_part                 shift and go to state 176
 
 state 164
 
-    (62) else_part -> ELSE statement .
+    (27) my_period_part -> ADDOP ICONST .
 
-    ELSE            reduce using rule 62 (else_part -> ELSE statement .)
-    END             reduce using rule 62 (else_part -> ELSE statement .)
-    SEMI            reduce using rule 62 (else_part -> ELSE statement .)
+    DOTDOT          reduce using rule 27 (my_period_part -> ADDOP ICONST .)
+    RBRACK          reduce using rule 27 (my_period_part -> ADDOP ICONST .)
+    COMMA           reduce using rule 27 (my_period_part -> ADDOP ICONST .)
 
 
 state 165
 
-    (52) statement -> FOR ID ASSIGN expression TO expression . DO statement
+    (53) statement -> IF expression THEN statement else_part .
 
-    DO              shift and go to state 168
+    END             reduce using rule 53 (statement -> IF expression THEN statement else_part .)
+    SEMI            reduce using rule 53 (statement -> IF expression THEN statement else_part .)
+    ELSE            reduce using rule 53 (statement -> IF expression THEN statement else_part .)
 
 
 state 166
 
-    (19) type -> ARRAY LBRACK period RBRACK OF basic_type .
+    (66) else_part -> ELSE . statement
+    (49) statement -> . empty
+    (50) statement -> . variable ASSIGN expression
+    (51) statement -> . procedure_call
+    (52) statement -> . compound_statement
+    (53) statement -> . IF expression THEN statement else_part
+    (54) statement -> . FOR ID ASSIGN expression TO expression DO statement
+    (55) statement -> . READ LPAREN variable_list RPAREN
+    (56) statement -> . WRITE LPAREN expression_list RPAREN
+    (57) statement -> . READLN LPAREN variable_list RPAREN
+    (58) statement -> . WRITELN LPAREN expression_list RPAREN
+    (84) empty -> .
+    (61) variable -> . ID id_varpart
+    (64) procedure_call -> . ID
+    (65) procedure_call -> . ID LPAREN expression_list RPAREN
+    (46) compound_statement -> . BEGIN statement_list END
 
-    SEMI            reduce using rule 19 (type -> ARRAY LBRACK period RBRACK OF basic_type .)
+    IF              shift and go to state 52
+    FOR             shift and go to state 53
+    READ            shift and go to state 55
+    WRITE           shift and go to state 56
+    READLN          shift and go to state 57
+    WRITELN         shift and go to state 58
+    ELSE            reduce using rule 84 (empty -> .)
+    END             reduce using rule 84 (empty -> .)
+    SEMI            reduce using rule 84 (empty -> .)
+    ID              shift and go to state 54
+    BEGIN           shift and go to state 29
 
+    statement                      shift and go to state 177
+    empty                          shift and go to state 48
+    variable                       shift and go to state 49
+    procedure_call                 shift and go to state 50
+    compound_statement             shift and go to state 51
 
 state 167
 
-    (29) period -> period COMMA my_period_part DOTDOT . my_period_part
-    (25) my_period_part -> . ADDOP ICONST
-    (26) my_period_part -> . ICONST
-    (27) my_period_part -> . CCONST
+    (67) else_part -> empty .
 
-    ADDOP           shift and go to state 126
-    ICONST          shift and go to state 127
-    CCONST          shift and go to state 128
+    ELSE            reduce using rule 67 (else_part -> empty .)
+    END             reduce using rule 67 (else_part -> empty .)
+    SEMI            reduce using rule 67 (else_part -> empty .)
 
-    my_period_part                 shift and go to state 169
 
 state 168
 
-    (52) statement -> FOR ID ASSIGN expression TO expression DO . statement
-    (47) statement -> . empty
-    (48) statement -> . variable ASSIGN expression
-    (49) statement -> . procedure_call
-    (50) statement -> . compound_statement
-    (51) statement -> . IF expression THEN statement else_part
-    (52) statement -> . FOR ID ASSIGN expression TO expression DO statement
-    (53) statement -> . READ LPAREN variable_list RPAREN
-    (54) statement -> . WRITE LPAREN expression_list RPAREN
-    (80) empty -> .
-    (57) variable -> . ID id_varpart
-    (60) procedure_call -> . ID
-    (61) procedure_call -> . ID LPAREN expression_list RPAREN
-    (44) compound_statement -> . BEGIN statement_list END
+    (80) factor -> ID LPAREN expression_list RPAREN .
 
-    IF              shift and go to state 48
-    FOR             shift and go to state 49
-    READ            shift and go to state 51
-    WRITE           shift and go to state 52
-    ELSE            reduce using rule 80 (empty -> .)
-    END             reduce using rule 80 (empty -> .)
-    SEMI            reduce using rule 80 (empty -> .)
-    ID              shift and go to state 50
-    BEGIN           shift and go to state 29
+    MULDIVANDOP     reduce using rule 80 (factor -> ID LPAREN expression_list RPAREN .)
+    RELOP           reduce using rule 80 (factor -> ID LPAREN expression_list RPAREN .)
+    EQU             reduce using rule 80 (factor -> ID LPAREN expression_list RPAREN .)
+    ADDOP           reduce using rule 80 (factor -> ID LPAREN expression_list RPAREN .)
+    THEN            reduce using rule 80 (factor -> ID LPAREN expression_list RPAREN .)
+    END             reduce using rule 80 (factor -> ID LPAREN expression_list RPAREN .)
+    SEMI            reduce using rule 80 (factor -> ID LPAREN expression_list RPAREN .)
+    ELSE            reduce using rule 80 (factor -> ID LPAREN expression_list RPAREN .)
+    RPAREN          reduce using rule 80 (factor -> ID LPAREN expression_list RPAREN .)
+    COMMA           reduce using rule 80 (factor -> ID LPAREN expression_list RPAREN .)
+    RBRACK          reduce using rule 80 (factor -> ID LPAREN expression_list RPAREN .)
+    TO              reduce using rule 80 (factor -> ID LPAREN expression_list RPAREN .)
+    DO              reduce using rule 80 (factor -> ID LPAREN expression_list RPAREN .)
 
-    statement                      shift and go to state 170
-    empty                          shift and go to state 44
-    variable                       shift and go to state 45
-    procedure_call                 shift and go to state 46
-    compound_statement             shift and go to state 47
 
 state 169
 
-    (29) period -> period COMMA my_period_part DOTDOT my_period_part .
+    (54) statement -> FOR ID ASSIGN expression TO . expression DO statement
+    (70) expression -> . simple_expression RELOP simple_expression
+    (71) expression -> . simple_expression EQU simple_expression
+    (72) expression -> . simple_expression
+    (73) simple_expression -> . simple_expression ADDOP term
+    (74) simple_expression -> . term
+    (75) term -> . term MULDIVANDOP factor
+    (76) term -> . factor
+    (77) factor -> . const_value
+    (78) factor -> . variable
+    (79) factor -> . LPAREN expression RPAREN
+    (80) factor -> . ID LPAREN expression_list RPAREN
+    (81) factor -> . NOTOP factor
+    (82) factor -> . ADDOP factor
+    (11) const_value -> . ADDOP ICONST
+    (12) const_value -> . ICONST
+    (13) const_value -> . RCONST
+    (14) const_value -> . CCONST
+    (15) const_value -> . BCONST
+    (16) const_value -> . string
+    (61) variable -> . ID id_varpart
+    (83) string -> . STRING
 
-    RBRACK          reduce using rule 29 (period -> period COMMA my_period_part DOTDOT my_period_part .)
-    COMMA           reduce using rule 29 (period -> period COMMA my_period_part DOTDOT my_period_part .)
+    LPAREN          shift and go to state 82
+    ID              shift and go to state 83
+    NOTOP           shift and go to state 84
+    ADDOP           shift and go to state 77
+    ICONST          shift and go to state 38
+    RCONST          shift and go to state 39
+    CCONST          shift and go to state 40
+    BCONST          shift and go to state 41
+    STRING          shift and go to state 43
 
+    expression                     shift and go to state 178
+    simple_expression              shift and go to state 76
+    term                           shift and go to state 78
+    factor                         shift and go to state 79
+    const_value                    shift and go to state 80
+    variable                       shift and go to state 81
+    string                         shift and go to state 42
 
 state 170
 
-    (52) statement -> FOR ID ASSIGN expression TO expression DO statement .
+    (68) expression_list -> expression_list COMMA expression .
 
-    END             reduce using rule 52 (statement -> FOR ID ASSIGN expression TO expression DO statement .)
-    SEMI            reduce using rule 52 (statement -> FOR ID ASSIGN expression TO expression DO statement .)
-    ELSE            reduce using rule 52 (statement -> FOR ID ASSIGN expression TO expression DO statement .)
+    RPAREN          reduce using rule 68 (expression_list -> expression_list COMMA expression .)
+    COMMA           reduce using rule 68 (expression_list -> expression_list COMMA expression .)
+    RBRACK          reduce using rule 68 (expression_list -> expression_list COMMA expression .)
+
+
+state 171
+
+    (59) variable_list -> variable_list COMMA variable .
+
+    RPAREN          reduce using rule 59 (variable_list -> variable_list COMMA variable .)
+    COMMA           reduce using rule 59 (variable_list -> variable_list COMMA variable .)
+
+
+state 172
+
+    (39) parameter_list -> parameter_list SEMI parameter .
+
+    RPAREN          reduce using rule 39 (parameter_list -> parameter_list SEMI parameter .)
+    SEMI            reduce using rule 39 (parameter_list -> parameter_list SEMI parameter .)
+
+
+state 173
+
+    (44) value_parameter -> idlist COLON basic_type .
+
+    RPAREN          reduce using rule 44 (value_parameter -> idlist COLON basic_type .)
+    SEMI            reduce using rule 44 (value_parameter -> idlist COLON basic_type .)
+
+
+state 174
+
+    (22) type -> ARRAY LBRACK period RBRACK OF . basic_type
+    (23) basic_type -> . INTEGER
+    (24) basic_type -> . REAL
+    (25) basic_type -> . CHAR
+    (26) basic_type -> . BOOLEAN
+
+    INTEGER         shift and go to state 66
+    REAL            shift and go to state 67
+    CHAR            shift and go to state 68
+    BOOLEAN         shift and go to state 69
+
+    basic_type                     shift and go to state 179
+
+state 175
+
+    (31) period -> period COMMA my_period_part . DOTDOT my_period_part
+
+    DOTDOT          shift and go to state 180
+
+
+state 176
+
+    (30) period -> my_period_part DOTDOT my_period_part .
+
+    RBRACK          reduce using rule 30 (period -> my_period_part DOTDOT my_period_part .)
+    COMMA           reduce using rule 30 (period -> my_period_part DOTDOT my_period_part .)
+
+
+state 177
+
+    (66) else_part -> ELSE statement .
+
+    ELSE            reduce using rule 66 (else_part -> ELSE statement .)
+    END             reduce using rule 66 (else_part -> ELSE statement .)
+    SEMI            reduce using rule 66 (else_part -> ELSE statement .)
+
+
+state 178
+
+    (54) statement -> FOR ID ASSIGN expression TO expression . DO statement
+
+    DO              shift and go to state 181
+
+
+state 179
+
+    (22) type -> ARRAY LBRACK period RBRACK OF basic_type .
+
+    SEMI            reduce using rule 22 (type -> ARRAY LBRACK period RBRACK OF basic_type .)
+
+
+state 180
+
+    (31) period -> period COMMA my_period_part DOTDOT . my_period_part
+    (27) my_period_part -> . ADDOP ICONST
+    (28) my_period_part -> . ICONST
+    (29) my_period_part -> . CCONST
+
+    ADDOP           shift and go to state 136
+    ICONST          shift and go to state 137
+    CCONST          shift and go to state 138
+
+    my_period_part                 shift and go to state 182
+
+state 181
+
+    (54) statement -> FOR ID ASSIGN expression TO expression DO . statement
+    (49) statement -> . empty
+    (50) statement -> . variable ASSIGN expression
+    (51) statement -> . procedure_call
+    (52) statement -> . compound_statement
+    (53) statement -> . IF expression THEN statement else_part
+    (54) statement -> . FOR ID ASSIGN expression TO expression DO statement
+    (55) statement -> . READ LPAREN variable_list RPAREN
+    (56) statement -> . WRITE LPAREN expression_list RPAREN
+    (57) statement -> . READLN LPAREN variable_list RPAREN
+    (58) statement -> . WRITELN LPAREN expression_list RPAREN
+    (84) empty -> .
+    (61) variable -> . ID id_varpart
+    (64) procedure_call -> . ID
+    (65) procedure_call -> . ID LPAREN expression_list RPAREN
+    (46) compound_statement -> . BEGIN statement_list END
+
+    IF              shift and go to state 52
+    FOR             shift and go to state 53
+    READ            shift and go to state 55
+    WRITE           shift and go to state 56
+    READLN          shift and go to state 57
+    WRITELN         shift and go to state 58
+    ELSE            reduce using rule 84 (empty -> .)
+    END             reduce using rule 84 (empty -> .)
+    SEMI            reduce using rule 84 (empty -> .)
+    ID              shift and go to state 54
+    BEGIN           shift and go to state 29
+
+    statement                      shift and go to state 183
+    empty                          shift and go to state 48
+    variable                       shift and go to state 49
+    procedure_call                 shift and go to state 50
+    compound_statement             shift and go to state 51
+
+state 182
+
+    (31) period -> period COMMA my_period_part DOTDOT my_period_part .
+
+    RBRACK          reduce using rule 31 (period -> period COMMA my_period_part DOTDOT my_period_part .)
+    COMMA           reduce using rule 31 (period -> period COMMA my_period_part DOTDOT my_period_part .)
+
+
+state 183
+
+    (54) statement -> FOR ID ASSIGN expression TO expression DO statement .
+
+    END             reduce using rule 54 (statement -> FOR ID ASSIGN expression TO expression DO statement .)
+    SEMI            reduce using rule 54 (statement -> FOR ID ASSIGN expression TO expression DO statement .)
+    ELSE            reduce using rule 54 (statement -> FOR ID ASSIGN expression TO expression DO statement .)
 
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for ELSE in state 129 resolved as shift
+WARNING: shift/reduce conflict for ELSE in state 139 resolved as shift
+WARNING: reduce/reduce conflict in state 110 resolved using rule (const_value -> ADDOP ICONST)
+WARNING: rejected rule (const_value -> ICONST) in state 110
