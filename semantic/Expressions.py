@@ -159,7 +159,7 @@ class Variable(object):
     def __init__(self, node, symboltable, typestable):
         self.name = 'variable'
         node.print()
-        self.id = node.childs[0].type[1]
+        self.id = symboltable.getItem(node.childs[0].type[1])['actual_name']  # 大小写以声明时为准
         self.id_period = None
         print('---'+self.id)
         if len(node.childs) > 1:
@@ -183,7 +183,7 @@ class Variable(object):
 class Function(object):
     def __init__(self, node, symboltable, typestable):
         self.name = 'function'
-        self.id = node.childs[0].type[1]
+        self.id = symboltable.getItem(node.childs[0].type[1])['actual_name']  # 大小写以声明时为准
         self.expression_list = [
             Expression(p, symboltable, typestable)
             for p in node.childs[1].childs

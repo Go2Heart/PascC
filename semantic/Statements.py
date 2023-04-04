@@ -72,7 +72,7 @@ class ForStatement(object):
     def __init__(self, node, symboltable, typestable):
         # child[0]=id,child[1]=expression,child[2]=expression,child[3]=statement
         self.name = 'for_statement'
-        self.id = node.childs[0].type[1]
+        self.id = symboltable.getItem(node.childs[0].type[1])['actual_name'] # pascal大小写不敏感，故输出时以定义时为准
         self.start_expression = Expressions.Expression(node.childs[1],
                                                        symboltable, typestable)
         self.end_expression = Expressions.Expression(node.childs[2],

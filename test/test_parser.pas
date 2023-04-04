@@ -4,7 +4,7 @@ const
     p = 1000000007;
     size = 10;
 var
-    i : integer;
+    I : integer;
     var1 : real;
     array1 : array [1..9] of integer;
 
