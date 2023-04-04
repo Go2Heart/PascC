@@ -28,8 +28,6 @@ class ProcedureStatement(object):
     def __init__(self, node, symboltable, typestable):
         self.name = 'procedure_statement'
         self.id = symboltable.getItem(node.childs[0].type[1])['actual_name']
-        print('---------')
-        print(self.id)
         self.expression_list = []
         if len(node.childs) == 2:
             for parameter in node.childs[1].childs:

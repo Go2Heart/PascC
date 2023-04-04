@@ -50,23 +50,17 @@ class HashTable(object):
 
 
 class IndexStack():
-    # Generate_flag = False
     cnt = 0
     stack = []
-    # block_range = []  # [st,ed)是块号为i的块的符号表范围
 
     @classmethod
     def pushblock(cls):  # 索引栈入栈
         cls.stack.append(cls.cnt)
-        # if not cls.Generate_flag:  # 当前是语义分析在调用
-        #     cls.block_range.append([len(SymbolTable.table)])
         cls.cnt += 1
 
     @classmethod
     def popblock(cls):  # 索引栈出栈并返回栈顶
         ans = cls.stack.pop()
-        # if not cls.Generate_flag:  # 当前是语义分析在调用
-        #     cls.block_range[ans].append(len(SymbolTable.table))
         return ans
 
     @classmethod
@@ -82,7 +76,6 @@ class SymbolTable():
     @classmethod
     def setIndexStack(cls):
         IndexStack.cnt = 0
-        # IndexStack.Generate_flag = True
 
     # 通过块号+标识符名唯一定位一个多元列表
     @classmethod
@@ -149,7 +142,7 @@ class SymbolTable():
         return False
 
     @classmethod
-    def popblock(cls):  # 块结束时，重定位。索引栈出栈+更新符号表+更新哈希表
+    def popblock(cls):  # 块结束时，重定位。
         block = IndexStack.popblock()
         while len(cls.now_indexs) > 0:
             item = cls.table[cls.now_indexs[-1]]
@@ -160,5 +153,5 @@ class SymbolTable():
                 break
 
     @classmethod
-    def pushblock(cls):  # 块开始时，定位。索引栈入栈+更新符号表
+    def pushblock(cls):  # 块开始时，定位。
         IndexStack.pushblock()

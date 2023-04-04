@@ -2,7 +2,7 @@ class Expression(object):
     def __init__(self, node, symboltable, typestable):
         # node = expression
         self.name = 'expression'
-        node.print()
+        # node.print()
         if len(node.childs) == 3:
             self.child_cnt = 2
             self.childs = [
@@ -31,6 +31,7 @@ class Expression(object):
         else:
             return str(self.childs[0]) + ' ' + operator + ' ' + str(
                 self.childs[1])
+
 
 class SimpleExpression(object):
     def __init__(self, node, symboltable, typestable):
@@ -130,12 +131,12 @@ class Factor(object):
         self.type = self.childs[0].type
 
     def __str__(self):
-        operator =self.operator
+        operator = self.operator
         if operator == 'not':
             operator = '!'
         ans = ""
         if self.operator is not None:
-            ans = operator+' '
+            ans = operator + ' '
         if self.kind == 'expression':
             ans += '('
         ans += str(self.childs[0])
@@ -147,8 +148,8 @@ class Factor(object):
 class Constant(object):
     def __init__(self, node, symboltable, typestable):
         self.name = 'constant'
-        node.print()
-        self.type = typestable.get_type(node) # 常量类型
+        # node.print()
+        self.type = typestable.get_type(node)  # 常量类型
         self.val = node.type[1]
 
     def __str__(self):
@@ -158,11 +159,12 @@ class Constant(object):
 class Variable(object):
     def __init__(self, node, symboltable, typestable):
         self.name = 'variable'
-        node.print()
-        self.id = symboltable.getItem(node.childs[0].type[1])['actual_name']  # 大小写以声明时为准
+        # node.print()
+        self.id = symboltable.getItem(
+            node.childs[0].type[1])['actual_name']  # 大小写以声明时为准
         self.id_isvar = symboltable.getItem(self.id)['type'].name == 'var'
         self.id_period = None
-        print('---'+self.id)
+        # print('---'+self.id)
         if len(node.childs) > 1:
             self.part_expression_list = [
                 Expression(p, symboltable, typestable)
@@ -177,11 +179,14 @@ class Variable(object):
     def __str__(self):
         ans = self.id
         if self.id_isvar:
-            ans = '(*'+ans+')'
+            ans = '(*' + ans + ')'
         if self.part_expression_list is not None:
             for i in range(len(self.part_expression_list)):
-                ans += '[('+str(self.part_expression_list[i]) + ') - (' + str(self.id_period[i][0][1]) + ')]'
+                ans += '[(' + str(
+                    self.part_expression_list[i]) + ') - (' + str(
+                        self.id_period[i][0][1]) + ')]'
         return ans
+
 
 class Function(object):
     def __init__(self, node, symboltable, typestable):
@@ -193,20 +198,19 @@ class Function(object):
             Expression(p, symboltable, typestable)
             for p in node.childs[1].childs
         ]
-        self.isvar_list = [
-            p.name == 'var' for p in item['type'].params
-        ] # 布尔数组，表示每个参数是否是var
+        self.isvar_list = [p.name == 'var'
+                           for p in item['type'].params]  # 布尔数组，表示每个参数是否是var
         self.type = symboltable.getItem(self.id)['type'].type  # 返回值类型
 
     def __str__(self):
-        ans = self.id+'('
+        ans = self.id + '('
         for i in range(len(self.expression_list)):
             if self.isvar_list[i]:
                 ans += '&('
             ans += str(self.expression_list[i])
             if self.isvar_list[i]:
                 ans += ')'
-            if i != len(self.expression_list)-1:
+            if i != len(self.expression_list) - 1:
                 ans += ', '
         ans += ')'
         return ans

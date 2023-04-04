@@ -239,7 +239,7 @@ class Parser:
         if len(p) == 4:
             p[0] = ASTNode(("assignment_statement"), p[1], p[3])
         elif len(p) == 2:
-            if isinstance(p[1], ASTNode):  # compound
+            if isinstance(p[1], ASTNode):  # compound_statement,procedure_call
                 p[0] = p[1]
             else:  # p[1] is None
                 p[0] = ASTNode(("empty_statement"))
@@ -349,9 +349,6 @@ class Parser:
     def p_string(self, p):
         """string : STRING"""
         p[0] = ASTNode(("string", p[1]))
-
-
-    
 
     def p_empty(self, p):
         """empty :"""
