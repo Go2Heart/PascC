@@ -4,13 +4,13 @@ Typical usage example:
 parser = PParser()
 parser.parse(script)
 """
+from distutils.log import debug
 import sys, os
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from ply.yacc import yacc
 from plexer import Lexer
 from ast_node import ASTNode
-
 
 class Parser:
     """Parse the script and return the AST
@@ -25,9 +25,18 @@ class Parser:
         self._lexer = Lexer()
         self.tokens = self._lexer.tokens
         self._yacc = yacc(module=self)
+        self.Lexerror = False
+        self.yaccerror = False
+        self.errormes = []
 
     precedence = (('left', 'ELSE'), ('left', 'LPAREN', 'LBRACK'), ('right',
                                                                    'ASSIGN'))
+    def p_error(self, p):
+        """error handler"""
+        self.yaccerror = True
+        self.errormes.append("Line {1}: Syntax error '{0}'".format(p.value, p.lineno))
+        # self._yacc.errok()
+        # print("Syntax error at '%s'" % p.value, p.lineno, p.lexpos)
 
     def parse(self, script):
         """parse the script
@@ -35,7 +44,12 @@ class Parser:
         Args:
             script: the script to be parsed
         """
-        return self._yacc.parse(script, lexer=self._lexer.get_lexer())
+        renode = self._yacc.parse(script, lexer=self._lexer.get_lexer(),debug=False)
+        if(self._lexer.errorFlag):
+            self.Lexerror = True
+            for me in self._lexer.errormes:
+                print(me)
+        return renode
 
     def p_program(self, p):
         """program : program_head SEMI program_body DOT"""
@@ -58,6 +72,14 @@ class Parser:
         elif len(p) == 4:
             p[0] = ASTNode(("idlist"), *p[1].childs, ASTNode(("id", p[3])))
 
+    def p_wrong_idlist(self, p):
+        """idlist : idlist error ID
+                  | ID error"""
+        if len(p) == 3:
+            p[0] = ASTNode(("idlist"), ASTNode(("id", p[1])))
+        elif len(p) == 4:
+            p[0] = ASTNode(("idlist"), *p[1].childs, ASTNode(("id", p[3])))
+
     def p_program_body(self, p):
         """program_body : const_declarations var_declarations subprogram_declarations compound_statement"""
         p[0] = ASTNode(("program_body"), p[1], p[2], p[3], p[4])
@@ -71,7 +93,7 @@ class Parser:
             p[0] = None
 
     def p_const_declaration(self, p):
-        """const_declaration : ID EQU const_value
+        """const_declaration : ID EQU const_value 
                              | const_declaration SEMI ID EQU const_value"""
         if len(p) == 4:
             p[0] = [
@@ -81,6 +103,19 @@ class Parser:
             p[0] = p[1] + [
                 ASTNode(("const_declaration", ), ASTNode(("id", p[3])), p[5])
             ]
+
+    def p_wrong_const_declaration(self, p):
+        """const_declaration : ID EQU error ID
+                             | const_declaration SEMI ID EQU error ID"""
+        if len(p) == 5:
+            p[0] = [
+                ASTNode(("const_declaration", ), ASTNode(("id", p[1])), ASTNode(("string",'0')))
+            ]
+            #print(*p)
+        elif len(p) == 7:
+            p[0] = p[1] + [
+                ASTNode(("const_declaration", ), ASTNode(("id", p[3])), ASTNode(("string",'0')))
+            ]       
 
     def p_const_value(self, p):
         """const_value : ADDOP ICONST
@@ -111,6 +146,13 @@ class Parser:
         else:
             p[0] = None
 
+    ''' def p_wrong_var_declarations(self, p):
+        """var_declarations : var_declaration SEMI"""
+        if len(p) == 3:
+            p[0] = ASTNode(("var_declarations"), *p[1])
+        else:
+            p[0] = None'''#做不到恢复，会跟常量定义冲突
+
     def p_var_declaration(self, p):
         """var_declaration : idlist COLON type
                            | var_declaration SEMI idlist COLON type"""
@@ -138,7 +180,8 @@ class Parser:
     def p_my_period_part(self, p):
         """my_period_part : ADDOP ICONST
                           | ICONST
-                          | CCONST"""
+                          | CCONST
+                          | ID"""
         if len(p) == 3:
             p[0] = ASTNode(("integer", p[1] + str(p[2])))
         else:
@@ -156,6 +199,7 @@ class Parser:
         elif len(p) == 6:
             p[0] = ASTNode(("period"), *p[1].childs, p[3], p[5])
         # TODO what if the period is not a const value?
+        # ans：带上ID作为下标，语义分析检查
 
     def p_subprogram_declarations(self, p):
         """subprogram_declarations : subprogram_declarations subprogram SEMI
@@ -206,6 +250,10 @@ class Parser:
 
     def p_value_parameter(self, p):
         """value_parameter : idlist COLON basic_type"""
+        p[0] = ASTNode(("value_parameter"), *p[1].childs, p[3])
+
+    def p_wrong_value_parameter(self, p):
+        """value_parameter : idlist error basic_type"""
         p[0] = ASTNode(("value_parameter"), *p[1].childs, p[3])
 
     def p_subprogram_body(self, p):
@@ -354,10 +402,6 @@ class Parser:
         """empty :"""
         pass
 
-    def p_error(self, p):
-        """error handler"""
-        print("Line {1}: Syntax error '{0}'".format(p.value, p.lineno))
-        # print("Syntax error at '%s'" % p.value, p.lineno, p.lexpos)
 
 
 if __name__ == "__main__":
@@ -365,7 +409,7 @@ if __name__ == "__main__":
     with open("./test/gcd.pas", "r") as f:
         node = parser.parse(f.read())
         f.close()
-    node.print(output_file=open("test/gcd.ast", "w"))
+    # node.print()
     # node.print(output_file=open("test/gcd.ast", "w", encoding='utf-8')
     # node.json_print(output_file=open("test/gcd_ast.json", "w", encoding='utf-8'))
     pass

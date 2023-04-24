@@ -4,6 +4,10 @@ Lexer class is the main class for the lexer, being able to tokenize a string of 
 import sys,os
 from ply.lex import lex
 
+class LexException(Exception):
+    def __init__(self,mes):
+        self.mes=mes
+
 class Lexer:
     """Lexer class 
     
@@ -83,6 +87,8 @@ class Lexer:
         """
         self._lexer = lex(module=self)
         self._input = None
+        self.errorFlag = False
+        self.errormes = []
         
     def get_lexer(self):
         """get the lexer object
@@ -155,6 +161,12 @@ class Lexer:
         t.value = int(str(t.value)[2:], 16)
         t.type = 'ICONST'
         return t
+    
+    def t_ICONST_4(self,t):
+        r'0x[a-fA-F1-9][a-fA-F0-9]*'
+        t.value = int(str(t.value)[2:], 16)
+        t.type = 'ICONST'
+        return t
 
     def t_ICONST_3(self,t):
         r'0B1[0-1]*'
@@ -196,10 +208,10 @@ class Lexer:
         return t
 
     def t_error(self,t):
-        global errorFlag
-        print("Line {1}: Illegal character '{0}'".format(t.value[0], t.lineno))
+        self.errorFlag = True
+        self.errormes.append("Line {1}: Illegal character '{0}'".format(t.value[0], t.lineno))
         t.lexer.skip(1)
-        errorFlag = True
+        
     
     def find_column(input, token):
         line_start = input.rfind('\n', 0, token.lexpos) + 1
