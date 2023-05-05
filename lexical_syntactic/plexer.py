@@ -49,7 +49,8 @@ class Lexer:
         'writeln' : 'WRITELN',
         'in' : 'INOP',
         'not' : 'NOTOP',
-        'or' : 'OROP'
+        'or' : 'OROP',
+        'string':'TYPE_STRING'
     }
     
     tokens = [

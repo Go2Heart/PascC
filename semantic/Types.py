@@ -1,3 +1,8 @@
+import logging
+
+from lexical_syntactic.ast_node import ASTNode
+
+
 class IntegerType(object):
     def __init__(self):
         self.name = 'integer'
@@ -254,7 +259,7 @@ class TypesTable(object):
 
     # 基于node提取类型
     @classmethod
-    def get_type(cls, node):
+    def get_type(cls, node,symboltable=None,const_idlist=None):
         if node.type[0] in cls.types.keys(
         ):  # 基本类型/自定义类型。basic_type -> INTEGER | REAL | CHAR | STRING | BOOLEAN
             return cls.types[node.type[0]]
@@ -263,8 +268,65 @@ class TypesTable(object):
             now = node.childs[0]  # now = period
             lst = []
             for i in range(0, len(now.childs), 2):
-                lst.append((now.childs[i].type, now.childs[i + 1].type))
+                left_range=now.childs[i]
+                right_range=now.childs[i+1]
+                left_node=left_range.type
+                right_node=right_range.type
+                # logging.debug(left_range)
+                # logging.debug(right_range)
+                flag=True
 
+                if left_range.type[0]=='id':
+                    name=left_range.type[1]
+                    symbol=symboltable.getItem(name)
+                    if symbol is not None:
+                        if name not in const_idlist:
+                            print("Line {0} : 标识符 {1} 不是常量，不能作为数组范围".format(left_range.type[2],name))
+                            flag=False
+                        else:
+                            left_type=symbol['type'].type
+                            left_value=symbol['type'].value
+                            left_node = (left_type, left_value)
+                    else:
+                        print("Line {0} : 标识符 {1} 未定义，不能作为数组范围".format(left_range.type[2], name))
+                        flag=False
+                else:
+                    left_type=left_range.type[0]
+                    left_value=left_range.type[1]
+
+                if right_range.type[0] == 'id':
+                    name = right_range.type[1]
+                    symbol = symboltable.getItem(name)
+                    if symbol is not None:
+                        if name not in const_idlist:
+                            print("Line {0} : 标识符 {1} 不是常量，不能作为数组范围".format(right_range.type[2], name))
+                            flag = False
+                        else:
+                            right_type = symbol['type'].type
+                            right_value = symbol['type'].value
+                            right_node = (right_type, right_value)
+                    else:
+                        print("Line {0} : 标识符 {1} 未定义，不能作为数组范围".format(right_range.type[2], name))
+                        flag = False
+                else:
+                    right_type = right_range.type[0]
+                    right_value = right_range.type[1]
+
+
+                if not flag:
+                    lst.append((None, None))
+                    continue
+                if left_type != right_type:
+                    print("Line {0} : 数组范围类型不一致".format(node.type[1]))
+                    lst.append((None, None))
+                    continue
+                if left_value>right_value:
+                    print("Line {0} : 数组左范围超过了右范围".format(node.type[1]))
+                    lst.append((None, None))
+                    continue
+
+                lst.append((left_node,right_node))
+            # logging.debug(lst)
             now = node.childs[1]  # now = basic_type
             return ArrayType(lst, cls.get_type(now))
         elif node.type[0] == 'function_head' or node.type[

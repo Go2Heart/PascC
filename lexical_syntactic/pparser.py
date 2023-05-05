@@ -30,7 +30,7 @@ class Parser:
         self.errormes = []
 
     precedence = (('left', 'ELSE'), ('left', 'LPAREN', 'LBRACK'), ('right',
-                                                                   'ASSIGN'))
+                                                                   'ASSIGN'))#???
     def p_error(self, p):
         """error handler"""
         self.yaccerror = True
@@ -68,9 +68,9 @@ class Parser:
         """idlist : idlist COMMA ID
                   | ID"""
         if len(p) == 2:
-            p[0] = ASTNode(("idlist"), ASTNode(("id", p[1])))
+            p[0] = ASTNode(("idlist"), ASTNode(("id", p[1],p.lineno(1))))
         elif len(p) == 4:
-            p[0] = ASTNode(("idlist"), *p[1].childs, ASTNode(("id", p[3])))
+            p[0] = ASTNode(("idlist"), *p[1].childs, ASTNode(("id", p[3],p.lineno(3))))
 
     def p_wrong_idlist(self, p):
         """idlist : idlist error ID
@@ -97,11 +97,11 @@ class Parser:
                              | const_declaration SEMI ID EQU const_value"""
         if len(p) == 4:
             p[0] = [
-                ASTNode(("const_declaration", ), ASTNode(("id", p[1])), p[3])
+                ASTNode(("const_declaration", ), ASTNode(("id", p[1],p.lineno(1))), p[3])
             ]
         elif len(p) == 6:
             p[0] = p[1] + [
-                ASTNode(("const_declaration", ), ASTNode(("id", p[3])), p[5])
+                ASTNode(("const_declaration", ), ASTNode(("id", p[3],p.lineno(3))), p[5])
             ]
 
     def p_wrong_const_declaration(self, p):
@@ -167,14 +167,16 @@ class Parser:
         if len(p) == 2:
             p[0] = p[1]
         elif len(p) == 7:
-            p[0] = ASTNode(("array_type", ), p[3], p[6])
+            p[0] = ASTNode(("array_type", p.lineno(1)), p[3], p[6])
 
     def p_basic_type(self, p):
         """basic_type : INTEGER
                       | REAL
                       | CHAR
-                      | BOOLEAN"""
+                      | BOOLEAN
+                      | TYPE_STRING"""
         # 多了一个STRING
+        # TODO：string的代码生成
         p[0] = ASTNode((p[1], ))
 
     def p_my_period_part(self, p):
@@ -183,12 +185,14 @@ class Parser:
                           | CCONST
                           | ID"""
         if len(p) == 3:
-            p[0] = ASTNode(("integer", p[1] + str(p[2])))
+            p[0] = ASTNode(("integer", int(p[1] + str(p[2]))))
         else:
             if isinstance(p[1], int):
                 p[0] = ASTNode(("integer", p[1]))
-            else:
+            elif p[1].startswith('\''):
                 p[0] = ASTNode(("char", p[1]))
+            else:
+                p[0]= ASTNode(('id',p[1],p.lineno(1)))
 
     def p_period(self, p):
         """period : my_period_part DOTDOT my_period_part
