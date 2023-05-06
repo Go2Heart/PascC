@@ -125,16 +125,17 @@ class Parser:
                     | BCONST
                     | string"""
         # 进行了一个大改
+        # 这里有一个需要注意的细节，应该先判断是不是boolean再判断是不是int，因为在python里bool是int的子类
         if len(p) == 3:
             p[0] = ASTNode(("integer", int(p[1] + str(p[2]))))
+        elif isinstance(p[1], bool):
+            p[0] = ASTNode(("boolean", p[1]))
         elif isinstance(p[1], int):
             p[0] = ASTNode(("integer", p[1]))
         elif isinstance(p[1], float):
             p[0] = ASTNode(("real", p[1]))
         elif isinstance(p[1], str):
             p[0] = ASTNode(("char", p[1]))
-        elif isinstance(p[1], bool):
-            p[0] = ASTNode(("boolean", p[1]))
         elif isinstance(p[1], ASTNode):
             p[0] = p[1]
 
@@ -221,9 +222,9 @@ class Parser:
         """subprogram_head : PROCEDURE ID formal_parameter
                            | FUNCTION ID formal_parameter COLON basic_type"""
         if len(p) == 4:
-            p[0] = ASTNode(("procedure_head", p[2]), p[3])
+            p[0] = ASTNode(("procedure_head", p[2],p.lineno(2)), p[3])
         elif len(p) == 6:
-            p[0] = ASTNode(("function_head", p[2]), p[3], p[5])
+            p[0] = ASTNode(("function_head", p[2],p.lineno(2)), p[3], p[5])
 
     def p_formal_parameter(self, p):
         """formal_parameter : LPAREN parameter_list RPAREN
@@ -289,7 +290,7 @@ class Parser:
                      | WRITELN LPAREN expression_list RPAREN"""
         # 删去了不可能归约的产生式 | ID ASSIGN expression，以免产生混淆
         if len(p) == 4:
-            p[0] = ASTNode(("assignment_statement"), p[1], p[3])
+            p[0] = ASTNode(("assignment_statement",p.lineno(2)), p[1], p[3])
         elif len(p) == 2:
             if isinstance(p[1], ASTNode):  # compound_statement,procedure_call
                 p[0] = p[1]
@@ -320,9 +321,9 @@ class Parser:
     def p_variable(self, p):
         """variable : ID id_varpart"""
         if p[2] is not None:
-            p[0] = ASTNode(("variable"), ASTNode(("id", p[1])), p[2])
+            p[0] = ASTNode(("variable"), ASTNode(("id", p[1],p.lineno(1))), p[2])
         else:
-            p[0] = ASTNode(("variable"), ASTNode(("id", p[1])))
+            p[0] = ASTNode(("variable"), ASTNode(("id", p[1],p.lineno(1))))
 
     def p_id_varpart(self, p):
         """id_varpart : LBRACK expression_list RBRACK
@@ -335,9 +336,9 @@ class Parser:
         """procedure_call : ID
                           | ID LPAREN expression_list RPAREN"""
         if len(p) == 2:
-            p[0] = ASTNode(("procedure_call"), ASTNode(("id", p[1])))
+            p[0] = ASTNode(("procedure_call",p.lineno(1)), ASTNode(("id", p[1])))
         elif len(p) == 5:
-            p[0] = ASTNode(("procedure_call"), ASTNode(("id", p[1])), p[3])
+            p[0] = ASTNode(("procedure_call",p.lineno(1)), ASTNode(("id", p[1])), p[3])
 
     def p_else_part(self, p):
         """else_part : ELSE statement
@@ -358,15 +359,16 @@ class Parser:
                       | simple_expression EQU simple_expression
                       | simple_expression"""
         if len(p) == 4:
-            p[0] = ASTNode(("expression"), p[1], p[2], p[3])
+            p[0] = ASTNode(("expression",p.lineno(2)), p[1], p[2], p[3])
         elif len(p) == 2:
             p[0] = ASTNode(("expression"), p[1])
 
     def p_simple_expression(self, p):
         """simple_expression : simple_expression ADDOP term
+                                | simple_expression OROP term
                              | term"""
         if len(p) == 4:
-            p[0] = ASTNode(("simple_expression"), p[1], p[2], p[3])
+            p[0] = ASTNode(("simple_expression",p.lineno(2)), p[1], p[2], p[3])
         elif len(p) == 2:
             p[0] = ASTNode(("simple_expression"), p[1])
 
@@ -374,7 +376,7 @@ class Parser:
         """term : term MULDIVANDOP factor
                 | factor"""
         if len(p) == 4:
-            p[0] = ASTNode(("term"), p[1], p[2], p[3])
+            p[0] = ASTNode(("term",p.lineno(2)), p[1], p[2], p[3])
         elif len(p) == 2:
             p[0] = ASTNode(("term"), p[1])
 
@@ -392,11 +394,11 @@ class Parser:
             else:
                 p[0] = ASTNode(("factor", "constant"), p[1])
         elif len(p) == 3:
-            p[0] = ASTNode(("factor", 'factor'), p[1], p[2])
+            p[0] = ASTNode(("factor", 'factor',p.lineno(1)), p[1], p[2])
         elif len(p) == 4:
             p[0] = ASTNode(("factor", 'expression'), p[2])
         elif len(p) == 5:
-            p[0] = ASTNode(("factor", 'function'), ASTNode(("id", p[1])), p[3])
+            p[0] = ASTNode(("factor", 'function'), ASTNode(("id", p[1],p.lineno(1))), p[3])
 
     def p_string(self, p):
         """string : STRING"""

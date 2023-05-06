@@ -144,7 +144,10 @@ class ArrayType(object):  # 每个实例代表一个数组类型
     def __str__(self):
         ans = str(self.type)
         for pair in self.period:
-            ans += '[' + str(pair[0][1]) + ',' + str(pair[1][1]) + ']'
+            if pair[0] is None :
+                ans+='[None,None]'
+            else:
+                ans += '[' + str(pair[0][1]) + ',' + str(pair[1][1]) + ']'
             # 输出是不输出数组下标的类型
             # pair[0][0]为下标类型，pair[0][1]为下标值
         return ans
@@ -272,8 +275,6 @@ class TypesTable(object):
                 right_range=now.childs[i+1]
                 left_node=left_range.type
                 right_node=right_range.type
-                # logging.debug(left_range)
-                # logging.debug(right_range)
                 flag=True
 
                 if left_range.type[0]=='id':
@@ -284,7 +285,7 @@ class TypesTable(object):
                             print("Line {0} : 标识符 {1} 不是常量，不能作为数组范围".format(left_range.type[2],name))
                             flag=False
                         else:
-                            left_type=symbol['type'].type
+                            left_type=symbol['type'].type.name
                             left_value=symbol['type'].value
                             left_node = (left_type, left_value)
                     else:
@@ -302,7 +303,7 @@ class TypesTable(object):
                             print("Line {0} : 标识符 {1} 不是常量，不能作为数组范围".format(right_range.type[2], name))
                             flag = False
                         else:
-                            right_type = symbol['type'].type
+                            right_type = symbol['type'].type.name
                             right_value = symbol['type'].value
                             right_node = (right_type, right_value)
                     else:
@@ -326,7 +327,7 @@ class TypesTable(object):
                     continue
 
                 lst.append((left_node,right_node))
-            # logging.debug(lst)
+            logging.debug(lst)
             now = node.childs[1]  # now = basic_type
             return ArrayType(lst, cls.get_type(now))
         elif node.type[0] == 'function_head' or node.type[
