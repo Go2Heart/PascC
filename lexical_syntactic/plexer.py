@@ -152,7 +152,8 @@ class Lexer:
         return t
 
     def t_RCONST(self,t):
-        r'([1-9][0-9]*|0)*\.(0|[0-9]*[1-9][0-9]*)((e|E)(\+|-)?[0-9]+)?|[0-9]+(e|E)(\+|-)?[0-9]+|0H([a-fA-F1-9]+[a-fA-F1-9]*)*\.[0-9]*[1-9a-fA-F][a-fA-F0-9]*|0B[1]+\.[0-1]*[1][0-1]*'
+        # 这里的正则表达式有点问题，小数点后的([0-9]*[1-9][0-9]*|0)，若匹配1.022，只能匹配到1.0
+        r'([1-9][0-9]*|0)*\.([0-9]*[1-9][0-9]*|0)((e|E)(\+|-)?[0-9]+)?|[0-9]+(e|E)(\+|-)?[0-9]+|0H([a-fA-F1-9]+[a-fA-F1-9]*)*\.[0-9]*[1-9a-fA-F][a-fA-F0-9]*|0B[1]+\.[0-1]*[1][0-1]*'
         t.value = float(t.value)
         t.type = 'RCONST'
         return t
@@ -182,8 +183,12 @@ class Lexer:
         return t
 
     def t_BCONST(self,t):
-        r'TRUE|FALSE'
-        t.value = bool(t.value)
+        # 这里之前的正则表达式忽略了大小写不区分的问题，已经修改
+        r'[tT][rR][uU][eE]|[fF][aA][lL][sS][eE]'
+        if t.value.lower()=='true':
+            t.value=True
+        else:
+            t.value=False
         t.type = 'BCONST'
         return t
 

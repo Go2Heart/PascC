@@ -19,7 +19,7 @@ class SubProgram(object):
         if tmp is not None:
             tmp = tmp.childs[0]
             # now = parameter_list.parameter_list -> parameter_list SEMI parameter | parameter
-            param_types = symboltable.getItem(self.name)["type"].params
+            param_types = symboltable.getItem(self.name)["type"].params #参数类型列表
             cnt = 0
             for i in range(len(tmp.childs)):
                 # x = value_parameter/variable_parameter
@@ -27,14 +27,16 @@ class SubProgram(object):
                 if x.type == 'var_parameter':
                     x = x.childs[0]
                 ids = [p.type[1] for p in x.childs if p.type[0] == 'id']
+                linenos=[p.type[2] for p in x.childs if p.type[0] == 'id']
                 for id in ids:
                     type = param_types[cnt]  # 之前求函数类型的时候已经存过一次了
-                    cnt += 1
                     if symboltable.haveItem(id):
-                        print("重复声明")
+                        print("Line {0} : 参数 '{1}' 重复声明".format(linenos[cnt],id))
                     else:
                         symboltable.insertItem(id, type, [], [])
                         self.parameter_idlist.append(id)
+                    cnt += 1
+
 
         logging.debug('subprogram.parameter_idlist=' +
                       str(self.parameter_idlist))
@@ -46,9 +48,10 @@ class SubProgram(object):
         if tmp is not None:
             for x in tmp.childs:  # x=const_declaration
                 id = x.childs[0].type[1]  # id = 'id1'
+                lineno = x.childs[0].type[2]
                 type = typestable.get_type(x)
                 if symboltable.haveItem(id):
-                    print("重复声明")
+                    print("Line {0} : Const Variable ‘{1}’ 重复声明".format(lineno, id))
                 else:
                     symboltable.insertItem(id, type, [], [])
                     self.const_idlist.append(id)
@@ -62,10 +65,11 @@ class SubProgram(object):
             for x in tmp.childs:  # x=var_declaration
                 type = typestable.get_type(x.childs[-1])
                 ids = [p.type[1] for p in x.childs if p.type[0] == 'id']
+                linenos = [p.type[2] for p in x.childs if p.type[0] == 'id']
                 tmp_ids = []
-                for id in ids:
+                for index, id in enumerate(ids):
                     if symboltable.haveItem(id):
-                        print("重复声明")
+                        print("Line {0} : Variable ‘{1}’ 重复声明".format(linenos[index], id))
                     else:
                         symboltable.insertItem(id, type, [], [])
                         tmp_ids.append(id)

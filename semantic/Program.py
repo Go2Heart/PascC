@@ -66,7 +66,7 @@ class Program(object):
             id = x.childs[0].type[1]  # id = 'id1'
             type = typestable.get_type(x.childs[0])
             if symboltable.haveItem(id):
-                print("重复声明")
+                print("Line {0} : Subprogram '{1}' 重复声明".format(x.childs[0].type[2],id))
             else:
                 symboltable.insertItem(id, type, [], [])
                 self.subprogram_list.append(
