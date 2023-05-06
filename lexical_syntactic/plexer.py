@@ -206,6 +206,10 @@ class Lexer:
         if t.value.lower() in self.keywords.keys():
             t.value = t.value.lower()
         t.type = self.keywords.get(t.value, 'ID')
+        # limit the length to 32
+        if len(t.value) > 32:
+            self.errorFlag = True
+            self.errormes.append("Line {1}: Identifier '{0}' is too long".format(t.value, t.lineno))
         return t
 
     def t_error(self,t):
@@ -239,6 +243,6 @@ class Lexer:
         
 if __name__ == '__main__':
     lexer = Lexer()
-    lexer.load_file('test/lex/test_lex_8.pas')
+    lexer.load_file('test/lex/test_lex_1.pas')
     lexer.scan(output_file=open('test/qsort.out', 'w',encoding='utf-8'))
     
