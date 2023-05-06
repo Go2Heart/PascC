@@ -188,14 +188,14 @@ class Lexer:
         return t
 
     def t_CCONST(self,t):
-        r'\'([ -~]|\\n|\\f|\\t|\\r|\\b|\\v)\''
+        r'\'([ -~]|\\n|\\f|\\t|\\r|\\b|\\v)?\''
         t.value = str(t.value) # 不修改为[1:-1]
         t.type = 'CCONST'
         t.lexer.lineno += t.value.count('\n') 
         return t
 
     def t_STRING(self,t):
-        r"'([^']|\\\\|\\'|\\n|\\t)*'" 
+        r"'([^']|\\\\|\\'|\\n|\\t)+'" 
         t.value = '"'+str(t.value[1:-1])+'"' # 不修改为[1:-1]
         t.type = 'STRING'
         t.lexer.lineno += t.value.count('\n')
@@ -210,6 +210,7 @@ class Lexer:
 
     def t_error(self,t):
         self.errorFlag = True
+        # column = self.find_column(self._input, t)
         self.errormes.append("Line {1}: Illegal character '{0}'".format(t.value[0], t.lineno))
         t.lexer.skip(1)
         
@@ -231,9 +232,13 @@ class Lexer:
             print(token)
             if output_file:
                 output_file.write(str(token) + '\n')
+        if self.errorFlag:
+            print("词法分析出现错误, 错误信息如下:")
+            for item in self.errormes:
+                print(item)
         
 if __name__ == '__main__':
     lexer = Lexer()
-    lexer.load_file('test/qsort.pas')
+    lexer.load_file('test/lex/test_lex_8.pas')
     lexer.scan(output_file=open('test/qsort.out', 'w',encoding='utf-8'))
     
