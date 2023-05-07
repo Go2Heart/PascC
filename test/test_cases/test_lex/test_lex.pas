@@ -22,7 +22,7 @@ begin
          end  
     end  
     until i>j;  
-    kp l,j);  
+    kp(l,j);
     kp(i,r)  
 end;  
   
