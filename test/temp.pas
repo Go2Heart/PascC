@@ -10,10 +10,7 @@ b:integer;d:char;ee:boolean;
 str:string;
 arr: array [l..r,l .. r,l .. r] of integer;
 procedure proc(var a,
-a:integer);
-const a='s';a='s';
-var b,b:integer;
-
+b:real);
 begin
 
 end;
@@ -22,5 +19,5 @@ begin
 
 end;
 begin
-    ee:='abc'>='abd';
+    read(arr);
 end.

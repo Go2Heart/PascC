@@ -288,6 +288,8 @@ class Variable(object):
                                 print("Line {0} : 数组 '{1}' 的第{2}维是'{3}'类型，但对该维的引用是'{4}'类型".format(lineno, self.id,idx,cur_type,cur_expression_type))
 
             else:
+                if symboltable.getItem(self.id)['type'].name == 'array':
+                    print("Line {0} : 标识符 '{1}' 是数组，需要有下标索引".format(node.childs[0].type[2], node.childs[0].type[1]))
                 self.part_expression_list = None
                 self.type = symboltable.getItem(self.id)['type']
 
