@@ -1,0 +1,8 @@
+LexToken(PROGRAM,'program',1,0)
+LexToken(ID,'test',1,8)
+LexToken(LPAREN,'(',1,12)
+LexToken(ID,'input',1,13)
+LexToken(COMMA,',',1,18)
+LexToken(ID,'output',1,19)
+LexToken(RPAREN,')',1,25)
+LexToken(SEMI,';',1,26)
