@@ -1,9 +1,10 @@
 program BubbleSort;
 
+const 
+  c = 2;
 var
   arr: array[1..10] of integer;
   i, j, temp: integer;
-
 begin
   writeln('Enter 10 numbers:');
   for i := 1 to 10 do

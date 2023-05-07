@@ -248,6 +248,6 @@ class Lexer:
         
 if __name__ == '__main__':
     lexer = Lexer()
-    lexer.load_file('test/lex/test_lex_1.pas')
+    lexer.load_file('test/bubble.pas')
     lexer.scan(output_file=open('test/qsort.out', 'w',encoding='utf-8'))
     
