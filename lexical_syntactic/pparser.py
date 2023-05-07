@@ -267,7 +267,7 @@ class Parser:
 
     def p_compound_statement(self, p):
         """compound_statement : BEGIN statement_list END"""
-        p[0] = ASTNode(("compound_statement"), p[2])
+        p[0] = ASTNode(("compound_statement",), p[2])
 
     def p_statement_list(self, p):
         """statement_list : statement_list SEMI statement
@@ -295,20 +295,20 @@ class Parser:
             if isinstance(p[1], ASTNode):  # compound_statement,procedure_call
                 p[0] = p[1]
             else:  # p[1] is None
-                p[0] = ASTNode(("empty_statement"))
+                p[0] = ASTNode(("empty_statement",))
         elif len(p) == 6:
-            p[0] = ASTNode(("if_statement"), p[2], p[4], p[5])
+            p[0] = ASTNode(("if_statement",p.lineno(1)), p[2], p[4], p[5])
         elif len(p) == 9:
-            p[0] = ASTNode(("for_statement"), ASTNode(("id", p[2])), p[4],
+            p[0] = ASTNode(("for_statement",), ASTNode(("id", p[2],p.lineno(2))), p[4],
                            p[6], p[8])
         elif p[1].lower() == "read":
-            p[0] = ASTNode(("read_statement"), p[3])
+            p[0] = ASTNode(("read_statement",p.lineno(1)), p[3])
         elif p[1].lower() == "write":
-            p[0] = ASTNode(("write_statement"), p[3])
+            p[0] = ASTNode(("write_statement",), p[3])
         elif p[1].lower() == "readln":
-            p[0] = ASTNode(("read_statement"), p[3], True)
+            p[0] = ASTNode(("read_statement",), p[3], True)
         elif p[1].lower() == "writeln":
-            p[0] = ASTNode(("write_statement"), p[3], True)
+            p[0] = ASTNode(("write_statement",), p[3], True)
 
     def p_variable_list(self, p):
         """variable_list : variable_list COMMA variable
