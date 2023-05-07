@@ -30,9 +30,10 @@ class Program(object):
         if tmp is not None:
             for x in tmp.childs:  # x=const_declaration
                 id = x.childs[0].type[1]  # id = 'id1'
+                lineno=x.childs[0].type[2]
                 type = typestable.get_type(x)
                 if symboltable.haveItem(id):
-                    print("重复声明")
+                    print("Line {0} : Const Variable ‘{1}’ 重复声明".format(lineno,id))
                 else:
                     symboltable.insertItem(id, type, [], [])
                     self.const_idlist.append(id)
@@ -44,12 +45,13 @@ class Program(object):
         tmp = tmp.childs[1]  # tmp=var_declarations
         if tmp is not None:
             for x in tmp.childs:  # x=var_declaration
-                type = typestable.get_type(x.childs[-1])
+                type = typestable.get_type(x.childs[-1],symboltable,self.const_idlist)
                 ids = [p.type[1] for p in x.childs if p.type[0] == 'id']
+                linenos=[p.type[2] for p in x.childs if p.type[0] == 'id']
                 tmp_ids = []
-                for id in ids:
+                for index,id in enumerate(ids):
                     if symboltable.haveItem(id):
-                        print("重复声明")
+                        print("Line {0} : Variable ‘{1}’ 重复声明".format(linenos[index],id))
                     else:
                         symboltable.insertItem(id, type, [], [])
                         tmp_ids.append(id)
@@ -64,7 +66,7 @@ class Program(object):
             id = x.childs[0].type[1]  # id = 'id1'
             type = typestable.get_type(x.childs[0])
             if symboltable.haveItem(id):
-                print("重复声明")
+                print("Line {0} : Subprogram '{1}' 重复声明".format(x.childs[0].type[2],id))
             else:
                 symboltable.insertItem(id, type, [], [])
                 self.subprogram_list.append(
