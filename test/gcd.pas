@@ -31,9 +31,10 @@ progrAm example;
 
     
 program example(input,output);
-    const cs = ox3f;
-    x.y:integer;
-    function gcd(a,b.integer):integer;
+    const cs = 'abc';
+    CC = 'a';
+    var x,y:integer;
+    function gcd(a,b:integer):integer;
         begin 
             if b=0 then gcd:=a
             else gcd:=gcd(b, a mod b)
@@ -44,7 +45,6 @@ program example(input,output);
         x := y;
     end;
     begin
-        z:=1;
         read(x, y);
         write('test');
         write(gcd(x, y));

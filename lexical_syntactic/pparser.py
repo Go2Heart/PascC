@@ -20,7 +20,7 @@ class Parser:
         tokens: the tokens
         _yacc: the yacc parser
     """
-    def __init__(self):
+    def __init__(self,lens):
         """init the parser"""
         self._lexer = Lexer()
         self.tokens = self._lexer.tokens
@@ -28,13 +28,17 @@ class Parser:
         self.Lexerror = False
         self.yaccerror = False
         self.errormes = []
+        self.lens=lens
 
     precedence = (('left', 'ELSE'), ('left', 'LPAREN', 'LBRACK'), ('right',
                                                                    'ASSIGN'))#???
     def p_error(self, p):
         """error handler"""
         self.yaccerror = True
-        self.errormes.append("Line {1}: Syntax error '{0}'".format(p.value, p.lineno))
+        if(p!=None):
+            self.errormes.append("Line {1}: Syntax error '{0}'".format(p.value, p.lineno))
+        else:
+            self.errormes.append("Line {1}: Syntax error in the last word".format('',self.lens))
         # self._yacc.errok()
         # print("Syntax error at '%s'" % p.value, p.lineno, p.lexpos)
 
@@ -54,6 +58,12 @@ class Parser:
     def p_program(self, p):
         """program : program_head SEMI program_body DOT"""
         p[0] = ASTNode(("program"), p[1], p[3])
+
+    def p_wrong_program(self, p):
+        """program : program_head SEMI program_body"""
+        p[0] = ASTNode(("program"), p[1], p[3])
+        self.yaccerror = True
+        self.errormes.append("Line {0}: Syntax error ,lost symbol '.'".format(self.lens))
 
     def p_program_head(self, p):
         """program_head : PROGRAM ID 
