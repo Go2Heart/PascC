@@ -140,6 +140,10 @@ class Lexer:
         # t.lexer.lexpos = 0
         pass
 
+    def t_ignore_COMMENT_SINGLE(self,t):
+        r'//.*'
+        pass
+    
     def t_ignore_COMMENT_MULTI(self,t):
         r'{[^}]*|\n*}'
         t.lexer.lineno += t.value.count('\n')
@@ -248,6 +252,6 @@ class Lexer:
         
 if __name__ == '__main__':
     lexer = Lexer()
-    lexer.load_file('test/lex/test_lex_1.pas')
+    lexer.load_file('test/lex/test_lex_6.pas')
     lexer.scan(output_file=open('test/qsort.out', 'w',encoding='utf-8'))
     
