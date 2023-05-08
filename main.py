@@ -4,7 +4,6 @@ from semantic.Types import TypesTable  # 全局类型表
 from lexical_syntactic import pparser  # 语法分析器
 from semantic.Analyzer import Analyzer  # 语义分析器
 from targetcode.CodeGenerater import CodeGenerater  # 代码生成器
-
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
@@ -36,6 +35,8 @@ if __name__ == "__main__":
             node.print()
         if(Wrong==False):
             program = analyzer.analyse(node)  # 语义分析，得到语义语法树根节点
+            if program.ErrorFlag==True:
+                Wrong=True
         if(not Wrong):
             generator.ProgramGenerate(program)  # 代码生成
         f.close()

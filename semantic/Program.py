@@ -2,10 +2,11 @@ import logging
 import Statements
 import SubPrograms
 
-
 class Program(object):
+
     """program : program_head SEMI program_body DOT"""
     def __init__(self, node, symboltable, typestable):
+        self.ErrorFlag=False
         # 进入块
         symboltable.pushblock()  # 进入到一个块中了，符号表重定位
 
@@ -32,8 +33,10 @@ class Program(object):
                 id = x.childs[0].type[1]  # id = 'id1'
                 lineno=x.childs[0].type[2]
                 type = typestable.get_type(x)
+                self.ErrorFlag |= type.ErrorFlag
                 if symboltable.haveItem(id):
                     print("Line {0} : Const Variable ‘{1}’ 重复声明".format(lineno,id))
+                    self.ErrorFlag=True
                 else:
                     symboltable.insertItem(id, type, [], [])
                     self.const_idlist.append(id)
@@ -49,9 +52,11 @@ class Program(object):
                 ids = [p.type[1] for p in x.childs if p.type[0] == 'id']
                 linenos=[p.type[2] for p in x.childs if p.type[0] == 'id']
                 tmp_ids = []
+                self.ErrorFlag|=type.ErrorFlag
                 for index,id in enumerate(ids):
                     if symboltable.haveItem(id):
                         print("Line {0} : Variable ‘{1}’ 重复声明".format(linenos[index],id))
+                        self.ErrorFlag=True
                     else:
                         symboltable.insertItem(id, type, [], [])
                         tmp_ids.append(id)
@@ -65,12 +70,16 @@ class Program(object):
         for x in tmp.childs:  # x=subprogram
             id = x.childs[0].type[1]  # id = 'id1'
             type = typestable.get_type(x.childs[0])
+            self.ErrorFlag|=type.ErrorFlag
             if symboltable.haveItem(id):
                 print("Line {0} : Subprogram '{1}' 重复声明".format(x.childs[0].type[2],id))
+                self.ErrorFlag=True
             else:
                 symboltable.insertItem(id, type, [], [])
                 self.subprogram_list.append(
                     SubPrograms.SubProgram(x, symboltable, typestable))
+                for subprogram in self.subprogram_list:
+                    self.ErrorFlag|=subprogram.ErrorFlag
 
                 logging.debug('Program:SymbolTable')
                 symboltable.print()
@@ -80,6 +89,8 @@ class Program(object):
         tmp = tmp.childs[3]  # tmp=compound_statement
         self.compound_statement = Statements.CompoundStatement(
             tmp, symboltable, typestable)
+        self.ErrorFlag|=self.compound_statement.ErrorFlag
 
         # 退出块
         symboltable.popblock()  # 退出当前块，符号表重定位
+

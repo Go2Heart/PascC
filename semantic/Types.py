@@ -5,6 +5,7 @@ from lexical_syntactic.ast_node import ASTNode
 
 class IntegerType(object):
     def __init__(self):
+        self.ErrorFlag=False
         self.name = 'integer'
         self.cname = 'int'
         self.print_type = '%d'
@@ -24,10 +25,21 @@ class IntegerType(object):
                 ans = ans + ',' + ids[i]
         return ans
 
+class NoneType(object):
+    def __init__(self):
+        self.ErrorFlag=True
+        self.name = 'none'
 
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return str(self)
 
 class RealType(object):
+
     def __init__(self):
+        self.ErrorFlag = False
         self.name = 'real'
         self.cname = 'double'
         self.print_type = '%lf'
@@ -51,6 +63,7 @@ class RealType(object):
 
 class BooleanType(object):
     def __init__(self):
+        self.ErrorFlag = False
         self.name = 'boolean'
         self.cname = 'bool'
         self.print_type = '%d'
@@ -73,6 +86,7 @@ class BooleanType(object):
 
 class CharType(object):
     def __init__(self):
+        self.ErrorFlag = False
         self.name = 'char'
         self.cname = 'char'
         self.print_type = '%c'
@@ -95,6 +109,7 @@ class CharType(object):
 
 class VoidType(object):
     def __init__(self):
+        self.ErrorFlag = False
         self.name = 'void'
         self.cname = 'void'
 
@@ -113,6 +128,7 @@ class VoidType(object):
 
 class StringType(object):  # 暂时不考虑一个变量是string类型的情况，只考虑常量字符串
     def __init__(self):
+        self.ErrorFlag = False
         self.name = 'string'
         self.cname = 'char*'
         self.print_type = '%s'
@@ -134,7 +150,8 @@ class StringType(object):  # 暂时不考虑一个变量是string类型的情况
 
 
 class ArrayType(object):  # 每个实例代表一个数组类型
-    def __init__(self, period, type):
+    def __init__(self, period, type,ErrorFlag):
+        self.ErrorFlag = ErrorFlag
         # 根据ast_node.py,node.childs=(period, type)
         self.name = 'array'
         self.period = period  # 数组各维度下标范围（起始，终止）：二元组列表
@@ -174,20 +191,26 @@ class ArrayType(object):  # 每个实例代表一个数组类型
 # TODO 记录类型
 class RecordType(object):  # 每个实例代表一个记录类型
     def __init__(self, fields):
+        self.ErrorFlag = False
         self.fields = fields  # （子成员变量名，类型）：二元组列表
 
 
 # TODO 指针类型
 class PointerType(object):  # 每个实例代表一个指针类型
     def __init__(self, type):
+        self.ErrorFlag = False
         self.type = type  # 指针指向的类型
 
 
 class FunctionType(object):  # 每个实例代表一个函数类型
     def __init__(self, type, params):
+        self.ErrorFlag = False
         self.name = 'function'
         self.type = type  # 返回值类型
         self.params = params  # 参数类型列表。
+        self.ErrorFlag=type.ErrorFlag
+        for param in params:
+                self.ErrorFlag|=param.ErrorFlag
 
     def __str__(self):
         ans = str(self.type)
@@ -221,6 +244,7 @@ class FunctionType(object):  # 每个实例代表一个函数类型
 
 class ConstType(object):  # 每个实例代表一个常量类型
     def __init__(self, type, value):
+        self.ErrorFlag = type.ErrorFlag
         self.name = 'const'
         self.type = type
         self.value = value
@@ -237,6 +261,7 @@ class ConstType(object):  # 每个实例代表一个常量类型
 
 class ReferenceType(object):  # 每个实例代表一个引用传参类型
     def __init__(self, type):
+        self.ErrorFlag = type.ErrorFlag
         self.name = 'var'
         self.type = type
 
@@ -268,6 +293,7 @@ class TypesTable(object):
             return cls.types[node.type[0]]
         elif node.type[0] == 'array_type':
             # 数组类型。type -> ARRAY LBRACK period RBRACK OF basic_type
+            ErrorFlag=False
             now = node.childs[0]  # now = period
             lst = []
             for i in range(0, len(now.childs), 2):
@@ -283,6 +309,7 @@ class TypesTable(object):
                     if symbol is not None:
                         if name not in const_idlist:
                             print("Line {0} : 标识符 {1} 不是常量，不能作为数组范围".format(left_range.type[2],name))
+                            ErrorFlag=True
                             flag=False
                         else:
                             left_type=symbol['type'].type.name
@@ -290,6 +317,7 @@ class TypesTable(object):
                             left_node = (left_type, left_value)
                     else:
                         print("Line {0} : 标识符 {1} 未定义，不能作为数组范围".format(left_range.type[2], name))
+                        ErrorFlag=True
                         flag=False
                 else:
                     left_type=left_range.type[0]
@@ -302,12 +330,14 @@ class TypesTable(object):
                         if name not in const_idlist:
                             print("Line {0} : 标识符 {1} 不是常量，不能作为数组范围".format(right_range.type[2], name))
                             flag = False
+                            ErrorFlag=True
                         else:
                             right_type = symbol['type'].type.name
                             right_value = symbol['type'].value
                             right_node = (right_type, right_value)
                     else:
                         print("Line {0} : 标识符 {1} 未定义，不能作为数组范围".format(right_range.type[2], name))
+                        ErrorFlag=True
                         flag = False
                 else:
                     right_type = right_range.type[0]
@@ -320,16 +350,18 @@ class TypesTable(object):
                 if left_type != right_type:
                     print("Line {0} : 数组范围类型不一致".format(node.type[1]))
                     lst.append((None, None))
+                    ErrorFlag=True
                     continue
                 if left_value>right_value:
                     print("Line {0} : 数组左范围超过了右范围".format(node.type[1]))
                     lst.append((None, None))
+                    ErrorFlag=True
                     continue
 
                 lst.append((left_node,right_node))
             logging.debug(lst)
             now = node.childs[1]  # now = basic_type
-            return ArrayType(lst, cls.get_type(now))
+            return ArrayType(lst, cls.get_type(now),ErrorFlag)
         elif node.type[0] == 'function_head' or node.type[
                 0] == 'procedure_head':
             # 子程序类型。subprogram_head subprogram_head -> PROCEDURE ID formal_parameter

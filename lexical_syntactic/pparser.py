@@ -344,9 +344,9 @@ class Parser:
     def p_variable(self, p):
         """variable : ID id_varpart"""
         if p[2] is not None:
-            p[0] = ASTNode(("variable"), ASTNode(("id", p[1],p.lineno(1))), p[2])
+            p[0] = ASTNode(("variable",p.lineno(1)), ASTNode(("id", p[1],p.lineno(1))), p[2])
         else:
-            p[0] = ASTNode(("variable"), ASTNode(("id", p[1],p.lineno(1))))
+            p[0] = ASTNode(("variable",p.lineno(1)), ASTNode(("id", p[1],p.lineno(1))))
 
     def p_id_varpart(self, p):
         """id_varpart : LBRACK expression_list RBRACK
@@ -412,7 +412,7 @@ class Parser:
                   | ADDOP factor"""
         # 漏产生式了啊喂！ factor->(expression)
         if len(p) == 2:
-            if p[1].type == "variable":
+            if p[1].type[0] == "variable":
                 p[0] = ASTNode(("factor", "variable"), p[1])
             else:
                 p[0] = ASTNode(("factor", "constant"), p[1])
