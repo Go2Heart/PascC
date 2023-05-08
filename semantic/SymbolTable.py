@@ -58,6 +58,7 @@ class IndexStack():
         cls.stack.append(cls.cnt)
         cls.cnt += 1
 
+
     @classmethod
     def popblock(cls):  # 索引栈出栈并返回栈顶
         ans = cls.stack.pop()

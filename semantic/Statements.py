@@ -1,4 +1,6 @@
 import Expressions
+from semantic.SymbolTable import IndexStack
+from semantic.Types import NoneType
 
 
 class Statement(object):
@@ -38,36 +40,44 @@ class ProcedureStatement(object):
             print("Line {0} : 标识符 '{1}' 不存在".format(node.type[1],node.childs[0].type[1]))
             self.ErrorFlag=True
         else:
-            self.id = symbol['actual_name']
-            self.expression_list = []
-            if len(node.childs) == 2:
-                for parameter in node.childs[1].childs:
-                    self.expression_list.append(
-                        Expressions.Expression(parameter, symboltable, typestable))
-                for expression in self.expression_list:
-                        self.ErrorFlag|=expression.ErrorFlag
-            params=symbol['type'].params
-            if len(self.expression_list)!= len(params):
-                print("Line {0} : 过程 '{1}' 有{2}个参数，但对过程的引用有{3}个参数".format(node.type[1], node.childs[0].type[1],len(params),len(self.expression_list)))
+            if symbol['type'].name!='function':
+                print("Line {0} : 标识符 '{1}' 不是函数名".format(node.type[1],node.childs[0].type[1]))
                 self.ErrorFlag=True
+            elif symbol['type'].type.name!='void':
+                print("Line {0} : 标识符 '{1}' 不是过程，不能被未引用调用".format(node.type[1], node.childs[0].type[1]))
+                self.ErrorFlag = True
             else:
-                for idx,expression in enumerate(self.expression_list):
-                    expression_type=expression.type.name
-                    if expression_type=='const':
-                        expression_type=expression.type.type.name
-                    param_type=params[idx].type.name
-                    if param_type=='const':
-                        param_type=params[idx].type.type.name
-                    if param_type=='real' and expression_type=='integer':
-                        print("WARNING: Line {0} : 过程 '{1}' 的第{2}个参数的引用进行隐式类型转换从integer转到real".format(node.type[1], node.childs[0].type[1],
-                                                                                  idx+1))
-                        self.ErrorFlag=True
-                    elif param_type!=expression_type:
-                        print("Line {0} : 过程 '{1}' 的第{2}个参数是 '{3}' 类型，但实参是 '{4}' 类型".format(node.type[1],
-                                                                                                      node.childs[
-                                                                                                          0].type[1],
-                                                                                                      idx+1,param_type,expression_type))
-                        self.ErrorFlag=True
+
+                self.id = symbol['actual_name']
+                self.expression_list = []
+                if len(node.childs) == 2:
+                    for parameter in node.childs[1].childs:
+                        self.expression_list.append(
+                            Expressions.Expression(parameter, symboltable, typestable))
+                    for expression in self.expression_list:
+                            self.ErrorFlag|=expression.ErrorFlag
+                params=symbol['type'].params
+                if len(self.expression_list)!= len(params):
+                    print("Line {0} : 过程 '{1}' 有{2}个参数，但对过程的引用有{3}个参数".format(node.type[1], node.childs[0].type[1],len(params),len(self.expression_list)))
+                    self.ErrorFlag=True
+                else:
+                    for idx,expression in enumerate(self.expression_list):
+                        expression_type=expression.type.name
+                        if expression_type=='const':
+                            expression_type=expression.type.type.name
+                        if params[idx].name=='var':
+                            param_type=params[idx].type.name
+                        else:
+                            param_type=params[idx].name
+                        if param_type=='const':
+                            param_type=params[idx].type.type.name
+                        if param_type=='real' and expression_type=='integer':
+                            print("WARNING: Line {0} : 过程 '{1}' 的第{2}个参数的引用进行隐式类型转换从integer转到real".format(node.type[1], node.childs[0].type[1],
+                                                                                      idx+1))
+                        elif param_type!=expression_type:
+                            print("Line {0} : 过程 '{1}' 的第{2}个参数是 '{3}' 类型，但实参是 '{4}' 类型".format(node.type[1],
+                                                                                                          idx+1,param_type,expression_type))
+                            self.ErrorFlag=True
 
 class CompoundStatement(object):
     def __init__(self, node, symboltable, typestable):
@@ -80,7 +90,6 @@ class CompoundStatement(object):
                 Statement(statement, symboltable, typestable))
         for statement in self.statements:
             self.ErrorFlag |=statement.ErrorFlag
-
 
 class AssignmentStatement(object):
     def __init__(self, node, symboltable, typestable):
@@ -97,6 +106,12 @@ class AssignmentStatement(object):
         if item is not None and item['type'].name == 'function':
             self.is_function = True
             # TODO:控制流检查
+            if IndexStack.topblock()==0 or item['block']!=IndexStack.topblock():
+                print("Line {0} : 在函数 '{1}' 外不能将函数名作为左值".format(node.childs[0].type[1],self.variable.id))
+                self.ErrorFlag=True
+            # print("???????????????")
+            # print(item['block'])
+            # print(IndexStack.topblock())
         else:
             self.is_function = False
         variable_type=self.variable.type.name

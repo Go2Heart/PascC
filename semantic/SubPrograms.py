@@ -7,7 +7,9 @@ class SubProgram(object):
     def __init__(self, node, symboltable, typestable):
         self.ErrorFlag=False
         symboltable.pushblock()  # 进入到一个块中了，符号表重定位
-
+        id = node.childs[0].type[1]  # id = 'id1'
+        type = typestable.get_type(node.childs[0])
+        symboltable.insertItem(id, type, [], [])
         # 子程序名
         tmp = node.childs[0]  # tmp=('procedure_head', 'gcd1')
         self.name = tmp.type[1]  # example

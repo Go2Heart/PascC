@@ -20,10 +20,11 @@ class Expression(object):
             self.operator = node.childs[1]
             # '=' | '<>' | '<' | '<=' | '>' | '>='
             typeA = self.childs[0].type.name
-            if typeA=='const':
+
+            if typeA=='const' or typeA=='var':
                 typeA=self.childs[0].type.type.name
             typeB = self.childs[1].type.name
-            if typeB=='const':
+            if typeB=='const' or typeB=='var':
                 typeB=self.childs[1].type.type.name
             if (typeA == 'integer' and typeB=='real') or (typeA=='real' and typeB=='integer'):
                 print("WARNING: Line {0} : 隐式类型转换从 'integer' 到 'real'".format(node.type[1]))
@@ -75,6 +76,7 @@ class SimpleExpression(object):
             typeB = self.childs[1].type.name
             if typeB=='const':
                 typeB=self.childs[1].type.type.name
+
             if self.operator == 'or':
                 if not (typeA == 'boolean' and typeB == 'boolean'):
                     print("Line {0} : OR运算的运算数不是boolean类型".format(node.type[1]))
@@ -194,7 +196,7 @@ class Factor(object):
         self.ErrorFlag=False
         self.name = 'factor'
         self.kind = None
-        self.type = None
+        self.type = NoneType()
         if node.type[1] == 'constant':
             self.kind = 'constant'
             self.child_cnt = 1
@@ -245,7 +247,7 @@ class Factor(object):
             self.child_cnt = 1
             self.operator = None
             self.childs=None
-            self.type=None
+            self.type=NoneType()
             func_name=node.childs[0].type[1]
             symbol=symboltable.getItem(func_name)
 
