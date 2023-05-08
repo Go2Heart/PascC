@@ -4,7 +4,7 @@ procedure pro;
 var a:integer;  
 begin  
     c:=22;
-    b:=b;
+    b:=0;
     a:=7
 
 end;  

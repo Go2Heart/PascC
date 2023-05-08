@@ -17,12 +17,14 @@ if __name__ == "__main__":
     generator = CodeGenerater(symboltable, typestable)  # 代码生成器
     input = input("请输入测试文件名：")
     Wrong = False
-    with open("test/"+input+".pas", "r", encoding='utf-8') as f:
+    #route1="D:/code/PascC/test/test_cases/test_parse/test_period/single_error/test_period_2.pas"
+    route="test/"+input+".pas"
+    with open(route, "r", encoding='utf-8') as f:
         line = f.readlines()
         lens = len(line)
         f.close()
     parser = pparser.Parser(lens)  # 语法分析器
-    with open("test/"+input+".pas", "r", encoding='utf-8') as f:
+    with open(route, "r", encoding='utf-8') as f:
         node = parser.parse(f.read())  # 语法分析，得到抽象语法树根节点
         if(parser.Lexerror==True):
             Wrong = True

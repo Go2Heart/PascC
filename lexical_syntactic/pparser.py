@@ -209,12 +209,25 @@ class Parser:
         """period : my_period_part DOTDOT my_period_part
                   | period COMMA my_period_part DOTDOT my_period_part"""
         # 做了改动，让数组下标元素可以是负数、可以是字符
+        # print(p[1],type(p[1]))
         if len(p) == 4:
             p[0] = ASTNode(("period"), p[1], p[3])
         elif len(p) == 6:
             p[0] = ASTNode(("period"), *p[1].childs, p[3], p[5])
         # TODO what if the period is not a const value?
         # ans：带上ID作为下标，语义分析检查
+
+    def p_wrong_period(self, p):
+        """period : RCONST
+                  | period COMMA RCONST"""
+        # 做了改动，让数组下标元素可以是负数、可以是字符
+        self.yaccerror=True
+        if len(p) == 2:
+            p[0] = ASTNode(("period"), ASTNode(("integer", 0)), ASTNode(("integer", 1)))
+            self.errormes.append("Line {1}: Syntax error in {0}".format(p[1],p.lineno(1)))
+        elif len(p) == 4:
+            p[0] = ASTNode(("period"), *p[1].childs, ASTNode(("integer", 0)), ASTNode(("integer", 1)))
+            self.errormes.append("Line {1}: Syntax error in {0}".format(p[3],p.lineno(3)))
 
     def p_subprogram_declarations(self, p):
         """subprogram_declarations : subprogram_declarations subprogram SEMI
