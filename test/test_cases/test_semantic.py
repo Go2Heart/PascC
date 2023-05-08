@@ -749,7 +749,7 @@ def test_semantic():
     test_typestable = TypesTable  # 全局类型表
 
     test_analyzer = Analyzer(test_symboltable, test_typestable)
-    with open("../swap.pas", "r", encoding='utf-8') as f:
+    with open("./test_semantic/test_semantic_1.pas", "r", encoding='utf-8') as f:
         line = f.readlines()
         lens = len(line)
         f.seek(0)
