@@ -5,7 +5,7 @@ var a,b:integer;
     e:char;  
 begin  
     a:=1;  
-    repeat
+    {repeat
         begin
             writeln(a);
             a:=a+1
@@ -15,7 +15,7 @@ begin
         begin  
             writeln(a);  
             a:=a+1  
-        end;  
+        end;  }
     if c=d then //条件表达式类型错误  
         begin  
             a:=a+1;  

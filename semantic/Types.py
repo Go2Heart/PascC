@@ -36,6 +36,17 @@ class NoneType(object):
     def __repr__(self):
         return str(self)
 
+class FileType(object):
+    def __init__(self):
+        self.ErrorFlag=False
+        self.name = 'file'
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return str(self)
+
 class RealType(object):
 
     def __init__(self):

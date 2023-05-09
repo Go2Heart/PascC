@@ -57,7 +57,7 @@ class Parser:
 
     def p_program(self, p):
         """program : program_head SEMI program_body DOT"""
-        p[0] = ASTNode(("program"), p[1], p[3])
+        p[0] = ASTNode(("program",p.lineno(2)), p[1], p[3])
 
     def p_wrong_program(self, p):
         """program : program_head SEMI program_body"""
