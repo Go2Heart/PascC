@@ -5,12 +5,12 @@ var a,b:integer;
     e:char;  
 begin  
     a:=1;  
-    repeat
-        begin
-            writeln(a);
-            a:=a+1
-        end
-    until a+b; //条件表达式类型错误
+//    repeat
+//        begin
+//            writeln(a);
+//            a:=a+1
+//        end
+//    until a+b; //条件表达式类型错误
     while e do //条件表达式类型错误  
         begin  
             writeln(a);  

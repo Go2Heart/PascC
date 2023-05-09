@@ -361,7 +361,7 @@ def test_generate_1():
     out_file = open("./test_generate/test_generate_1.cpp", "a", encoding="utf-8")
 
     # sys.stdout = out_file
-    with open("../gcd.pas", "r", encoding='utf-8') as f:
+    with open("./test_generate/test_generate_1.pas", "r", encoding='utf-8') as f:
         line = f.readlines()
         lens = len(line)
         f.seek(0)
