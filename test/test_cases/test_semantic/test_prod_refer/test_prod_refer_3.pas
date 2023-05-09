@@ -14,7 +14,7 @@ begin
     read(d,h,i,j); //正确  
     read(a,c,e,f[1]); //正确  
     read(f); //错误，数组名不能作为read的参数
-    read(a+b); //错误，复杂表达式不能作为read的参数
+    {read(a+b); //错误，复杂表达式不能作为read的参数}
     read(test); //错误，主程序名不能作为read的参数  
     read(input); //错误，主程序参数不能作为read的参数  
     read(pro); //错误，过程名不能作为read的参数  

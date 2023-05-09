@@ -1,6 +1,6 @@
 import logging
 
-from semantic.Types import IntegerType, BooleanType, RealType, NoneType
+from semantic.Types import IntegerType, BooleanType, RealType, NoneType, ConstType
 
 
 class Expression(object):
@@ -212,8 +212,11 @@ class Factor(object):
             self.ErrorFlag = self.childs[0].ErrorFlag
             self.operator = None
             self.type=self.childs[0].type
-            if self.type.name=='function':
-                print('Line {0} : 函数引用缺少实参'.format(node.childs[0].type[1]))
+            if self.type.name=='function' :
+                if len(self.type.params)!=0:
+                    print('Line {0} : 函数引用缺少实参'.format(node.childs[0].type[1]))
+                else:
+                    self.type=self.type.type
         elif node.type[1] == 'factor':
             self.kind = 'factor'
             self.child_cnt = 1
@@ -280,8 +283,11 @@ class Constant(object):
         self.name = 'constant'
         # node.print()
         self.type = typestable.get_type(node)  # 常量类型
+        # print("CONST!!!!!!!!!")
+        # print(self.type.name)
         self.ErrorFlag=self.type.ErrorFlag
         self.val = node.type[1]
+        self.type=ConstType(self.type,self.val)
 
     def __str__(self):
         return str(self.val)
@@ -305,6 +311,9 @@ class Variable(object):
             self.id_isvar = symboltable.getItem(self.id)['type'].name == 'var'
             self.id_period = None
             # print('---'+self.id)
+            # print("?????????????????")
+            # print(self.id)
+            # print(len(node.childs))
             if len(node.childs) > 1:
                 if symboltable.getItem(self.id)['type'].name != 'array':
                     print("Line {0} : 标识符 '{1}' 不是数组，不能有下标索引".format(node.childs[0].type[2], node.childs[0].type[1]))
@@ -328,6 +337,8 @@ class Variable(object):
                         for idx,pair in enumerate(self.id_period):
                             cur_type=pair[0][0]
                             cur_expression_type=self.part_expression_list[idx].type.name
+                            if cur_expression_type=='const':
+                                cur_expression_type=self.part_expression_list[idx].type.type.name
                             if cur_type != cur_expression_type:
                                 print("Line {0} : 数组 '{1}' 的第{2}维是'{3}'类型，但对该维的引用是'{4}'类型".format(lineno, self.id,idx,cur_type,cur_expression_type))
                                 self.ErrorFlag=True
@@ -365,6 +376,9 @@ class Function(object):
         ]
         for expression in self.expression_list:
             self.ErrorFlag|=expression.ErrorFlag
+        self.isvar_list = [p.name == 'var'
+                           for p in item['type'].params]  # 布尔数组，表示每个参数是否是var
+        self.type = symboltable.getItem(self.id)['type'].type  # 返回值类型
         params_type=item['type'].params
         if len(self.expression_list)!= len(params_type):
             print("Line {0} : 函数 '{1}' 的参数列表有{2}个参数，对函数的引用有{3}个参数".format(node.childs[0].type[2],self.id,len(params_type),len(self.expression_list)))
@@ -374,6 +388,7 @@ class Function(object):
                 expression_type=expression.type.name
                 if expression_type=='const':
                     expression_type=expression.type.type.name
+                    is_expression_type_const=True
                 if params_type[idx].name=='var':
                     param_type=params_type[idx].type.name
                 else:
@@ -389,9 +404,7 @@ class Function(object):
                                                                                    expression_type))
                     self.ErrorFlag=True
 
-        self.isvar_list = [p.name == 'var'
-                           for p in item['type'].params]  # 布尔数组，表示每个参数是否是var
-        self.type = symboltable.getItem(self.id)['type'].type  # 返回值类型
+
 
     def __str__(self):
         ans = self.id + '('

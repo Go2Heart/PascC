@@ -1,6 +1,8 @@
 import logging
 import Statements
 import SubPrograms
+from semantic.Types import StringType, VoidType, FunctionType, NoneType, FileType
+
 
 class Program(object):
 
@@ -10,11 +12,13 @@ class Program(object):
         # 进入块
         symboltable.pushblock()  # 进入到一个块中了，符号表重定位
 
+
         # 程序名
         tmp = node.childs[0]  # tmp=('program_head', 'example')
         self.name = tmp.type[1]  # example
-        logging.debug('program.name=' + self.name)
 
+        logging.debug('program.name=' + self.name)
+        lst=[]
         # 参数表
         tmp = tmp.childs[0]  # tmp=idlist
         if tmp is None:
@@ -22,6 +26,15 @@ class Program(object):
         else:
             self.parameter_idlist = [x.type[1] for x in tmp.childs
                                      ]  # ['id1', 'id2', 'id3']
+        for param in self.parameter_idlist:
+            if param==self.name:
+                print('Line {0} : 主程序参数不能与主程序名同名'.format(node.type[1]))
+                self.ErrorFlag=True
+            else:
+                symboltable.insertItem(param,FileType(),[],[])
+                lst.append(FileType())
+        symboltable.insertItem(self.name,FunctionType(VoidType(),lst),[],[])
+
         logging.debug('program.parameter_idlist=' + str(self.parameter_idlist))
 
         # 将常量加入符号表

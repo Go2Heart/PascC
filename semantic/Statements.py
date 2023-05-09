@@ -62,22 +62,46 @@ class ProcedureStatement(object):
                     self.ErrorFlag=True
                 else:
                     for idx,expression in enumerate(self.expression_list):
+                        is_var=False
+                        is_expression_type_const=False
                         expression_type=expression.type.name
-                        if expression_type=='const':
+                        # print(idx)
+                        # print(expression_type)
+                        if expression_type=='const' or expression_type=='var':
+                            if expression_type=='const':
+                                is_expression_type_const=True
                             expression_type=expression.type.type.name
-                        if params[idx].name=='var':
+
+                        if params[idx].name=='var' or params[idx].name=='const':
+                            if params[idx].name=='var':
+                                is_var=True
                             param_type=params[idx].type.name
                         else:
                             param_type=params[idx].name
-                        if param_type=='const':
-                            param_type=params[idx].type.type.name
-                        if param_type=='real' and expression_type=='integer':
-                            print("WARNING: Line {0} : 过程 '{1}' 的第{2}个参数的引用进行隐式类型转换从integer转到real".format(node.type[1], node.childs[0].type[1],
-                                                                                      idx+1))
-                        elif param_type!=expression_type:
-                            print("Line {0} : 过程 '{1}' 的第{2}个参数是 '{3}' 类型，但实参是 '{4}' 类型".format(node.type[1],
-                                                                                                          idx+1,param_type,expression_type))
-                            self.ErrorFlag=True
+                        # print(is_var)
+                        # print(is_expression_type_const)
+                        if is_var and is_expression_type_const:
+                            print("Line {0} : 过程 '{1}' 的第{2}个参数是var，实参不能是常量".format(node.type[1],
+                                                                                                node.childs[0].type[1],
+                                                                                                idx + 1))
+
+                        if is_var:
+                            if param_type != expression_type:
+                                print("Line {0} : 过程 '{1}' 的第{2}个参数是 '{3}' 类型，但实参是 '{4}' 类型".format(node.type[1],
+                                                                                                    node.childs[0].type[
+                                                                                                        1],
+                                                                                                    idx + 1, param_type,
+                                                                                                    expression_type))
+                                self.ErrorFlag = True
+                        else:
+
+                            if param_type=='real' and expression_type=='integer':
+                                print("WARNING: Line {0} : 过程 '{1}' 的第{2}个参数的引用进行隐式类型转换从integer转到real".format(node.type[1], node.childs[0].type[1],
+                                                                                          idx+1))
+                            elif param_type!=expression_type:
+                                print("Line {0} : 过程 '{1}' 的第{2}个参数是 '{3}' 类型，但实参是 '{4}' 类型".format(node.type[1],node.childs[0].type[1],
+                                                                                                              idx+1,param_type,expression_type))
+                                self.ErrorFlag=True
 
 class CompoundStatement(object):
     def __init__(self, node, symboltable, typestable):
@@ -200,7 +224,7 @@ class ForStatement(object):
                 print("Line {0} : 变量 '{1}' 是 '{2}' 类型，但起始范围是 '{3}' 类型".format(node.childs[0].type[2],self.id,id_type,start_expression_type))
                 self.ErrorFlag=True
             if id_type!= end_expression_type:
-                print("Line {0} : 变量 '{1}' 是 '{2}' 类型，但起始范围是 '{3}' 类型".format(node.childs[0].type[2],self.id,id_type,end_expression_type))
+                print("Line {0} : 变量 '{1}' 是 '{2}' 类型，但终止范围是 '{3}' 类型".format(node.childs[0].type[2],self.id,id_type,end_expression_type))
                 self.ErrorFlag=True
 
 
@@ -216,7 +240,7 @@ class ReadStatement(object):
         for variable in self.variable_list:
             self.ErrorFlag|=variable.ErrorFlag
         for variable in self.variable_list:
-            if symboltable.getItem(variable.id)['type'].name == 'array':
+            if variable.type.name == 'array':
                 print("Line {0} : 变量 '{1}' 是数组，不能被读取".format(node.type[1],variable.id))
                 self.ErrorFlag=True
             if variable.type.name=='function':
@@ -224,6 +248,9 @@ class ReadStatement(object):
                 self.ErrorFlag=True
             if variable.type.name=='const':
                 print("Line {0} : '{1}' 是 常量，不能被读取".format(node.type[1], variable.id))
+                self.ErrorFlag=True
+            if variable.type.name=='file':
+                print("Line {0} : '{1}' 是 文件类型，不能被读取".format(node.type[1], variable.id))
                 self.ErrorFlag=True
         if len(node.childs) > 1:
             self.newline = True
