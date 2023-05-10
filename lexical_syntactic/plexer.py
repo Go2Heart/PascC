@@ -50,7 +50,10 @@ class Lexer:
         'in' : 'INOP',
         'not' : 'NOTOP',
         'or' : 'OROP',
-        'string':'TYPE_STRING'
+        'string':'TYPE_STRING',
+        'repeat' : 'REPEAT',
+        'until' : 'UNTIL',
+        
     }
     
     tokens = [

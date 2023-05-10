@@ -373,7 +373,9 @@ class Parser:
                      | READ LPAREN variable_list RPAREN
                      | WRITE LPAREN expression_list RPAREN
                      | READLN LPAREN variable_list RPAREN
-                     | WRITELN LPAREN expression_list RPAREN"""
+                     | WRITELN LPAREN expression_list RPAREN
+                     | REPEAT statement_list UNTIL expression
+                     | WHILE expression DO statement"""
         # 删去了不可能归约的产生式 | ID ASSIGN expression，以免产生混淆
         if len(p) == 4:
             p[0] = ASTNode(("assignment_statement",p.lineno(2)), p[1], p[3])
@@ -395,6 +397,10 @@ class Parser:
             p[0] = ASTNode(("read_statement",), p[3], True)
         elif p[1].lower() == "writeln":
             p[0] = ASTNode(("write_statement",), p[3], True)
+        elif p[1].lower() == "repeat":
+            p[0] = ASTNode(("repeat_statement",), p[2], p[4])
+        elif p[1].lower() == "while":
+            p[0] = ASTNode(("while_statement",), p[2], p[4])
 
     def p_variable_list(self, p):
         """variable_list : variable_list COMMA variable
@@ -492,6 +498,8 @@ class Parser:
     def p_string(self, p):
         """string : STRING"""
         p[0] = ASTNode(("string", p[1]))
+        
+    
 
     def p_empty(self, p):
         """empty :"""
