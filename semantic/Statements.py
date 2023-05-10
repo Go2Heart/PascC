@@ -83,10 +83,17 @@ class ProcedureStatement(object):
                             param_type=params[idx].name
                         # print(is_var)
                         # print(is_expression_type_const)
+                        if is_var and expression.is_complex_expression:
+                            print("Line {0} : 过程 '{1}' 的第{2}个参数是var，实参不能是复杂表达式".format(node.type[1],
+                                                                                    node.childs[0].type[1],
+                                                                                    idx + 1))
+                            self.ErrorFlag=True
+
                         if is_var and is_expression_type_const:
                             print("Line {0} : 过程 '{1}' 的第{2}个参数是var，实参不能是常量".format(node.type[1],
                                                                                                 node.childs[0].type[1],
                                                                                                 idx + 1))
+                            self.ErrorFlag=True
 
                         if is_var:
                             if param_type != expression_type:

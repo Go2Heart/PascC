@@ -12,6 +12,6 @@ begin
             fib:=fib(i-1)+fib(i-2);
     end;  
 end;  
-begin  
-    fib:=a; //在子函数外出现对函数名的左值引用  
+begin
+    fib:=a; //在子函数外出现对函数名的左值引用
 end.  

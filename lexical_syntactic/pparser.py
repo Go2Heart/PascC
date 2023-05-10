@@ -131,13 +131,20 @@ class Parser:
         """const_value : ADDOP ICONST
                     | ICONST
                     | RCONST
+                    | ADDOP RCONST
                     | CCONST
                     | BCONST
                     | string"""
         # 进行了一个大改
         # 这里有一个需要注意的细节，应该先判断是不是boolean再判断是不是int，因为在python里bool是int的子类
         if len(p) == 3:
-            p[0] = ASTNode(("integer", int(p[1] + str(p[2]))))
+            if isinstance(p[2],int):
+                p[0] = ASTNode(("integer", int(p[1] + str(p[2]))))
+            else:
+                if p[1]=='+':
+                    p[0] = ASTNode(("real",p[2]))
+                else:
+                    p[0]=ASTNode(("real",-p[2]))
         elif isinstance(p[1], bool):
             p[0] = ASTNode(("boolean", p[1]))
         elif isinstance(p[1], int):
