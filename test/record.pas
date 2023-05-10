@@ -5,6 +5,7 @@ const
 type
   IIII = INTEGER;
   INT = IIII;
+  int_array = array[1..10] of integer;
 
   TStudent = record
     Age: IIII;
@@ -12,7 +13,7 @@ type
   end;
 
   TCourse = record
-    Credit: INT;
+    Credit: int_array;
   end;
 
   TEnrollment = record
@@ -31,7 +32,7 @@ var
 begin
   Enrollment.Student.Age := 20;
   Enrollment.Student.GPA := 3.5;
-  Enrollment.Course.Credit := 3;
+  Enrollment.Course.Credit[2] := 3;
   Enrollment.Grade := 85;
 
   writeln('Grade: ', Enrollment.Grade);
