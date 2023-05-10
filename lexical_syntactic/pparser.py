@@ -290,6 +290,8 @@ class Parser:
     def p_wrong_value_parameter(self, p):
         """value_parameter : idlist error basic_type"""
         p[0] = ASTNode(("value_parameter"), *p[1].childs, p[3])
+        self.yaccerror=True
+        self.errormes.append("Line {1}: Syntax error in {0}".format(p[2],p.lineno(2)))
 
     def p_subprogram_body(self, p):
         """subprogram_body : const_declarations var_declarations compound_statement"""
