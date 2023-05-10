@@ -247,7 +247,7 @@ class TypeType(object):  # 每个实例代表一个用户自定义类型
         ans = 'typedef '
         if self.type.name == 'record':
             ans += self.type.type_generate(0)
-            ans+=' '+self.id + ';'
+            ans+=' '+self.id 
         else:
             ans += self.type.generate(False,self.id)
         return ans
