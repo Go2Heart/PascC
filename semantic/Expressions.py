@@ -292,6 +292,76 @@ class Constant(object):
     def __str__(self):
         return str(self.val)
 
+class VariablePart(object):
+    def __init__(self,node, type, lineno, symboltable, typestable):
+        self.name = 'variable_part'
+        self.mode=None 
+        self.pre_type=None
+        self.type = None
+        self.ErrorFlag = False
+        while type.name == 'type':
+            type=type.type
+        # print(type)
+        # node.print()
+        self.variable_part = None
+        # node.print()
+        if node is not None:
+            self.mode=node.type[0]
+            if self.mode == 'array':
+                self.pre_type = type.type  # 元素类型
+                self.type = self.pre_type
+                self.id_period = type.period
+                self.part_expression_list = [
+                        Expression(p, symboltable, typestable)
+                        for p in node.childs[0].childs
+                    ]
+                for expression in self.part_expression_list:
+                    self.ErrorFlag|=expression.ErrorFlag
+                if node.childs[1] is not None:
+                    self.variable_part = VariablePart(node.childs[1],self.pre_type,lineno,symboltable,typestable)
+                    self.type = self.variable_part.type
+                logging.debug('Array Dimension '+str(len(self.id_period)))
+                logging.debug('expression list length ' + str(len(self.part_expression_list)))
+                if len(self.id_period)!=len(self.part_expression_list):
+                    print("Line {0} : 数组 '{1}' 的维数是{2}，但对数组的引用只有{3}维".format(lineno,self.id,len(self.id_period),len(self.part_expression_list)))
+                    self.ErrorFlag=True
+                else:
+                    for idx,pair in enumerate(self.id_period):
+                        cur_type=pair[0][0]
+                        cur_expression_type=self.part_expression_list[idx].type.name
+                        if cur_expression_type=='const':
+                            cur_expression_type=self.part_expression_list[idx].type.type.name
+                        if cur_type != cur_expression_type:
+                            print("Line {0} : 数组 '{1}' 的第{2}维是'{3}'类型，但对该维的引用是'{4}'类型".format(lineno, self.id,idx,cur_type,cur_expression_type))
+                            self.ErrorFlag=True
+            elif self.mode == 'record':
+                self.id = node.childs[0]
+                self.pre_type = type.fields[self.id] # 元素类型
+                self.type = self.pre_type
+                # print(self.pre_type)
+                if node.childs[1] is not None:
+                    self.variable_part = VariablePart(node.childs[1],self.pre_type,lineno,symboltable,typestable)
+                    self.type = self.variable_part.type
+            else:
+                # node.print()
+                print("Line {0} : 标识符 '{1}' 不是数组/记录，不能有索引".format(node.childs[0].type[2], node.childs[0].type[1]))
+                self.ErrorFlag=True
+                self.type=type
+        
+        
+    def __str__(self):
+        ans = ''
+        if self.mode == 'array':
+            if self.part_expression_list is not None:
+                for i in range(len(self.part_expression_list)):
+                    ans += '[(' + str(
+                        self.part_expression_list[i]) + ') - ' + str(
+                            self.id_period[i][0][1]) + ']'
+        elif self.mode == 'record':
+            ans += '.' + self.id
+        if self.variable_part is not None:
+            ans += str(self.variable_part)
+        return ans
 
 class Variable(object):
     def __init__(self, node, symboltable, typestable):
@@ -300,6 +370,7 @@ class Variable(object):
         self.ErrorFlag=False
         self.type=NoneType()
         # node.print()
+        self.variable_part = None
         symbol=symboltable.getItem(node.childs[0].type[1])
         if symbol is None:
             print("Line {0} : 标识符 '{1}' 不存在".format(node.childs[0].type[2],node.childs[0].type[1]))
@@ -310,56 +381,33 @@ class Variable(object):
             lineno=node.childs[0].type[2]
             self.id_isvar = symboltable.getItem(self.id)['type'].name == 'var'
             self.id_period = None
-            # print('---'+self.id)
-            # print("?????????????????")
-            # print(self.id)
-            # print(len(node.childs))
             if len(node.childs) > 1:
-                if symboltable.getItem(self.id)['type'].name != 'array':
-                    print("Line {0} : 标识符 '{1}' 不是数组，不能有下标索引".format(node.childs[0].type[2], node.childs[0].type[1]))
-                    self.ErrorFlag=True
-                    self.type=symboltable.getItem(self.id)['type']
-                else:
-                    self.type = symboltable.getItem(self.id)['type'].type  # 元素类型
-                    self.id_period = symboltable.getItem(self.id)['type'].period
-                    self.part_expression_list = [
-                            Expression(p, symboltable, typestable)
-                            for p in node.childs[1].childs[0].childs
-                        ]
-                    for expression in self.part_expression_list:
-                        self.ErrorFlag|=expression.ErrorFlag
-                    logging.debug('Array Dimension '+str(len(self.id_period)))
-                    logging.debug('expression list length ' + str(len(self.part_expression_list)))
-                    if len(self.id_period)!=len(self.part_expression_list):
-                        print("Line {0} : 数组 '{1}' 的维数是{2}，但对数组的引用只有{3}维".format(lineno,self.id,len(self.id_period),len(self.part_expression_list)))
-                        self.ErrorFlag=True
-                    else:
-                        for idx,pair in enumerate(self.id_period):
-                            cur_type=pair[0][0]
-                            cur_expression_type=self.part_expression_list[idx].type.name
-                            if cur_expression_type=='const':
-                                cur_expression_type=self.part_expression_list[idx].type.type.name
-                            if cur_type != cur_expression_type:
-                                print("Line {0} : 数组 '{1}' 的第{2}维是'{3}'类型，但对该维的引用是'{4}'类型".format(lineno, self.id,idx,cur_type,cur_expression_type))
-                                self.ErrorFlag=True
-
+                type=symboltable.getItem(self.id)['type']
+                if type.name == 'var':
+                    type=type.type
+                self.variable_part = VariablePart(node.childs[1],type,lineno,symboltable,typestable)
+                # print(self.type)
+                self.type = self.variable_part.type
+                # print(self.type)
             else:
                 if symboltable.getItem(self.id)['type'].name == 'array':
                     print("Line {0} : 标识符 '{1}' 是数组，但对它的引用没有下标索引".format(node.childs[0].type[2], node.childs[0].type[1]))
                     self.ErrorFlag=True
-
+                elif symboltable.getItem(self.id)['type'].name == 'type':
+                    if symboltable.getItem(self.id)['type'].type.name == 'array':
+                        print("Line {0} : 标识符 '{1}' 是数组，但对它的引用没有下标索引".format(node.childs[0].type[2], node.childs[0].type[1]))
+                    elif symboltable.getItem(self.id)['type'].type.name == 'record':
+                        print("Line {0} : 标识符 '{1}' 是记录，但对它的引用没有成员索引".format(node.childs[0].type[2], node.childs[0].type[1]))
+                    self.ErrorFlag=True
                 self.part_expression_list = None
                 self.type = symboltable.getItem(self.id)['type']
 
     def __str__(self):
-        ans = self.id
+        ans = self.id 
         if self.id_isvar:
             ans = '(*' + ans + ')'
-        if self.part_expression_list is not None:
-            for i in range(len(self.part_expression_list)):
-                ans += '[(' + str(
-                    self.part_expression_list[i]) + ') - (' + str(
-                        self.id_period[i][0][1]) + ')]'
+        if self.variable_part is not None:
+            ans = ans + str(self.variable_part)
         return ans
 
 
