@@ -1,23 +1,11 @@
-program Hello;
-const bll=1.01;
-ttt=true;
-a='a';
-l=10;
-r=20;
-bl=TrUe;
-var b,
-b:integer;d:char;ee:boolean;
-str:string;
-arr: array [l..r,l .. r,l .. r] of integer;
-procedure proc(var a,
-b:real);
-begin
+program RecordExample;
 
-end;
-function func(var a:real;var b:integer):real;
+type
+  TStudent = record
+    Name: string;
+    Age: integer;
+    GPA: real;
+  end;
 begin
-
-end;
-begin
-    read(arr);
+    // a:=1>=2;
 end.

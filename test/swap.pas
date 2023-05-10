@@ -1,4 +1,4 @@
-﻿program gcd_program(input,output);
+program gcd_program(input,output);
     var x,y,temp,ret:integer;
     function swap(var a,b:integer):integer; 
         begin

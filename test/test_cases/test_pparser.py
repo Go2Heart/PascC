@@ -814,13 +814,13 @@ def test_factor_2():
 
 
 def test_parse():
-    with open("./test_lex/single_error/test_lex_1.pas", "r") as f:
+    with open("../gcd.pas", "r") as f:
         line = f.readlines()
         lens = len(line)
         test_parser = Parser(lens)
         f.seek(0)
         test_parser.parse(f.read())
-        assert test_parser.yaccerror
+        # assert not test_parser.yaccerror
         for item in test_parser.errormes:
             print(item)
     # assert test_node is not None

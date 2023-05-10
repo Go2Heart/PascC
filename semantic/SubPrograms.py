@@ -5,8 +5,11 @@ import Statements
 class SubProgram(object):
     """subprogram : subprogram_head SEMI subprogram_body"""
     def __init__(self, node, symboltable, typestable):
+        self.ErrorFlag=False
         symboltable.pushblock()  # 进入到一个块中了，符号表重定位
-
+        id = node.childs[0].type[1]  # id = 'id1'
+        return_type=typestable.get_type(node.childs[0]).type.name
+        type = typestable.get_type(node.childs[0])
         # 子程序名
         tmp = node.childs[0]  # tmp=('procedure_head', 'gcd1')
         self.name = tmp.type[1]  # example
@@ -32,6 +35,7 @@ class SubProgram(object):
                     type = param_types[cnt]  # 之前求函数类型的时候已经存过一次了
                     if symboltable.haveItem(id):
                         print("Line {0} : 参数 '{1}' 重复声明".format(linenos[cnt],id))
+                        self.ErrorFlag=True
                     else:
                         symboltable.insertItem(id, type, [], [])
                         self.parameter_idlist.append(id)
@@ -50,8 +54,10 @@ class SubProgram(object):
                 id = x.childs[0].type[1]  # id = 'id1'
                 lineno = x.childs[0].type[2]
                 type = typestable.get_type(x)
+                self.ErrorFlag|=type.ErrorFlag
                 if symboltable.haveItem(id):
                     print("Line {0} : Const Variable ‘{1}’ 重复声明".format(lineno, id))
+                    self.ErrorFlag=True
                 else:
                     symboltable.insertItem(id, type, [], [])
                     self.const_idlist.append(id)
@@ -64,12 +70,14 @@ class SubProgram(object):
         if tmp is not None:
             for x in tmp.childs:  # x=var_declaration
                 type = typestable.get_type(x.childs[-1])
+                self.ErrorFlag|=type.ErrorFlag
                 ids = [p.type[1] for p in x.childs if p.type[0] == 'id']
                 linenos = [p.type[2] for p in x.childs if p.type[0] == 'id']
                 tmp_ids = []
                 for index, id in enumerate(ids):
                     if symboltable.haveItem(id):
                         print("Line {0} : Variable ‘{1}’ 重复声明".format(linenos[index], id))
+                        self.ErrorFlag=True
                     else:
                         symboltable.insertItem(id, type, [], [])
                         tmp_ids.append(id)
@@ -95,7 +103,10 @@ class SubProgram(object):
         # 处理语句块
         tmp = node.childs[1]  # tmp=program_body
         tmp = tmp.childs[-1]  # tmp=compound_statement
-        self.compound_statement = Statements.CompoundStatement(tmp, symboltable, typestable)
-
+        self.compound_statement = Statements.CompoundStatement(tmp, symboltable, typestable,node.childs[0].type[1])
+        self.ErrorFlag|=self.compound_statement.ErrorFlag
+        if (not self.compound_statement.ReturnFlag) and return_type!='void':
+            print("Line {0} : 函数 '{1}' 没有返回值语句".format(node.childs[0].type[2],node.childs[0].type[1]))
+            self.ErrorFlag=True
         # 退出块
         symboltable.popblock()  # 退出当前块，符号表重定位

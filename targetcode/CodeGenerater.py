@@ -1,9 +1,18 @@
 class CodeGenerater(object):
     # 基于 符号表symboltable，类型表typestable，根节点program进行代码生成
-    def __init__(self, symboltable, typestable):
+    def __init__(self, symboltable, typestable, output=None):
         self.symboltable = symboltable
         self.typestable = typestable
         self.depth = 0
+        self.output = output
+
+    def print(self, ss):
+        """选择性输出到文件"""
+        if self.output:
+            self.output.write(ss+'\n')
+            print(ss)
+        else:
+            print(ss)
 
     def ProgramGenerate(self, program):
 
@@ -12,30 +21,32 @@ class CodeGenerater(object):
 
         # 进入块
         self.symboltable.pushblock()  # 进入到一个块中了，更新索引表
+        self.symboltable.recover_const_var()
+        self.symboltable.recover_function()
 
-        print("#include<stdio.h>")
+        self.print("#include<stdio.h>")
         self.symboltable.recover_const_var()
 
         for id in program.const_idlist:
             item = self.symboltable.getItem(id)
-            print(item["type"].generate(False, id) + ';')
+            self.print(item["type"].generate(False, id) + ';')
 
         for ids in program.var_idlist:
             item = self.symboltable.getItem(ids[0])
-            # print(item)
-            print(item["type"].generate(False, *ids) + ';')
+            # self.print(item)
+            self.print(item["type"].generate(False, *ids) + ';')
 
         for subprogram in program.subprogram_list:
             self.symboltable.recover_function()
             self.SubProgramGenerate(subprogram)
 
-        print("int main()")
-        print("{")
+        self.print("int main()")
+        self.print("{")
         self.depth += 1
         self.CompoundGenerate(program.compound_statement)
-        print(' ' * 4 * self.depth + "return 0;")
+        self.print(' ' * 4 * self.depth + "return 0;")
         self.depth -= 1
-        print("}")
+        self.print("}")
 
         self.symboltable.popblock()
 
@@ -46,34 +57,38 @@ class CodeGenerater(object):
         self.symboltable.recover_const_var()
 
         item = self.symboltable.getItem(subprogram.name)
-        print(item["type"].generate(False, subprogram.name,
+        # print(subprogram.name=='fun')
+        # print("!!!!!!!!")
+        # self.symboltable.print()
+        # print(item)
+        self.print(item["type"].generate(False, subprogram.name,
                                     subprogram.parameter_idlist))
 
-        print('{')
+        self.print('{')
         self.depth += 1
         for id in subprogram.const_idlist:
             item = self.symboltable.getItem(id)
-            print(' ' * 4 * self.depth + item["type"].generate(False, id) + ';')
+            self.print(' ' * 4 * self.depth + item["type"].generate(False, id) + ';')
 
         for ids in subprogram.var_idlist:
             item = self.symboltable.getItem(ids[0])
-            # print(item)
-            print(' ' * 4 * self.depth + item["type"].generate(False, *ids) + ';')
+            # self.print(item)
+            self.print(' ' * 4 * self.depth + item["type"].generate(False, *ids) + ';')
 
         self.CompoundGenerate(subprogram.compound_statement)
         self.depth -= 1
-        print('}')
+        self.print('}')
 
         self.symboltable.popblock()
 
     def StatementGenerate(self, statement):
         if statement.information.name == 'compound_statement':
-            print(' ' * 4 * self.depth + '{')
+            self.print(' ' * 4 * self.depth + '{')
             self.depth += 1
             self.CompoundGenerate(statement.information)
             self.depth -= 1
 
-            print(' ' * 4 * self.depth + '}')
+            self.print(' ' * 4 * self.depth + '}')
 
         elif statement.information.name == 'assignment_statement':
             self.AssignmentGenerate(statement.information)
@@ -95,7 +110,7 @@ class CodeGenerater(object):
             self.StatementGenerate(statement)
 
     def ProcedureGenerate(self, procedurestatement):
-        ans = ' ' * 4 * self.depth + str(procedurestatement.id) + '(' 
+        ans = ' ' * 4 * self.depth + str(procedurestatement.id) + '('
         first = True
         for expression in procedurestatement.expression_list:
             if first:
@@ -104,23 +119,23 @@ class CodeGenerater(object):
                 ans += ', '
             ans += str(expression)
         ans += ');'
-        print(ans)
+        self.print(ans)
 
     def AssignmentGenerate(self, assignmentstatement):
         if assignmentstatement.is_function:
-            print(' ' * 4 * self.depth + 'return ' +
+            self.print(' ' * 4 * self.depth + 'return ' +
                   str(assignmentstatement.expression) + ';')
         else:
-            print(' ' * 4 * self.depth + str(assignmentstatement.variable) +
+            self.print(' ' * 4 * self.depth + str(assignmentstatement.variable) +
                   ' = ' + str(assignmentstatement.expression) + ';')
 
     def EmptyGenerate(self, statement):
-        # print(' ' * 4 * self.depth + ';')
+        # self.print(' ' * 4 * self.depth + ';')
         # 空语句直接不输出比较好看
         pass
 
     def IfGenerate(self, statement):
-        print(' ' * 4 * self.depth + 'if (' + str(statement.if_expression) +
+        self.print(' ' * 4 * self.depth + 'if (' + str(statement.if_expression) +
               ')')
         if statement.then_statement.information.name == 'compound_statement':
             self.StatementGenerate(statement.then_statement)
@@ -129,7 +144,7 @@ class CodeGenerater(object):
             self.StatementGenerate(statement.then_statement)
             self.depth -= 1
         if statement.else_statement:
-            print(' ' * 4 * self.depth + 'else')
+            self.print(' ' * 4 * self.depth + 'else')
             if statement.else_statement.information.name == 'compound_statement':
                 self.StatementGenerate(statement.else_statement)
             else:
@@ -138,7 +153,7 @@ class CodeGenerater(object):
                 self.depth -= 1
 
     def ForGenerate(self, forstatement):
-        print(' ' * 4 * self.depth + 'for (' + str(forstatement.id) + ' = ' +
+        self.print(' ' * 4 * self.depth + 'for (' + str(forstatement.id) + ' = ' +
               str(forstatement.start_expression) + '; ' +
               str(forstatement.id) + ' <= ' +
               str(forstatement.end_expression) + '; ' + str(forstatement.id) +
@@ -158,7 +173,7 @@ class CodeGenerater(object):
         for p in readstatement.variable_list:
             ans += ', &' + str(p)
         ans += ');'
-        print(' ' * 4 * self.depth + ans)
+        self.print(' ' * 4 * self.depth + ans)
         return ans
 
     def WriteGenerate(self, printstatement):
@@ -171,5 +186,5 @@ class CodeGenerater(object):
         for p in printstatement.expression_list:
             ans += ', ' + str(p)
         ans += ');'
-        print(' ' * 4 * self.depth + ans)
+        self.print(' ' * 4 * self.depth + ans)
         return ans

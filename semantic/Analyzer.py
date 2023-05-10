@@ -5,6 +5,7 @@ from Program import Program
 
 
 class Analyzer(object):
+
     def __init__(self, symboltable,  typestable):
         self.symboltable = symboltable
         self.typestable = typestable

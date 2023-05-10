@@ -48,6 +48,11 @@ class HashTable(object):
             cls.hash.pop(name)  # 如果链表为空，删除哈希表中的项
         return flag  # 删除成功返回True，否则返回False
 
+    @classmethod
+    def print(cls):
+        for k in cls.hash:
+            print(str(k)+','+str(cls.hash[k]))
+
 
 class IndexStack():
     cnt = 0
@@ -57,6 +62,7 @@ class IndexStack():
     def pushblock(cls):  # 索引栈入栈
         cls.stack.append(cls.cnt)
         cls.cnt += 1
+
 
     @classmethod
     def popblock(cls):  # 索引栈出栈并返回栈顶
@@ -84,6 +90,7 @@ class SymbolTable():
         for item in cls.table:
             logging.debug('index = ' + str(i) + ' : ' + str(item))
             i += 1
+        # HashTable.print()
 
     @classmethod
     def getItem(cls, name):

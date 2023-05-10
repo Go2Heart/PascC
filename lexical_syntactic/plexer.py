@@ -50,7 +50,10 @@ class Lexer:
         'in' : 'INOP',
         'not' : 'NOTOP',
         'or' : 'OROP',
-        'string':'TYPE_STRING'
+        'string':'TYPE_STRING',
+        'repeat' : 'REPEAT',
+        'until' : 'UNTIL',
+        
     }
     
     tokens = [
@@ -224,7 +227,7 @@ class Lexer:
     def t_error(self,t):
         self.errorFlag = True
         # column = self.find_column(self._input, t)
-        self.errormes.append("Line {1}: Illegal character '{0}'".format(t.value[0], t.lineno))
+        self.errormes.append("Line {1}: Illegal character '{0}'".format(t.value, t.lineno))
         t.lexer.skip(1)
         
     
@@ -252,6 +255,6 @@ class Lexer:
         
 if __name__ == '__main__':
     lexer = Lexer()
-    lexer.load_file('test/lex/test_lex_6.pas')
-    lexer.scan(output_file=open('test/qsort.out', 'w',encoding='utf-8'))
+    lexer.load_file('test/addons.pas')
+    lexer.scan()
     
