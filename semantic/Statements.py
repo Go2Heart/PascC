@@ -151,12 +151,14 @@ class AssignmentStatement(object):
         if variable_type=='function':
             variable_type=self.variable.type.type.name
 
-        if variable_type=='const':
+        if variable_type=='const' :
             variable_type=self.variable.type.type.name
             print("Line {0} : const 变量不能被赋值".format(node.type[1]))
             self.ErrorFlag = True
+        if variable_type=='var':
+            variable_type = self.variable.type.type.name
         expression_type=self.expression.type.name
-        if expression_type=='const':
+        if expression_type=='const' or expression_type=='var':
             expression_type=self.expression.type.type.name
         if variable_type=='real' and expression_type=='integer':
             print("WARNING: Line {0} : 隐式类型转换，从integer转换成real".format(node.type[1]))
