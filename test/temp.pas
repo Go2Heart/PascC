@@ -1,5 +1,11 @@
-program Hello;
-var a:boolean;
+program RecordExample;
+
+type
+  TStudent = record
+    Name: string;
+    Age: integer;
+    GPA: real;
+  end;
 begin
-    a:=1>=2;
+    // a:=1>=2;
 end.

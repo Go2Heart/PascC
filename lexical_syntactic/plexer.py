@@ -252,6 +252,6 @@ class Lexer:
         
 if __name__ == '__main__':
     lexer = Lexer()
-    lexer.load_file('test/swap.pas')
+    lexer.load_file('test/addons.pas')
     lexer.scan()
     
