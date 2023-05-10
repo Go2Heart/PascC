@@ -5,7 +5,7 @@ var a,b:integer;
 function fun:integer;  
 begin  
     for fun:=1 to 3 do //错把函数名当循环变量  
-        writlen('y')  
+        writeln('y')
 end;  
   
 procedure pro(var d:integer;e:char);  
@@ -15,7 +15,7 @@ begin
     for d:=1 to 3 do //正确  
         writeln(a/b);  
     for e:=1 to 3 do //错把char变量当循环变量  
-        writlen(a mod b);  
+        writeln(a mod b);
     for fun:=1 to 3 do //错把函数名当循环变量  
         writeln(a div b)  
 end;  

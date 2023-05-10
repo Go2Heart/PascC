@@ -6,22 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="c01d5d6b-b191-4d8d-9bf0-49f5805812e7" name="变更" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lexical_syntactic/parser.out" beforeDir="false" afterPath="$PROJECT_DIR$/lexical_syntactic/parser.out" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lexical_syntactic/parsetab.py" beforeDir="false" afterPath="$PROJECT_DIR$/lexical_syntactic/parsetab.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lexical_syntactic/pparser.py" beforeDir="false" afterPath="$PROJECT_DIR$/lexical_syntactic/pparser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/semantic/Expressions.py" beforeDir="false" afterPath="$PROJECT_DIR$/semantic/Expressions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/semantic/Program.py" beforeDir="false" afterPath="$PROJECT_DIR$/semantic/Program.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/semantic/Statements.py" beforeDir="false" afterPath="$PROJECT_DIR$/semantic/Statements.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/semantic/SubPrograms.py" beforeDir="false" afterPath="$PROJECT_DIR$/semantic/SubPrograms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/targetcode/CodeGenerater.py" beforeDir="false" afterPath="$PROJECT_DIR$/targetcode/CodeGenerater.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_cases/test_semantic/test_array_refer/test_array_refer_4.pas" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_cases/test_semantic/test_array_refer/test_array_refer_4.pas" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_cases/test_semantic/test_const_define/test_const_define_1.pas" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_cases/test_semantic/test_const_define/test_const_define_1.pas" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_cases/test_semantic/test_const_define/test_const_define_2.pas" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_cases/test_semantic/test_const_define/test_const_define_2.pas" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_cases/test_semantic/test_const_define/test_const_define_3.pas" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_cases/test_semantic/test_const_define/test_const_define_3.pas" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_cases/test_semantic/test_expression_check/test_expression_check_5.pas" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_cases/test_semantic/test_expression_check/test_expression_check_5.pas" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_cases/test_semantic/test_fun_define/test_fun_define_2.pas" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_cases/test_semantic/test_fun_define/test_fun_define_2.pas" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_cases/test_semantic/test_fun_refer/test_fun_refer_3.pas" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_cases/test_semantic/test_fun_refer/test_fun_refer_3.pas" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_cases/test_semantic/test_fun_refer/test_fun_refer_8.pas" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_cases/test_semantic/test_fun_refer/test_fun_refer_8.pas" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/test_cases/test_semantic/test_prod_refer/test_prod_refer_2.pas" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_cases/test_semantic/test_prod_refer/test_prod_refer_2.pas" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/test_cases/test_semantic/test_program/test_program_4.pas" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_cases/test_semantic/test_program/test_program_4.pas" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/test_cases/test_semantic/test_type_check/test_type_check_3.pas" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_cases/test_semantic/test_type_check/test_type_check_3.pas" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/test_cases/test_semantic/test_wrong_refer/test_wrong_refer_2.pas" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_cases/test_semantic/test_wrong_refer/test_wrong_refer_2.pas" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

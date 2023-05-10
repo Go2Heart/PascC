@@ -238,6 +238,8 @@ class ForStatement(object):
                 id_type=symbol['type'].type.name
                 print("Line {0} : const 变量不能被赋值".format(node.childs[0].type[2]))
                 self.ErrorFlag=True
+            if id_type=='var':
+                id_type = symbol['type'].type.name
             start_expression_type=self.start_expression.type.name
             end_expression_type=self.end_expression.type.name
             if start_expression_type=='const':
