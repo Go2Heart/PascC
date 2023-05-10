@@ -91,9 +91,71 @@ class Parser:
             p[0] = ASTNode(("idlist"), *p[1].childs, ASTNode(("id", p[3])))
 
     def p_program_body(self, p):
-        """program_body : const_declarations var_declarations subprogram_declarations compound_statement"""
-        p[0] = ASTNode(("program_body"), p[1], p[2], p[3], p[4])
+        """program_body : const_declarations type_declarations var_declarations subprogram_declarations compound_statement"""
+        p[0] = ASTNode(("program_body"), p[1], p[2], p[3], p[4], p[5])
+        
+    def p_type_declarations(self, p):
+        """type_declarations : TYPE type_declaration SEMI
+                             | empty"""
+        if len(p) == 4:
+            p[0] = ASTNode(("type_declarations"), *p[2])
+        else:
+            p[0] = None
+            
+    def p_type_declaration(self, p):
+        """type_declaration : ID EQU type_define
+                            | type_declaration SEMI ID EQU type_define"""
+        if len(p) == 4:
+            p[0] = [
+                ASTNode(("type_declaration", ), ASTNode(("id", p[1],p.lineno(1))), p[3])
+            ]
+        elif len(p) == 6:
+            p[0] = p[1] + [
+                ASTNode(("type_declaration", ), ASTNode(("id", p[3],p.lineno(3))), p[5])
+            ]
 
+    def p_type_define(self, p):
+        """type_define : simple_type
+                    | array_type
+                    | record_type"""
+        p[0] = p[1]
+
+    def p_simple_type(self, p):
+        """simple_type : ID
+                    | LPAREN ID DOTDOT ID RPAREN"""
+        if len(p) == 2:
+            p[0] = ASTNode(("simple_type", "ID"), p[1])
+        else:
+            p[0] = ASTNode(("simple_type", "range"), p[2], p[4])
+
+    def p_array_type(self, p):
+        """array_type : ARRAY LPAREN index_range RPAREN OF ID"""
+        p[0] = ASTNode(("array_type", p[3]), p[6])
+
+    def p_index_range(self, p):
+        """index_range : simple_type DOTDOT simple_type"""
+        p[0] = ASTNode(("index_range"), p[1], p[3])
+
+    def p_record_type(self, p):
+        """record_type : RECORD field_declarations END"""
+        p[0] = ASTNode(("record_type"), *p[2])
+
+    def p_field_declarations(self, p):
+        """field_declarations : field_declaration SEMI
+                            | field_declarations field_declaration SEMI"""
+        if len(p) == 3:
+            p[0] = [p[1]]
+        else:
+            p[0] = p[1] + [p[2]]
+
+    def p_field_declaration(self, p):
+        """field_declaration : ID COLON ID 
+                            | ID COLON basic_type"""
+        p[0] = ASTNode(("field_declaration", p[1]), p[3])
+
+
+        
+    
     def p_const_declarations(self, p):
         """const_declarations : CONST const_declaration SEMI
                               | empty"""
@@ -174,7 +236,8 @@ class Parser:
 
     def p_type(self, p):
         """type : basic_type
-                | ARRAY LBRACK period RBRACK OF basic_type"""
+                | ARRAY LBRACK period RBRACK OF basic_type
+                | ID"""
         if len(p) == 2:
             p[0] = p[1]
         elif len(p) == 7:
@@ -350,10 +413,13 @@ class Parser:
 
     def p_id_varpart(self, p):
         """id_varpart : LBRACK expression_list RBRACK
+                      | DOT ID id_varpart
                       | empty"""
-        # 错了！是expression_list
-        if len(p) == 4:
+        if len(p) == 4 and p[1] == '[':
             p[0] = ASTNode(("id_varpart"), p[2])
+        elif len(p) == 4 and p[1] == '.':
+            p[0] = ASTNode(("id_varpart"), (p[1], p[2]))
+       
 
     def p_procedure_call(self, p):
         """procedure_call : ID
@@ -434,10 +500,13 @@ class Parser:
 
 
 if __name__ == "__main__":
-    parser = Parser()
-    with open("./test/gcd.pas", "r") as f:
-        node = parser.parse(f.read())
-        f.close()
+    with open("./test/addons.pas", "r") as f:
+        line = f.readlines()
+        lens = len(line)
+        test_parser = Parser(lens)
+        f.seek(0)
+        node = test_parser.parse(f.read())
+    node.print()
     # node.print()
     # node.print(output_file=open("test/gcd.ast", "w", encoding='utf-8')
     # node.json_print(output_file=open("test/gcd_ast.json", "w", encoding='utf-8'))
