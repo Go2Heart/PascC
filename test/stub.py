@@ -39,7 +39,7 @@ class StubLexer:
 
 if __name__ == '__main__':
     lex_test = StubLexer()
-    lex_test.get_tokens('test/bubble.out')
+    lex_test.get_tokens('bubble.out')
     # jsonRead = StubParser()
     # typed_obj =jsonRead.get_node("test/gcd_ast.json")
     # d_l_obj = objtyping.to_primitive(typed_obj)
