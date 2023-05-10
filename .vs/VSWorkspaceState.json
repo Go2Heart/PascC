@@ -1,11 +1,14 @@
 {
   "ExpandedNodes": [
     "",
-    "\\lexical_syntactic",
     "\\semantic",
     "\\targetcode",
-    "\\test"
+    "\\test",
+    "\\test\\test_cases",
+    "\\test\\test_cases\\test_parse",
+    "\\test\\test_cases\\test_parse\\test_period",
+    "\\test\\test_cases\\test_parse\\test_period\\single_error"
   ],
-  "SelectedNode": "\\main.py",
+  "SelectedNode": "\\test\\swap.pas",
   "PreviewInSolutionExplorer": false
 }
