@@ -71,10 +71,10 @@ class SimpleExpression(object):
             # '+' | '-' | 'or'
 
             typeA = self.childs[0].type.name
-            if typeA=='const':
+            if typeA=='const' or typeA=='var':
                 typeA=self.childs[0].type.type.name
             typeB = self.childs[1].type.name
-            if typeB=='const':
+            if typeB=='const' or typeB=='var':
                 typeB=self.childs[1].type.type.name
 
             if self.operator == 'or':
@@ -135,6 +135,10 @@ class Term(object):
             # '*' | '/' | 'div' | 'mod' | 'and'
             typeA = self.childs[0].type.name
             typeB = self.childs[1].type.name
+            if typeA=='const' or typeA=='var':
+                typeA=self.childs[0].type.type.name
+            if typeB=='const' or typeB=='var':
+                typeB=self.childs[1].type.type.name
             if self.operator=='div' or self.operator=='mod':
                 if not(typeA=='integer' and typeB=='integer'):
                     if self.operator == 'div':
@@ -224,14 +228,17 @@ class Factor(object):
             self.ErrorFlag = self.childs[0].ErrorFlag
             self.operator = node.childs[0]
             self.type=self.childs[0].type
+            type_name=self.type.name
+            if type_name=='var' or type_name=='const':
+                type_name=self.type.type.name
             if self.operator=='not':
-                if self.type.name!= 'boolean':
+                if type_name!= 'boolean':
                     print("Line {0} : not 运算符不能对非boolean类型运算".format(node.type[2]))
                     self.ErrorFlag=True
                 else :
                     pass
             else:
-                if self.type.name != 'integer' and self.type.name!= 'real':
+                if type_name != 'integer' and type_name!= 'real':
                     print("Line {0} : ADDOP 运算符不能对非整数实数类型运算".format(node.type[2]))
                     self.ErrorFlag=True
                 else:

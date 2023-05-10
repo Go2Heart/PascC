@@ -276,6 +276,7 @@ class ReferenceType(object):  # 每个实例代表一个引用传参类型
         self.ErrorFlag = type.ErrorFlag
         self.name = 'var'
         self.type = type
+        self.print_type=self.type.print_type
 
     def __str__(self):
         return 'var ' + str(self.type)
