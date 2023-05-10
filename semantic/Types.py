@@ -258,6 +258,7 @@ class ConstType(object):  # 每个实例代表一个常量类型
         self.ErrorFlag = type.ErrorFlag
         self.name = 'const'
         self.type = type
+        self.print_type=self.type.print_type
         self.value = value
 
     def __str__(self):

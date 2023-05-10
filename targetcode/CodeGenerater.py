@@ -21,6 +21,8 @@ class CodeGenerater(object):
 
         # 进入块
         self.symboltable.pushblock()  # 进入到一个块中了，更新索引表
+        self.symboltable.recover_const_var()
+        self.symboltable.recover_function()
 
         self.print("#include<stdio.h>")
         self.symboltable.recover_const_var()
@@ -55,6 +57,10 @@ class CodeGenerater(object):
         self.symboltable.recover_const_var()
 
         item = self.symboltable.getItem(subprogram.name)
+        # print(subprogram.name=='fun')
+        # print("!!!!!!!!")
+        # self.symboltable.print()
+        # print(item)
         self.print(item["type"].generate(False, subprogram.name,
                                     subprogram.parameter_idlist))
 
@@ -162,7 +168,7 @@ class CodeGenerater(object):
     def ReadGenerate(self, readstatement):
         ans = 'scanf("'
         for p in readstatement.variable_list:
-            ans += p.type.self.print_type
+            ans += p.type.print_type
         ans += '"'
         for p in readstatement.variable_list:
             ans += ', &' + str(p)
@@ -173,7 +179,7 @@ class CodeGenerater(object):
     def WriteGenerate(self, printstatement):
         ans = 'self.printf("'
         for p in printstatement.expression_list:
-            ans += p.type.self.print_type
+            ans += p.type.print_type
             if printstatement.newline:
                 ans += '\\n'
         ans += '"'

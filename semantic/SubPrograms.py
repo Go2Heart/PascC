@@ -8,8 +8,8 @@ class SubProgram(object):
         self.ErrorFlag=False
         symboltable.pushblock()  # 进入到一个块中了，符号表重定位
         id = node.childs[0].type[1]  # id = 'id1'
+        return_type=typestable.get_type(node.childs[0]).type.name
         type = typestable.get_type(node.childs[0])
-        symboltable.insertItem(id, type, [], [])
         # 子程序名
         tmp = node.childs[0]  # tmp=('procedure_head', 'gcd1')
         self.name = tmp.type[1]  # example
@@ -103,7 +103,10 @@ class SubProgram(object):
         # 处理语句块
         tmp = node.childs[1]  # tmp=program_body
         tmp = tmp.childs[-1]  # tmp=compound_statement
-        self.compound_statement = Statements.CompoundStatement(tmp, symboltable, typestable)
+        self.compound_statement = Statements.CompoundStatement(tmp, symboltable, typestable,node.childs[0].type[1])
         self.ErrorFlag|=self.compound_statement.ErrorFlag
+        if (not self.compound_statement.ReturnFlag) and return_type!='void':
+            print("Line {0} : 函数 '{1}' 没有返回值语句".format(node.childs[0].type[2],node.childs[0].type[1]))
+            self.ErrorFlag=True
         # 退出块
         symboltable.popblock()  # 退出当前块，符号表重定位

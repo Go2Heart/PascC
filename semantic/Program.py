@@ -31,8 +31,12 @@ class Program(object):
                 print('Line {0} : 主程序参数不能与主程序名同名'.format(node.type[1]))
                 self.ErrorFlag=True
             else:
-                symboltable.insertItem(param,FileType(),[],[])
-                lst.append(FileType())
+                if param=='input' or param=='output':
+                    symboltable.insertItem(param,FileType(),[],[])
+                    lst.append(FileType())
+                else:
+                    symboltable.insertItem(param,VoidType(),[],[])
+                    lst.append(VoidType())
         symboltable.insertItem(self.name,FunctionType(VoidType(),lst),[],[])
 
         logging.debug('program.parameter_idlist=' + str(self.parameter_idlist))
@@ -101,7 +105,7 @@ class Program(object):
         tmp = node.childs[1]  # tmp=program_body
         tmp = tmp.childs[3]  # tmp=compound_statement
         self.compound_statement = Statements.CompoundStatement(
-            tmp, symboltable, typestable)
+            tmp, symboltable, typestable,self.name)
         self.ErrorFlag|=self.compound_statement.ErrorFlag
 
         # 退出块

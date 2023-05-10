@@ -4,33 +4,36 @@ from semantic.Types import NoneType
 
 
 class Statement(object):
-    def __init__(self, node, symboltable, typestable):
+    def __init__(self, node, symboltable, typestable,function_id=None):
         self.ErrorFlag=False
+        self.ReturnFlag=False
         self.information = None
         if node.type[0] == 'assignment_statement':
             self.information = AssignmentStatement(node, symboltable,
-                                                   typestable)
+                                                   typestable,function_id)
         elif node.type[0] == 'compound_statement':
-            self.information = CompoundStatement(node, symboltable, typestable)
+            self.information = CompoundStatement(node, symboltable, typestable,function_id)
         elif node.type[0] == 'procedure_call':
             self.information = ProcedureStatement(node, symboltable,
-                                                  typestable)
+                                                  typestable,function_id)
         elif node.type[0] == 'empty_statement':
-            self.information = EmptyStatement(node, symboltable, typestable)
+            self.information = EmptyStatement(node, symboltable, typestable,function_id)
         elif node.type[0] == 'if_statement':
-            self.information = IfStatement(node, symboltable, typestable)
+            self.information = IfStatement(node, symboltable, typestable,function_id)
         elif node.type[0] == 'read_statement':
-            self.information = ReadStatement(node, symboltable, typestable)
+            self.information = ReadStatement(node, symboltable, typestable,function_id)
         elif node.type[0] == 'write_statement':
-            self.information = WriteStatement(node, symboltable, typestable)
+            self.information = WriteStatement(node, symboltable, typestable,function_id)
         elif node.type[0] == 'for_statement':
-            self.information = ForStatement(node, symboltable, typestable)
+            self.information = ForStatement(node, symboltable, typestable,function_id)
         self.ErrorFlag=self.information.ErrorFlag
+        self.ReturnFlag|=self.information.ReturnFlag
 
 
 class ProcedureStatement(object):
-    def __init__(self, node, symboltable, typestable):
+    def __init__(self, node, symboltable, typestable,function_id=None):
         self.ErrorFlag=False
+        self.ReturnFlag = False
         self.name = 'procedure_statement'
         self.id = None
         self.expression_list=None
@@ -104,20 +107,23 @@ class ProcedureStatement(object):
                                 self.ErrorFlag=True
 
 class CompoundStatement(object):
-    def __init__(self, node, symboltable, typestable):
+    def __init__(self, node, symboltable, typestable,function_id=None):
         self.ErrorFlag=False
+        self.ReturnFlag = False
         self.name = 'compound_statement'
         self.statements = []
         now = node.childs[0]  # now = statement_list
         for statement in now.childs:
             self.statements.append(
-                Statement(statement, symboltable, typestable))
+                Statement(statement, symboltable, typestable,function_id))
         for statement in self.statements:
             self.ErrorFlag |=statement.ErrorFlag
+            self.ReturnFlag|=statement.ReturnFlag
 
 class AssignmentStatement(object):
-    def __init__(self, node, symboltable, typestable):
+    def __init__(self, node, symboltable, typestable,function_id=None):
         self.ErrorFlag = False
+        self.ReturnFlag = False
         # child[0] = variable,child[1] = expression
         self.name = 'assignment_statement'
         self.variable = Expressions.Variable(node.childs[0], symboltable,
@@ -130,9 +136,12 @@ class AssignmentStatement(object):
         if item is not None and item['type'].name == 'function':
             self.is_function = True
             # TODO:控制流检查
-            if IndexStack.topblock()==0 or item['block']!=IndexStack.topblock():
+            if function_id != self.variable.id:
                 print("Line {0} : 在函数 '{1}' 外不能将函数名作为左值".format(node.childs[0].type[1],self.variable.id))
                 self.ErrorFlag=True
+            else:
+                self.ReturnFlag=True
+
             # print("???????????????")
             # print(item['block'])
             # print(IndexStack.topblock())
@@ -157,22 +166,25 @@ class AssignmentStatement(object):
 
 
 class EmptyStatement(object):
-    def __init__(self, node, symboltable, typestable):
+    def __init__(self, node, symboltable, typestable,function_id=None):
         self.ErrorFlag = False
+        self.ReturnFlag = False
         self.name = 'empty_statement'
 
 
 class IfStatement(object):
-    def __init__(self, node, symboltable, typestable):
+    def __init__(self, node, symboltable, typestable,function_id=None):
         self.ErrorFlag = False
+        self.ReturnFlag = False
         # child[0]=expression,child[1]=statement,child[2]=else_part
         self.name = 'if_statement'
         self.if_expression = Expressions.Expression(node.childs[0],
                                                     symboltable, typestable)
         self.ErrorFlag |=self.if_expression.ErrorFlag
         self.then_statement = Statement(node.childs[1], symboltable,
-                                        typestable)
+                                        typestable,function_id)
         self.ErrorFlag|=self.then_statement.ErrorFlag
+        self.ReturnFlag|=self.then_statement.ReturnFlag
         expression_type=self.if_expression.type.name
         if expression_type=='const':
             expression_type=self.if_expression.type.type.name
@@ -181,8 +193,9 @@ class IfStatement(object):
             self.ErrorFlag=True
         if node.childs[2] is not None:
             self.else_statement = Statement(node.childs[2], symboltable,
-                                            typestable)
+                                            typestable,function_id)
             self.ErrorFlag|=self.else_statement.ErrorFlag
+            self.ReturnFlag|=self.else_statement.ReturnFlag
         else:
             self.else_statement = None
 
@@ -190,8 +203,9 @@ class IfStatement(object):
 
 
 class ForStatement(object):
-    def __init__(self, node, symboltable, typestable):
+    def __init__(self, node, symboltable, typestable,function_id=None):
         self.ErrorFlag = False
+        self.ReturnFlag = False
         # child[0]=id,child[1]=expression,child[2]=expression,child[3]=statement
         self.name = 'for_statement'
         self.start_expression = Expressions.Expression(node.childs[1],
@@ -200,8 +214,9 @@ class ForStatement(object):
         self.end_expression = Expressions.Expression(node.childs[2],
                                                      symboltable, typestable)
         self.ErrorFlag|=self.end_expression.ErrorFlag
-        self.statement = Statement(node.childs[3], symboltable, typestable)
+        self.statement = Statement(node.childs[3], symboltable, typestable,function_id)
         self.ErrorFlag|=self.statement.ErrorFlag
+        self.ReturnFlag|=self.statement.ReturnFlag
         self.id=None
         symbol=symboltable.getItem(node.childs[0].type[1])
         if symbol is None:
@@ -229,8 +244,9 @@ class ForStatement(object):
 
 
 class ReadStatement(object):
-    def __init__(self, node, symboltable, typestable):
+    def __init__(self, node, symboltable, typestable,function_id=None):
         self.ErrorFlag = False
+        self.ReturnFlag = False
         # child[0]=variable_list
         self.name = 'read_statement'
         self.variable_list = [
@@ -259,8 +275,9 @@ class ReadStatement(object):
 
 
 class WriteStatement(object):
-    def __init__(self, node, symboltable, typestable):
+    def __init__(self, node, symboltable, typestable,function_id=None):
         self.ErrorFlag=False
+        self.ReturnFlag = False
         # child[0]=expression_list
         self.name = 'write_statement'
         self.expression_list = [
