@@ -177,7 +177,7 @@ class CodeGenerater(object):
         return ans
 
     def WriteGenerate(self, printstatement):
-        ans = 'self.printf("'
+        ans = 'printf("'
         for p in printstatement.expression_list:
             ans += p.type.print_type
             if printstatement.newline:
