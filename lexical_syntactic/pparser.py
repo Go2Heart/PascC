@@ -199,12 +199,12 @@ class Parser:
         else:
             p[0] = None
 
-    ''' def p_wrong_var_declarations(self, p):
-        """var_declarations : var_declaration SEMI"""
+    def p_wrong_var_declarations(self, p):
+        """var_declarations : error var_declaration SEMI"""
         if len(p) == 3:
             p[0] = ASTNode(("var_declarations"), *p[1])
         else:
-            p[0] = None'''#做不到恢复，会跟常量定义冲突
+            p[0] = None
 
     def p_var_declaration(self, p):
         """var_declaration : idlist COLON type
@@ -347,7 +347,9 @@ class Parser:
 
     def p_wrong_value_parameter(self, p):
         """value_parameter : idlist error basic_type"""
+        self.yaccerror=True
         p[0] = ASTNode(("value_parameter"), *p[1].childs, p[3])
+        self.errormes.append("Line {1}: Syntax error around {0}".format(p[3].type[0],p.lineno(2)))
 
     def p_subprogram_body(self, p):
         """subprogram_body : const_declarations var_declarations compound_statement"""
