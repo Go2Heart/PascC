@@ -1,5 +1,6 @@
-program test(input,output);  
+program test(input,output);
+var a:integer;
 begin  
-    read;  
-    write;  
+    read(a);
+    write(2);
 end.  

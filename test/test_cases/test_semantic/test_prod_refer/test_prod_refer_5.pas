@@ -1,4 +1,4 @@
 program test(input,output);  
 begin  
-    writeln;  
+    writeln(1);
 end.  

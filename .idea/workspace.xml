@@ -6,7 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="c01d5d6b-b191-4d8d-9bf0-49f5805812e7" name="变更" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_cases/test_semantic/test_semantic_1.pas" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_cases/test_semantic/test_semantic_1.pas" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/test_cases/test_semantic/test_prod_refer/test_prod_refer_4.pas" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_cases/test_semantic/test_prod_refer/test_prod_refer_4.pas" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/test_cases/test_semantic/test_prod_refer/test_prod_refer_5.pas" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_cases/test_semantic/test_prod_refer/test_prod_refer_5.pas" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/test_cases/test_semantic/test_program/test_program_1.pas" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_cases/test_semantic/test_program/test_program_1.pas" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/test_cases/test_semantic/test_program/test_program_2.pas" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_cases/test_semantic/test_program/test_program_2.pas" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/test_cases/test_semantic/test_program/test_program_4.pas" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_cases/test_semantic/test_program/test_program_4.pas" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
