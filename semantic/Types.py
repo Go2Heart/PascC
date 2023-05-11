@@ -158,7 +158,7 @@ class StringType(object):  # 暂时不考虑一个变量是string类型的情况
         if const:
             ans = 'const char '+ids[0] + '[]'
         else:
-            ans = 'std::string '+ids[0]  # TODO C语言string变量怎么表示？得C++
+            ans = 'char* '+ids[0]  # TODO C语言string变量怎么表示？得C++
             for i in range(1, len(ids)):
                 ans = ans + ',' + ids[i]
         return ans
