@@ -110,7 +110,7 @@ class Program(object):
             else:
                 symboltable.insertItem(id, type, [], [])
                 self.subprogram_list.append(
-                    SubPrograms.SubProgram(x, symboltable, typestable))
+                    SubPrograms.SubProgram(x, symboltable, typestable,type))
                 for subprogram in self.subprogram_list:
                     self.ErrorFlag|=subprogram.ErrorFlag
 

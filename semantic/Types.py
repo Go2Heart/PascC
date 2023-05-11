@@ -158,7 +158,7 @@ class StringType(object):  # 暂时不考虑一个变量是string类型的情况
         if const:
             ans = 'const char '+ids[0] + '[]'
         else:
-            ans = 'std::string '+ids[0]  # TODO C语言string变量怎么表示？得C++
+            ans = 'char* '+ids[0] # TODO C语言string变量怎么表示？得C++
             for i in range(1, len(ids)):
                 ans = ans + ',' + ids[i]
         return ans
@@ -332,6 +332,7 @@ class ReferenceType(object):  # 每个实例代表一个引用传参类型
         self.ErrorFlag = type.ErrorFlag
         self.name = 'var'
         self.type = type
+        self.print_type=self.type.print_type
 
     def __str__(self):
         return 'var ' + str(self.type)

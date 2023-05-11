@@ -87,10 +87,17 @@ class ProcedureStatement(object):
                             param_type=params[idx].name
                         # print(is_var)
                         # print(is_expression_type_const)
+                        if is_var and expression.is_complex_expression:
+                            print("Line {0} : 过程 '{1}' 的第{2}个参数是var，实参不能是复杂表达式".format(node.type[1],
+                                                                                    node.childs[0].type[1],
+                                                                                    idx + 1))
+                            self.ErrorFlag=True
+
                         if is_var and is_expression_type_const:
                             print("Line {0} : 过程 '{1}' 的第{2}个参数是var，实参不能是常量".format(node.type[1],
                                                                                                 node.childs[0].type[1],
                                                                                                 idx + 1))
+                            self.ErrorFlag=True
 
                         if is_var:
                             if param_type != expression_type:
@@ -165,7 +172,7 @@ class AssignmentStatement(object):
         expression_type=self.expression.type.name
         if expression_type=='const' or expression_type=='var':
             expression_type=self.expression.type.type.name
-        return 
+
         if variable_type=='real' and expression_type=='integer':
             print("WARNING: Line {0} : 隐式类型转换，从integer转换成real".format(node.type[1]))
         elif variable_type!= expression_type:
@@ -237,6 +244,8 @@ class ForStatement(object):
                 id_type=symbol['type'].type.name
                 print("Line {0} : const 变量不能被赋值".format(node.childs[0].type[2]))
                 self.ErrorFlag=True
+            if id_type=='var':
+                id_type = symbol['type'].type.name
             start_expression_type=self.start_expression.type.name
             end_expression_type=self.end_expression.type.name
             if start_expression_type=='const':

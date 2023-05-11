@@ -56,7 +56,7 @@ class CodeGenerater(object):
     def SubProgramGenerate(self, subprogram):
         # 进入块
         self.symboltable.pushblock()  # 进入到一个块中了，更新索引表
-
+        self.symboltable.recover_function()
         self.symboltable.recover_const_var()
 
         item = self.symboltable.getItem(subprogram.name)
