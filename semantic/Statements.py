@@ -176,8 +176,9 @@ class AssignmentStatement(object):
         if variable_type=='real' and expression_type=='integer':
             print("WARNING: Line {0} : 隐式类型转换，从integer转换成real".format(node.type[1]))
         elif variable_type!= expression_type:
-            print("Line {0} : 赋值两边类型不匹配".format(node.type[1],variable_type,expression_type))
-            self.ErrorFlag = True
+            if variable_type!='type' and expression_type!='type':
+                print("Line {0} : 赋值两边类型不匹配".format(node.type[1],variable_type,expression_type))
+                self.ErrorFlag = True
 
 
 class EmptyStatement(object):
