@@ -1,6 +1,5 @@
-program read(write,output);//主程序名、主程序参数和库程序同名  
-const m=10;  
-      exit=m;//exit是库函数  
+program proc(input,output);//主程序名、主程序参数和库程序同名
+const m=10;
 var a,x,y:integer;  
     b:real;  
     c:char;  
@@ -29,7 +28,7 @@ end;
   
 procedure pro2(var a:real;b:integer);  
 begin   
-    exit(a+b);//过程没有返回值  
+    {exit(a+b);//过程没有返回值  }
 end;  
   
 begin  
