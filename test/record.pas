@@ -8,17 +8,20 @@ type
   int_array = array[1..10] of integer;
 
   TStudent = record
+  Name: string;
     Age: IIII;
     GPA: real;
   end;
 
   TCourse = record
+  Name: string;
+  Code: string;
     Credit: int_array;
   end;
 
   TEnrollment = record
-    Student: TStudent;
-    Course: TCourse;
+    Student:  TStudent;
+    Course: array [1..2] of TCourse;
     Grade: INT;
   end;
 
@@ -32,7 +35,7 @@ var
 begin
   Enrollment.Student.Age := 20;
   Enrollment.Student.GPA := 3.5;
-  Enrollment.Course.Credit[2] := 3;
+  Enrollment.Course[2].Credit[2] := 3;
   Enrollment.Grade := 85;
 
   writeln('Grade: ', Enrollment.Grade);

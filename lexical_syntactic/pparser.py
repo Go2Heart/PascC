@@ -216,7 +216,7 @@ class Parser:
 
     def p_type(self, p):
         """type : basic_type
-                | ARRAY LBRACK period RBRACK OF basic_type
+                | ARRAY LBRACK period RBRACK OF type
                 | ID"""
         if len(p) == 2:
             # p[0] = p[1]
