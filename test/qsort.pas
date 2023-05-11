@@ -1,107 +1,56 @@
-{*****************************************************************************
- * A Pascal quicksort.
- *****************************************************************************}
-PROGRAM Sort(input, output);
-    CONST
-        { Max array size. }
-        MaxElts = +50;
-    TYPE 
-        { Type of the element array. }
-        IntArrType = ARRAY [1..MaxElts] OF Integer;
+Program sort (input,output);
 
-    VAR
-        { Indexes, exchange temp, array size. }
-        i, j, tmp, size: integer;
+Var a : array[0..4] Of integer;
+  x,y: integer;
+Procedure readarray;
 
-        { Array of ints }
-        arr: IntArrType;
+Var i : integer;
+Begin
+  i := 0;
+  While i<5 Do
+    Begin
+      read(y);
+      a[i] := y;
+      i := i+1
+    End
+End;
+Procedure quicksort (l,h:integer);
 
-    { Read in the integers. }
-    PROCEDURE ReadArr(VAR size: Integer; VAR a: IntArrType);
-        BEGIN
-            size := 1;
-            WHILE NOT eof DO BEGIN
-                readln(a[size]);
-                IF NOT eof THEN 
-                    size := size + 1
-            END
-        END;
-
-    { Use quicksort to sort the array of integers. }
-    PROCEDURE Quicksort(size: Integer; VAR arr: IntArrType);
-        { This does the actual work of the quicksort.  It takes the
-          parameters which define the range of the array to work on,
-          and references the array as a global. }
-        PROCEDURE QuicksortRecur(start, stop: integer);
-            VAR
-                m: integer;
-
-                { The location separating the high and low parts. }
-                splitpt: integer;
-
-            { The quicksort split algorithm.  Takes the range, and
-              returns the split point. }
-            FUNCTION Split(start, stop: integer): integer;
-                VAR
-                    left, right: integer;       { Scan pointers. }
-                    pivot: integer;             { Pivot value. }
-
-                { Interchange the parameters. }
-                PROCEDURE swap(VAR a, b: integer);
-                    VAR
-                        t: integer;
-                    BEGIN
-                        t := a;
-                        a := b;
-                        b := t
-                    END;
-
-                BEGIN { Split }
-                    { Set up the pointers for the hight and low sections, and
-                      get the pivot value. }
-                    pivot := arr[start];
-                    left := start + 1;
-                    right := stop;
-
-                    { Look for pairs out of place and swap 'em. }
-                    WHILE left <= right DO BEGIN
-                        WHILE (left <= stop) AND (arr[left] < pivot) DO
-                            left := left + 1;
-                        WHILE (right > start) AND (arr[right] >= pivot) DO
-                            right := right - 1;
-                        IF left < right THEN 
-                            swap(arr[left], arr[right]);
-                    END;
-
-                    { Put the pivot between the halves. }
-                    swap(arr[start], arr[right]);
-
-                    { This is how you return function values in pascal.
-                      Yeccch. }
-                    Split := right
-                END;
-
-            BEGIN { QuicksortRecur }
-                { If there's anything to do... }
-                IF start < stop THEN BEGIN
-                    splitpt := Split(start, stop);
-                    QuicksortRecur(start, splitpt-1);
-                    QuicksortRecur(splitpt+1, stop);
-                END
-            END;
-                    
-        BEGIN { Quicksort }
-            QuicksortRecur(1, size)
-        END;
-
-    BEGIN
-        { Read }
-        ReadArr(size, arr);
-
-        { Sort the contents. }
-        Quicksort(size, arr);
-
-        { Print. }
-        FOR i := 1 TO size DO
-            writeln(arr[i])
-    END.
+Var i,j,k,m: integer;
+Begin
+  i := l;
+  j := h;
+  k := a[i];
+  If l<h Then
+    Begin
+      While i<j Do
+        Begin
+          While (a[j]>=k) And (i<j) Do
+            Begin
+              j := j-1
+            End;
+          a[i] := a[j];
+          While (a[i]<=k) And (i<j) Do
+            Begin
+              i := i+1
+            End;
+          a[j] := a[i]
+        End;
+      a[i] := k;
+      quicksort(l,i-1);
+      quicksort(j+1,h)
+    End
+  Else
+    m := 0
+End;
+Begin
+  x := 0;
+  readarray;
+  quicksort(0,4);
+  While x<5 Do
+    Begin
+      y := a[x];
+      write(y,' ');
+      x := x+1
+    End
+End.
