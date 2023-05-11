@@ -207,7 +207,7 @@ class Lexer:
         return t
 
     def t_STRING(self,t):
-        r"'([^']|\\\\|\\'|\\n|\\t)+'" 
+        r"""'([^']|\\\\|\\'|\\n|\\t)+'|"([^"]|\\\\|\\'|\\n|\\t)+" """ 
         t.value = '"'+str(t.value[1:-1])+'"' # 不修改为[1:-1]
         t.type = 'STRING'
         t.lexer.lineno += t.value.count('\n')

@@ -1,4 +1,4 @@
-{program sort(input, output);
+program sort(input, output);
 var a : array[0..10] of integer;
 x : integer;
 procedure readarray;
@@ -12,8 +12,8 @@ procedure exchange (i,j:integer);
     end;
 begin
 readarray;
-end.}
-program example(input, output);
+end.
+{program example(input, output);
 var x, y: integer;
 function gcd(a, b: integer): 
 integer;
@@ -24,4 +24,4 @@ end;
 begin
 read(x, y);
 write(gcd(x, y))
-end.
+end.}
