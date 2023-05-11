@@ -13,7 +13,6 @@ end;
 function fun2:integer;
 begin
     fun2:=1;
-    fun2:=e[6];//数组下标越界
     fun2;//函数不能作为一条单独的语句
     a:=fun2[1];//错把函数名当做数组
 end;

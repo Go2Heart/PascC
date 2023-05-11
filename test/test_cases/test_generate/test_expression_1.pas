@@ -8,7 +8,8 @@ var d,e,f:integer;
     m,n,o:boolean;
 function fun(a:integer):integer;
 begin
-    exit(a+1);
+    {exit(a+1);}
+    fun:=1;
 end;
 begin
     d:=5; e:=10;

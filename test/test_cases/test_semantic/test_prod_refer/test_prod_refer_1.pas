@@ -14,7 +14,7 @@ begin
 end;
 begin
     pro; //过程未定义
-    pro2(a, a>b); //正确
+    pro2(a, a>b); //不正确
     test; //将主程序名错当为过程调用
     input; //将主程序参数错当为过程调用
     a; //将integer变量错当成过程调用

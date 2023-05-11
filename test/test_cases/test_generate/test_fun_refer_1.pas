@@ -28,7 +28,7 @@ end;
 procedure mywrite(n:integer; var out:integer);
 begin
     if n=0 then
-        exit
+        {exit}
     else
     begin
         writeln(out);

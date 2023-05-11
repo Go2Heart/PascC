@@ -5,7 +5,7 @@ begin
     if a>0 then  
         fun:=1  
     else  
-        writeln(a); //该分支缺少返回值语句  
+        writeln(a);
 end;  
 begin  
     writeln(fun);  

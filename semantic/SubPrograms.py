@@ -4,9 +4,10 @@ import Statements
 
 class SubProgram(object):
     """subprogram : subprogram_head SEMI subprogram_body"""
-    def __init__(self, node, symboltable, typestable):
+    def __init__(self, node, symboltable, typestable,type):
         self.ErrorFlag=False
         symboltable.pushblock()  # 进入到一个块中了，符号表重定位
+        symboltable.insertItem(node.childs[0].type[1],type,[],[])
         id = node.childs[0].type[1]  # id = 'id1'
         return_type=typestable.get_type(node.childs[0]).type.name
         type = typestable.get_type(node.childs[0])

@@ -6,10 +6,12 @@ from semantic.Types import IntegerType, BooleanType, RealType, NoneType, ConstTy
 class Expression(object):
     def __init__(self, node, symboltable, typestable):
         self.ErrorFlag=False
+        self.is_complex_expression=False
         # node = expression
         self.name = 'expression'
         # node.print()
         if len(node.childs) == 3:
+            self.is_complex_expression = True
             self.child_cnt = 2
             self.childs = [
                 SimpleExpression(node.childs[0], symboltable, typestable),
@@ -37,6 +39,7 @@ class Expression(object):
             self.childs = [
                 SimpleExpression(node.childs[0], symboltable, typestable)
             ]
+            self.is_complex_expression=self.childs[0].is_complex_expression
             self.operator = None
             self.type = self.childs[0].type
             self.ErrorFlag|=self.childs[0].ErrorFlag
@@ -57,9 +60,11 @@ class Expression(object):
 class SimpleExpression(object):
     def __init__(self, node, symboltable, typestable):
         self.ErrorFlag=False
+        self.is_complex_expression = False
         # node = simple_expression
         self.name = 'simple_expression'
         if len(node.childs) == 3:
+            self.is_complex_expression = True
             self.child_cnt = 2
             self.childs = [
                 SimpleExpression(node.childs[0], symboltable, typestable),
@@ -71,10 +76,10 @@ class SimpleExpression(object):
             # '+' | '-' | 'or'
 
             typeA = self.childs[0].type.name
-            if typeA=='const':
+            if typeA=='const' or typeA=='var':
                 typeA=self.childs[0].type.type.name
             typeB = self.childs[1].type.name
-            if typeB=='const':
+            if typeB=='const' or typeB=='var':
                 typeB=self.childs[1].type.type.name
 
             if self.operator == 'or':
@@ -103,6 +108,7 @@ class SimpleExpression(object):
         else:
             self.child_cnt = 1
             self.childs = [Term(node.childs[0], symboltable, typestable)]
+            self.is_complex_expression=self.childs[0].is_complex_expression
             self.ErrorFlag |= self.childs[0].ErrorFlag
             self.operator = None
             self.type = self.childs[0].type
@@ -122,8 +128,10 @@ class Term(object):
     def __init__(self, node, symboltable, typestable):
         # node = term
         self.ErrorFlag=False
+        self.is_complex_expression = False
         self.name = 'term'
         if len(node.childs) == 3:
+            self.is_complex_expression = True
             self.child_cnt = 2
             self.childs = [
                 Term(node.childs[0], symboltable, typestable),
@@ -135,6 +143,10 @@ class Term(object):
             # '*' | '/' | 'div' | 'mod' | 'and'
             typeA = self.childs[0].type.name
             typeB = self.childs[1].type.name
+            if typeA=='const' or typeA=='var':
+                typeA=self.childs[0].type.type.name
+            if typeB=='const' or typeB=='var':
+                typeB=self.childs[1].type.type.name
             if self.operator=='div' or self.operator=='mod':
                 if not(typeA=='integer' and typeB=='integer'):
                     if self.operator == 'div':
@@ -171,6 +183,7 @@ class Term(object):
         else:
             self.child_cnt = 1
             self.childs = [Factor(node.childs[0], symboltable, typestable)]
+            self.is_complex_expression=self.childs[0].is_complex_expression
             self.ErrorFlag|=self.childs[0].ErrorFlag
             self.operator = None
             self.type = self.childs[0].type
@@ -194,6 +207,7 @@ class Factor(object):
     def __init__(self, node, symboltable, typestable):
         # node = factor
         self.ErrorFlag=False
+        self.is_complex_expression = False
         self.name = 'factor'
         self.kind = None
         self.type = NoneType()
@@ -218,20 +232,24 @@ class Factor(object):
                 else:
                     self.type=self.type.type
         elif node.type[1] == 'factor':
+            self.is_complex_expression=True
             self.kind = 'factor'
             self.child_cnt = 1
             self.childs = [Factor(node.childs[1], symboltable, typestable)]
             self.ErrorFlag = self.childs[0].ErrorFlag
             self.operator = node.childs[0]
             self.type=self.childs[0].type
+            type_name=self.type.name
+            if type_name=='var' or type_name=='const':
+                type_name=self.type.type.name
             if self.operator=='not':
-                if self.type.name!= 'boolean':
+                if type_name!= 'boolean':
                     print("Line {0} : not 运算符不能对非boolean类型运算".format(node.type[2]))
                     self.ErrorFlag=True
                 else :
                     pass
             else:
-                if self.type.name != 'integer' and self.type.name!= 'real':
+                if type_name != 'integer' and type_name!= 'real':
                     print("Line {0} : ADDOP 运算符不能对非整数实数类型运算".format(node.type[2]))
                     self.ErrorFlag=True
                 else:
@@ -242,6 +260,7 @@ class Factor(object):
             self.kind = 'expression'
             self.child_cnt = 1
             self.childs = [Expression(node.childs[0], symboltable, typestable)]
+            self.is_complex_expression|=self.childs[0].is_complex_expression
             self.ErrorFlag = self.childs[0].ErrorFlag
             self.operator = None
             self.type = self.childs[0].type
@@ -280,6 +299,7 @@ class Factor(object):
 
 class Constant(object):
     def __init__(self, node, symboltable, typestable):
+        self.is_complex_expression =False
         self.name = 'constant'
         # node.print()
         self.type = typestable.get_type(node)  # 常量类型
@@ -293,12 +313,13 @@ class Constant(object):
         return str(self.val)
 
 class VariablePart(object):
-    def __init__(self,node, type, lineno, symboltable, typestable):
+    def __init__(self,node, type, lineno, id_name,symboltable, typestable):
         self.name = 'variable_part'
         self.mode=None 
         self.pre_type=None
         self.type = None
         self.ErrorFlag = False
+        self.id=id_name
         while type.name == 'type':
             type=type.type
         # print(type)
@@ -307,7 +328,11 @@ class VariablePart(object):
         # node.print()
         if node is not None:
             self.mode=node.type[0]
-            if self.mode == 'array':
+            if type.name != 'array' and type.name !='record':
+                print("Line {0} : 标识符 '{1}' 不是数组/记录，不能有索引".format(lineno, id_name))
+                self.ErrorFlag = True
+                self.type = type
+            elif self.mode == 'array':
                 self.pre_type = type.type  # 元素类型
                 self.type = self.pre_type
                 self.id_period = type.period
@@ -318,12 +343,12 @@ class VariablePart(object):
                 for expression in self.part_expression_list:
                     self.ErrorFlag|=expression.ErrorFlag
                 if node.childs[1] is not None:
-                    self.variable_part = VariablePart(node.childs[1],self.pre_type,lineno,symboltable,typestable)
+                    self.variable_part = VariablePart(node.childs[1],self.pre_type,lineno,id_name,symboltable,typestable)
                     self.type = self.variable_part.type
                 logging.debug('Array Dimension '+str(len(self.id_period)))
                 logging.debug('expression list length ' + str(len(self.part_expression_list)))
                 if len(self.id_period)!=len(self.part_expression_list):
-                    print("Line {0} : 数组 '{1}' 的维数是{2}，但对数组的引用只有{3}维".format(lineno,self.id,len(self.id_period),len(self.part_expression_list)))
+                    print("Line {0} : 数组 '{1}' 的维数是{2}，但对数组的引用有{3}维".format(lineno,self.id,len(self.id_period),len(self.part_expression_list)))
                     self.ErrorFlag=True
                 else:
                     for idx,pair in enumerate(self.id_period):
@@ -340,13 +365,8 @@ class VariablePart(object):
                 self.type = self.pre_type
                 # print(self.pre_type)
                 if node.childs[1] is not None:
-                    self.variable_part = VariablePart(node.childs[1],self.pre_type,lineno,symboltable,typestable)
+                    self.variable_part = VariablePart(node.childs[1],self.pre_type,lineno,id_name,symboltable,typestable)
                     self.type = self.variable_part.type
-            else:
-                # node.print()
-                print("Line {0} : 标识符 '{1}' 不是数组/记录，不能有索引".format(node.childs[0].type[2], node.childs[0].type[1]))
-                self.ErrorFlag=True
-                self.type=type
         
         
     def __str__(self):
@@ -365,6 +385,7 @@ class VariablePart(object):
 
 class Variable(object):
     def __init__(self, node, symboltable, typestable):
+        self.is_complex_expression = False
         self.name = 'variable'
         self.id=node.childs[0].type[1]
         self.ErrorFlag=False
@@ -385,7 +406,8 @@ class Variable(object):
                 type=symboltable.getItem(self.id)['type']
                 if type.name == 'var':
                     type=type.type
-                self.variable_part = VariablePart(node.childs[1],type,lineno,symboltable,typestable)
+                self.variable_part = VariablePart(node.childs[1],type,lineno,node.childs[0].type[1],symboltable,typestable)
+                self.ErrorFlag|=self.variable_part.ErrorFlag
                 # print(self.type)
                 self.type = self.variable_part.type
                 # print(self.type)
@@ -413,6 +435,7 @@ class Variable(object):
 
 class Function(object):
     def __init__(self, node, symboltable, typestable):
+        self.is_complex_expression = False
         self.ErrorFlag=False
         self.name = 'function'
         item = symboltable.getItem(node.childs[0].type[1])
@@ -433,24 +456,52 @@ class Function(object):
             self.ErrorFlag=True
         else:
             for idx,expression in enumerate(self.expression_list):
+                is_var=False
+                is_expression_type_const=False
                 expression_type=expression.type.name
-                if expression_type=='const':
+                if expression_type=='const' or expression_type=='var':
+                    if expression_type=='const':
+                        is_expression_type_const=True
                     expression_type=expression.type.type.name
-                    is_expression_type_const=True
+
                 if params_type[idx].name=='var':
                     param_type=params_type[idx].type.name
+                    is_var=True
                 else:
                     param_type=params_type[idx].name
-
-                if param_type=='real' and expression_type=='integer':
+                # print(idx)
+                # print(expression.is_complex_expression)
+                if is_var and expression.is_complex_expression:
                     print(
-                        "WARNING: Line {0} : 函数 '{1}' 的参数列表中的第{2}个参数是real类型，将引用中的int隐式转换为real类型".format(node.childs[0].type[2],
-                                                                                                self.id, idx))
-                elif expression_type!= param_type:
-                    print("Line {0} : 函数 '{1}' 的参数列表中的第{2}个参数是'{3}'类型，对函数的引用中的该参数是'{4}'类型".format(node.childs[0].type[2], self.id,idx,
-                                                                                   param_type,
-                                                                                   expression_type))
+                        "Line {0} : 函数 '{1}' 的参数列表中的第{2}个参数是var，实参不能是复杂表达式".format(
+                            node.childs[0].type[2],
+                            self.id, idx + 1))
                     self.ErrorFlag=True
+                if is_var and is_expression_type_const:
+                    print(
+                        "Line {0} : 函数 '{1}' 的参数列表中的第{2}个参数是var，实参不能是常量".format(
+                            node.childs[0].type[2],
+                            self.id, idx + 1))
+                    self.ErrorFlag=True
+                elif is_var:
+                    if expression_type != param_type:
+                        print("Line {0} : 函数 '{1}' 的参数列表中的第{2}个参数是'{3}'类型，对函数的引用中的该参数是'{4}'类型".format(
+                            node.childs[0].type[2], self.id, idx + 1,
+                            param_type,
+                            expression_type))
+                        self.ErrorFlag=True
+                else:
+
+
+                    if param_type=='real' and expression_type=='integer':
+                        print(
+                            "WARNING: Line {0} : 函数 '{1}' 的参数列表中的第{2}个参数是real类型，将引用中的int隐式转换为real类型".format(node.childs[0].type[2],
+                                                                                                    self.id, idx+1))
+                    elif expression_type!= param_type:
+                        print("Line {0} : 函数 '{1}' 的参数列表中的第{2}个参数是'{3}'类型，对函数的引用中的该参数是'{4}'类型".format(node.childs[0].type[2], self.id,idx+1,
+                                                                                       param_type,
+                                                                                       expression_type))
+                        self.ErrorFlag=True
 
 
 

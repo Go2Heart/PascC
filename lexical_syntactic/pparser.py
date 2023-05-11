@@ -173,13 +173,20 @@ class Parser:
         """const_value : ADDOP ICONST
                     | ICONST
                     | RCONST
+                    | ADDOP RCONST
                     | CCONST
                     | BCONST
                     | string"""
         # 进行了一个大改
         # 这里有一个需要注意的细节，应该先判断是不是boolean再判断是不是int，因为在python里bool是int的子类
         if len(p) == 3:
-            p[0] = ASTNode(("integer", int(p[1] + str(p[2]))))
+            if isinstance(p[2],int):
+                p[0] = ASTNode(("integer", int(p[1] + str(p[2]))))
+            else:
+                if p[1]=='+':
+                    p[0] = ASTNode(("real",p[2]))
+                else:
+                    p[0]=ASTNode(("real",-p[2]))
         elif isinstance(p[1], bool):
             p[0] = ASTNode(("boolean", p[1]))
         elif isinstance(p[1], int):
@@ -419,9 +426,9 @@ class Parser:
                       |  DOT ID id_varpart
                       | empty""" 
         if len(p) == 5 and p[1] == '[':
-            p[0] = ASTNode(("array",), p[2], p[4])
+            p[0] = ASTNode(("array",p.lineno(1)), p[2], p[4])
         elif len(p) == 4 and p[1] == '.':
-            p[0] = ASTNode(("record",), p[2], p[3])
+            p[0] = ASTNode(("record",p.lineno(1)), p[2], p[3])
 
     def p_variable(self, p):
         """variable : ID id_varpart"""
