@@ -343,7 +343,7 @@ class VariablePart(object):
                 for expression in self.part_expression_list:
                     self.ErrorFlag|=expression.ErrorFlag
                 if node.childs[1] is not None:
-                    self.variable_part = VariablePart(node.childs[1],self.pre_type,lineno,symboltable,typestable)
+                    self.variable_part = VariablePart(node.childs[1],self.pre_type,lineno,id_name,symboltable,typestable)
                     self.type = self.variable_part.type
                 logging.debug('Array Dimension '+str(len(self.id_period)))
                 logging.debug('expression list length ' + str(len(self.part_expression_list)))
@@ -365,7 +365,7 @@ class VariablePart(object):
                 self.type = self.pre_type
                 # print(self.pre_type)
                 if node.childs[1] is not None:
-                    self.variable_part = VariablePart(node.childs[1],self.pre_type,lineno,symboltable,typestable)
+                    self.variable_part = VariablePart(node.childs[1],self.pre_type,lineno,id_name,symboltable,typestable)
                     self.type = self.variable_part.type
         
         
