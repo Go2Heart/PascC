@@ -153,8 +153,8 @@ class Lexer:
         pass
 
     def t_MULDIVANDOP(self,t):
-        r'and|div|mod|\*|\/'
-        t.value = str(t.value)
+        r'[aA][nN][dD]|[dD][iI][vV]|[mM][oO][dD]|\*|\/'
+        t.value = str(t.value.lower())
         t.type = 'MULDIVANDOP'
         return t
 

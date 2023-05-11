@@ -103,8 +103,11 @@ class Parser:
             p[0] = None
             
     def p_type_declaration(self, p):
-        """type_declaration : ID EQU type_define
-                            | type_declaration SEMI ID EQU type_define"""
+        """type_declaration : ID EQU type
+                            | ID EQU record_type
+                            | type_declaration SEMI ID EQU type
+                            | type_declaration SEMI ID EQU record_type"""
+        
         if len(p) == 4:
             p[0] = [
                 ASTNode(("type_declaration", ), ASTNode(("id", p[1],p.lineno(1))), p[3])
@@ -114,44 +117,21 @@ class Parser:
                 ASTNode(("type_declaration", ), ASTNode(("id", p[3],p.lineno(3))), p[5])
             ]
 
-    def p_type_define(self, p):
-        """type_define : simple_type
-                    | array_type
-                    | record_type"""
-        p[0] = p[1]
+    # def p_type_define(self, p):
+    #     """type_define : basic_type
+    #                 | array_type
+    #                 | record_type"""
+    #     p[0] = p[1]
 
-    def p_simple_type(self, p):
-        """simple_type : ID
-                    | LPAREN ID DOTDOT ID RPAREN"""
-        if len(p) == 2:
-            p[0] = ASTNode(("simple_type", "ID"), p[1])
-        else:
-            p[0] = ASTNode(("simple_type", "range"), p[2], p[4])
+    # def p_array_type(self, p):
+    #     """array_type : ARRAY LPAREN index_range RPAREN OF ID"""
+    #     p[0] = ASTNode(("array_type", p[3]), p[6])
 
-    def p_array_type(self, p):
-        """array_type : ARRAY LPAREN index_range RPAREN OF ID"""
-        p[0] = ASTNode(("array_type", p[3]), p[6])
+    # def p_index_range(self, p):
+    #     """index_range : simple_type DOTDOT simple_type"""
+    #     p[0] = ASTNode(("index_range"), p[1], p[3])
 
-    def p_index_range(self, p):
-        """index_range : simple_type DOTDOT simple_type"""
-        p[0] = ASTNode(("index_range"), p[1], p[3])
-
-    def p_record_type(self, p):
-        """record_type : RECORD field_declarations END"""
-        p[0] = ASTNode(("record_type"), *p[2])
-
-    def p_field_declarations(self, p):
-        """field_declarations : field_declaration SEMI
-                            | field_declarations field_declaration SEMI"""
-        if len(p) == 3:
-            p[0] = [p[1]]
-        else:
-            p[0] = p[1] + [p[2]]
-
-    def p_field_declaration(self, p):
-        """field_declaration : ID COLON ID 
-                            | ID COLON basic_type"""
-        p[0] = ASTNode(("field_declaration", p[1]), p[3])
+    
 
 
         
@@ -239,7 +219,11 @@ class Parser:
                 | ARRAY LBRACK period RBRACK OF basic_type
                 | ID"""
         if len(p) == 2:
-            p[0] = p[1]
+            # p[0] = p[1]
+            if isinstance(p[1],str):
+                p[0] = ASTNode((p[1], )) #typedef
+            else:
+                p[0] = p[1]
         elif len(p) == 7:
             p[0] = ASTNode(("array_type", p.lineno(1)), p[3], p[6])
 
@@ -291,6 +275,24 @@ class Parser:
         elif len(p) == 4:
             p[0] = ASTNode(("period"), *p[1].childs, ASTNode(("integer", 0)), ASTNode(("integer", 1)))
             self.errormes.append("Line {1}: Syntax error in {0}".format(p[3],p.lineno(3)))
+
+    def p_record_type(self, p):
+        """record_type : RECORD field_declarations END"""
+        p[0] = ASTNode(("record_type",), *p[2])
+
+    def p_field_declarations(self, p):
+        """field_declarations : field_declaration SEMI
+                            | field_declarations field_declaration SEMI"""
+        if len(p) == 3:
+            p[0] = [p[1]]
+        else:
+            p[0] = p[1] + [p[2]]
+
+    def p_field_declaration(self, p):
+        """field_declaration : ID COLON type"""
+        p[0] = ASTNode(("field_declaration", p[1]), p[3])
+
+
 
     def p_subprogram_declarations(self, p):
         """subprogram_declarations : subprogram_declarations subprogram SEMI
@@ -410,6 +412,15 @@ class Parser:
         elif len(p) == 2:
             p[0] = ASTNode(("variable_list"), p[1])
 
+    def p_id_varpart(self, p):
+        """id_varpart :  LBRACK expression_list RBRACK id_varpart
+                      |  DOT ID id_varpart
+                      | empty""" 
+        if len(p) == 5 and p[1] == '[':
+            p[0] = ASTNode(("array",), p[2], p[4])
+        elif len(p) == 4 and p[1] == '.':
+            p[0] = ASTNode(("record",), p[2], p[3])
+
     def p_variable(self, p):
         """variable : ID id_varpart"""
         if p[2] is not None:
@@ -417,14 +428,7 @@ class Parser:
         else:
             p[0] = ASTNode(("variable",p.lineno(1)), ASTNode(("id", p[1],p.lineno(1))))
 
-    def p_id_varpart(self, p):
-        """id_varpart : LBRACK expression_list RBRACK
-                      | DOT ID id_varpart
-                      | empty"""
-        if len(p) == 4 and p[1] == '[':
-            p[0] = ASTNode(("id_varpart"), p[2])
-        elif len(p) == 4 and p[1] == '.':
-            p[0] = ASTNode(("id_varpart"), (p[1], p[2]))
+    
        
 
     def p_procedure_call(self, p):

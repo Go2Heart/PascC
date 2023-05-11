@@ -8,6 +8,7 @@ class Program(object):
 
     """program : program_head SEMI program_body DOT"""
     def __init__(self, node, symboltable, typestable):
+        # node.print()
         self.ErrorFlag=False
         # 进入块
         symboltable.pushblock()  # 进入到一个块中了，符号表重定位
@@ -41,6 +42,7 @@ class Program(object):
 
         logging.debug('program.parameter_idlist=' + str(self.parameter_idlist))
 
+
         # 将常量加入符号表
         self.const_idlist = []
         tmp = node.childs[1]  # tmp=program_body
@@ -59,10 +61,24 @@ class Program(object):
                     self.const_idlist.append(id)
         logging.debug('program.const_idlist=' + str(self.const_idlist))
 
+        self.typelist = []
+        tmp=node.childs[1] # tmp=program_body
+        # tmp.print()
+        tmp=tmp.childs[1] # tmp=type_declarations
+        # tmp.print()
+        if tmp is not None:
+            for x in tmp.childs:  # x=type_declaration
+                lineno=x.childs[0].type[2]
+                type = typestable.get_type(x)
+                self.ErrorFlag |= type.ErrorFlag
+                self.typelist.append(type)
+                # print(type)
+        logging.debug('program.typelist=' + str(self.typelist))
+
         # 将变量加入符号表
         self.var_idlist = []
         tmp = node.childs[1]  # tmp=program_body
-        tmp = tmp.childs[1]  # tmp=var_declarations
+        tmp = tmp.childs[2]  # tmp=var_declarations
         if tmp is not None:
             for x in tmp.childs:  # x=var_declaration
                 type = typestable.get_type(x.childs[-1],symboltable,self.const_idlist)
@@ -83,7 +99,7 @@ class Program(object):
         # 将子程序加入符号表
         self.subprogram_list = []
         tmp = node.childs[1]  # tmp=program_body
-        tmp = tmp.childs[2]  # tmp=subprogram_declarations
+        tmp = tmp.childs[3]  # tmp=subprogram_declarations
         for x in tmp.childs:  # x=subprogram
             id = x.childs[0].type[1]  # id = 'id1'
             type = typestable.get_type(x.childs[0])
@@ -103,7 +119,7 @@ class Program(object):
 
         # 处理语句块
         tmp = node.childs[1]  # tmp=program_body
-        tmp = tmp.childs[3]  # tmp=compound_statement
+        tmp = tmp.childs[4]  # tmp=compound_statement
         self.compound_statement = Statements.CompoundStatement(
             tmp, symboltable, typestable,self.name)
         self.ErrorFlag|=self.compound_statement.ErrorFlag

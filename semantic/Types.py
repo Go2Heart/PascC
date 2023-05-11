@@ -15,7 +15,7 @@ class IntegerType(object):
 
     def __repr__(self):
         return str(self)
-
+    
     def generate(self, const,* ids):
         if const:
             ans = 'const int '+ids[0]
@@ -60,7 +60,7 @@ class RealType(object):
 
     def __repr__(self):
         return str(self)
-
+    
     def generate(self, const, *ids):
         if const:
             ans = 'const double '+ids[0]
@@ -85,6 +85,7 @@ class BooleanType(object):
     def __repr__(self):
         return str(self)
 
+    
     def generate(self, const, *ids):
         if const:
             ans = 'const bool '+ids[0]
@@ -107,7 +108,8 @@ class CharType(object):
 
     def __repr__(self):
         return str(self)
-
+    
+    
     def generate(self, const, *ids):
         if const:
             ans = 'const char '+ids[0]
@@ -130,6 +132,7 @@ class VoidType(object):
     def __repr__(self):
         return str(self)
 
+    
     def generate(self,const, *ids): 
         ans = 'void '+ids[0] # 不考虑const,认为不可能const
         for i in range(1, len(ids)): # 实际上只会有一个id
@@ -150,6 +153,7 @@ class StringType(object):  # 暂时不考虑一个变量是string类型的情况
     def __repr__(self):
         return str(self)
 
+    
     def generate(self, const, *ids):
         if const:
             ans = 'const char '+ids[0] + '[]'
@@ -182,7 +186,7 @@ class ArrayType(object):  # 每个实例代表一个数组类型
 
     def __repr__(self):
         return str(self)
-
+    
     def generate(self, const, *ids):
         if const:
             ans = self.type.generate(const,ids[0])+"[]" # const 则只考虑一个id
@@ -199,11 +203,63 @@ class ArrayType(object):  # 每个实例代表一个数组类型
         return ans
 
 
-# TODO 记录类型
 class RecordType(object):  # 每个实例代表一个记录类型
     def __init__(self, fields):
         self.ErrorFlag = False
-        self.fields = fields  # （子成员变量名，类型）：二元组列表
+        self.name='record'
+        self.cname='struct'
+        self.fields=fields #如{'name':'string','age':'integer'}
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return str(self)
+
+    def type_generate(self,depth): #用于typedef结构体
+        ans=' '*4*depth+'struct' + '\n'
+        ans+=' '*4*depth + '{\n'
+        depth += 1
+        # print(self.fields)
+        # print(self.fields.items)
+        for id in self.fields:
+            ans = ans + ' '*4*depth + self.fields[id].generate(False,id) + ';\n'
+        depth -= 1
+        return ans + ' '*4*depth + '}'
+
+    # 没有generate，不支持未重命名的record
+#用户自定义类型
+class TypeType(object):  # 每个实例代表一个用户自定义类型
+    def __init__(self, id, type):
+        self.ErrorFlag = type.ErrorFlag
+        self.name='type'
+        self.cname='typedef'
+        self.id=id
+        self.type=type
+
+    def __str__(self):
+        return self.name
+    
+    def __repr__(self) -> str:
+        return str(self)
+    
+    def type_generate(self):
+        ans = 'typedef '
+        if self.type.name == 'record':
+            ans += self.type.type_generate(0)
+            ans+=' '+self.id 
+        else:
+            ans += self.type.generate(False,self.id)
+        return ans
+    
+    def generate(self, const,* ids):
+        if const:
+            ans = 'const '+self.id+' '+ids[0]
+        else:
+            ans = self.id +' '+ids[0]
+            for i in range(1, len(ids)):
+                ans = ans + ',' + ids[i]
+        return ans
 
 
 # TODO 指针类型
@@ -407,9 +463,14 @@ class TypesTable(object):
             val = node.childs[1].type[1]  # val = 123
             return ConstType(type, val)
         elif node.type[0] == 'record_type':
-            pass  # TODO
-
-    # TODO 用户自定义类型，需要添加到types里
-    @classmethod
-    def build_type(cls, node):
-        pass
+            id_type={}
+            for x in node.childs:
+                id = x.type[1]
+                type = cls.get_type(x.childs[0])
+                id_type[id]=type
+            return RecordType(id_type)
+        elif node.type[0] == 'type_declaration': # 用户自定义类型，需要添加到types里
+            another_name = node.childs[0].type[1]  # type = STUDENT
+            type=cls.get_type(node.childs[1])
+            cls.types[another_name]=TypeType(another_name, type)
+            return cls.types[another_name]

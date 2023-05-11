@@ -1,26 +1,42 @@
-program BubbleSort;
-
+program RecordExample;
 const 
   c = 2;
+
 type
+  IIII = INTEGER;
+  INT = IIII;
+  int_array = array[1..10] of integer;
+
   TStudent = record
-    Age: integer;
+    Age: IIII;
     GPA: real;
   end;
 
   TCourse = record
-    Credit: integer;
+    Credit: int_array;
   end;
 
   TEnrollment = record
     Student: TStudent;
     Course: TCourse;
-    Grade: integer;
+    Grade: INT;
   end;
+
+  
+
 var
+  Enrollment: TEnrollment;
   arr: array[1..10] of integer;
   i, j, temp: integer;
+
 begin
+  Enrollment.Student.Age := 20;
+  Enrollment.Student.GPA := 3.5;
+  Enrollment.Course.Credit[2] := 3;
+  Enrollment.Grade := 85;
+
+  writeln('Grade: ', Enrollment.Grade);
+
   writeln('Enter 10 numbers:');
   i:=1;
   while i<=10 do

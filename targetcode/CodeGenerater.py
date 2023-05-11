@@ -27,6 +27,9 @@ class CodeGenerater(object):
         self.print("#include<stdio.h>")
         self.symboltable.recover_const_var()
 
+        for type in program.typelist:
+            self.print(type.type_generate()+';')
+
         for id in program.const_idlist:
             item = self.symboltable.getItem(id)
             self.print(item["type"].generate(False, id) + ';')
@@ -104,6 +107,10 @@ class CodeGenerater(object):
             self.WriteGenerate(statement.information)
         elif statement.information.name == 'procedure_statement':
             self.ProcedureGenerate(statement.information)
+        elif statement.information.name == 'while_statement':
+            self.WhileGenerate(statement.information)
+        elif statement.information.name == 'repeat_statement':
+            self.RepeatGenerate(statement.information)
 
     def CompoundGenerate(self, compoundstatement):
         for statement in compoundstatement.statements:
@@ -168,7 +175,10 @@ class CodeGenerater(object):
     def ReadGenerate(self, readstatement):
         ans = 'scanf("'
         for p in readstatement.variable_list:
-            ans += p.type.print_type
+            type = p.type
+            while type.name == 'type':
+                type = type.type
+            ans += type.print_type
         ans += '"'
         for p in readstatement.variable_list:
             ans += ', &' + str(p)
@@ -179,12 +189,33 @@ class CodeGenerater(object):
     def WriteGenerate(self, printstatement):
         ans = 'printf("'
         for p in printstatement.expression_list:
-            ans += p.type.print_type
-            if printstatement.newline:
-                ans += '\\n'
+            type = p.type
+            while type.name == 'type':
+                type = type.type
+            ans += type.print_type
+        if printstatement.newline:
+            ans += '\\n'
         ans += '"'
         for p in printstatement.expression_list:
             ans += ', ' + str(p)
         ans += ');'
         self.print(' ' * 4 * self.depth + ans)
         return ans
+    
+    def WhileGenerate(self, whilestatement):
+        self.print(' ' * 4 * self.depth + 'while (' + str(whilestatement.expression) +
+              ')')
+        if whilestatement.statement.information.name == 'compound_statement':
+            self.StatementGenerate(whilestatement.statement)
+        else:
+            self.depth += 1
+            self.StatementGenerate(whilestatement.statement)
+            self.depth -= 1
+    
+    def RepeatGenerate(self, repeatstatement):
+        self.print(' ' * 4 * self.depth + 'do')
+        self.depth += 1
+        for statement in repeatstatement.statement_list:
+            self.StatementGenerate(statement)
+        self.depth -= 1
+        self.print(' ' * 4 * self.depth + 'while (!(' + str(repeatstatement.expression) + '));')

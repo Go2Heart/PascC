@@ -26,6 +26,10 @@ class Statement(object):
             self.information = WriteStatement(node, symboltable, typestable,function_id)
         elif node.type[0] == 'for_statement':
             self.information = ForStatement(node, symboltable, typestable,function_id)
+        elif node.type[0] == 'while_statement':
+            self.information = WhileStatement(node, symboltable, typestable,function_id)
+        elif node.type[0] == 'repeat_statement':
+            self.information = RepeatStatement(node, symboltable, typestable,function_id)
         self.ErrorFlag=self.information.ErrorFlag
         self.ReturnFlag|=self.information.ReturnFlag
 
@@ -112,6 +116,7 @@ class CompoundStatement(object):
         self.ReturnFlag = False
         self.name = 'compound_statement'
         self.statements = []
+        # node.print()
         now = node.childs[0]  # now = statement_list
         for statement in now.childs:
             self.statements.append(
@@ -160,6 +165,7 @@ class AssignmentStatement(object):
         expression_type=self.expression.type.name
         if expression_type=='const' or expression_type=='var':
             expression_type=self.expression.type.type.name
+        return 
         if variable_type=='real' and expression_type=='integer':
             print("WARNING: Line {0} : 隐式类型转换，从integer转换成real".format(node.type[1]))
         elif variable_type!= expression_type:
@@ -294,3 +300,44 @@ class WriteStatement(object):
             self.newline = False
 
     pass
+
+class WhileStatement(object):
+    def __init__(self, node, symboltable, typestable,function_id=None):
+        self.ErrorFlag = False
+        self.ReturnFlag = False
+        # child[0]=expression,child[1]=statement
+        self.name = 'while_statement'
+        self.expression = Expressions.Expression(node.childs[0], symboltable,
+                                                 typestable)
+        # self.ErrorFlag|=self.expression.ErrorFlag
+        self.statement = Statement(node.childs[1], symboltable, typestable,function_id)
+        # self.ErrorFlag|=self.statement.ErrorFlag
+        # self.ReturnFlag|=self.statement.ReturnFlag
+        # expression_type=self.expression.type.name
+        # if expression_type=='const':
+        #     expression_type=self.expression.type.type.name
+        # if expression_type!='boolean':
+        #     print("Line {0} : WHILE语句的表达式不是boolean类型".format(node.type[1]))
+        #     self.ErrorFlag=True
+
+class RepeatStatement(object):
+    def __init__(self, node, symboltable, typestable,function_id=None):
+        self.ErrorFlag = False
+        self.ReturnFlag = False
+        # child[0]=statement_list,child[1]=expression
+        self.name = 'repeat_statement'
+        self.statement_list = [
+            Statement(p, symboltable, typestable,function_id)
+            for p in node.childs[0].childs
+        ]
+        self.expression = Expressions.Expression(node.childs[1], symboltable,
+                                                 typestable)
+        # self.ErrorFlag|=self.expression.ErrorFlag
+        # self.ErrorFlag|=self.statement_list[-1].ErrorFlag
+        # self.ReturnFlag|=self.statement_list[-1].ReturnFlag
+        # expression_type=self.expression.type.name
+        # if expression_type=='const':
+        #     expression_type=self.expression.type.type.name
+        # if expression_type!='boolean':
+        #     print("Line {0} : REPEAT语句的表达式不是boolean类型".format(node.type[1]))
+        #     self.ErrorFlag=True
