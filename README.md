@@ -1,7 +1,7 @@
 # PascC
 
 Yet Another Pascal Compiler To C Language
-<img width="2008" alt="image" src="https://github.com/Go2Heart/PascC/assets/71871209/664e365b-4edf-490e-9b24-072db346e9f0">
+<img width="1958" alt="image" src="https://github.com/Go2Heart/PascC/assets/71871209/129ede34-a9b8-4315-84eb-03da12a2686d">
 
 ## Quick Start By Executable File
 ```
